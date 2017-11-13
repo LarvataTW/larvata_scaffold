@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["snowild"]
   spec.email         = ["snowild@gmail.com"]
 
-  spec.summary       = %q{Larvata's backend scaffold generator.}
-  spec.description   = %q{larvata_scaffold is Larvata's backend scaffold generator.}
+  spec.summary       = %q{Larvata scaffold generator.}
+  spec.description   = %q{larvata_scaffold is Larvata scaffold generator.}
   spec.homepage      = "http://larvata.tw/"
   spec.license       = "MIT"
 
