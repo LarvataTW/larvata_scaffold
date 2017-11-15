@@ -7,10 +7,12 @@
             # 針對不同資料型態會呈現出不同的元件
             if attr.type == "string"
                 component += "<%= f.input_field :#{attr.name}, class:'form-control' %%>\n            " 
+            elsif attr.type == "text"
+                component += "<%= f.input_field :#{attr.name}, class:'form-control floara-editor' %%>\n            " 
             elsif attr.type == "datetime"
                 component += "<%= f.input_field :#{attr.name}, as: :string, class:'form-control datetimepicker' %%>\n            " 
             elsif attr.type == "boolean"
-                component += "<%= f.select :is_active, [['是', true],['否', false]] %%>\n            " 
+                component += "<%= f.select :#{attr.name}, [[t('helpers.select.true_option'), true],[t('helpers.select.false_option'), false]] %%>\n            " 
             elsif attr.type == "integer" 
                 component += "<%= f.input_field :#{attr.name}, class:'form-control' %%>\n            " 
             end
