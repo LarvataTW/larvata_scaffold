@@ -3,7 +3,6 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   layout "admin"
 <% end -%>
 
-  skip_before_action :verify_authenticity_token, only: [:datatables]
   before_action :set_<%= singular_name %>, only: [:show, :edit, :update, :destroy]
 
   def index
