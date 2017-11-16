@@ -50,6 +50,13 @@ module LarvataScaffold
       def admin?
         options['admin']
       end
+
+      def is_enum? column
+        class_const = class_name.constantize
+        plural_column_name = column.name.pluralize
+        
+        class_const.respond_to? plural_column_name and class_const.send(plural_column_name).is_a? ActiveSupport::HashWithIndifferentAccess
+      end
     end
   end
 end
