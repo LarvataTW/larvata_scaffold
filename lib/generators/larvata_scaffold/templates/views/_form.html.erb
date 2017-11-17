@@ -7,7 +7,7 @@
             # 針對不同資料型態會呈現出不同的元件
             if attr.type == "string"
                 if is_enum? attr
-                    component += "<%= f.input_field :#{attr.name}, collection: #{class_name}.#{attr.name.pluralize}_i18n, class: 'form-control' %%>\n            "
+                    component += "<%= f.input_field :#{attr.name}, collection: #{class_name}.#{attr.name.pluralize}_i18n, class: 'form-control select2' %%>\n            "
                 else
                     component += "<%= f.input_field :#{attr.name}, class:'form-control' %%>\n            " 
                 end
@@ -17,9 +17,9 @@
                 component += "<%= f.input_field :#{attr.name}, as: :string, class:'form-control datetimepicker' %%>\n            " 
             elsif attr.type == "boolean"
                 component += "<%= f.select :#{attr.name}, [[t('helpers.select.true_option'), true],[t('helpers.select.false_option'), false]] %%>\n            " 
-            elsif attr.type == "integer" 
+            elsif %w(integer float decimal).include? attr.type
                 if is_enum? attr
-                    component += "<%= f.input_field :#{attr.name}, collection: #{class_name}.#{attr.name.pluralize}_i18n, class: 'form-control' %%>\n            "
+                    component += "<%= f.input_field :#{attr.name}, collection: #{class_name}.#{attr.name.pluralize}_i18n, class: 'form-control select2' %%>\n            "
                 else
                     component += "<%= f.input_field :#{attr.name}, class:'form-control' %%>\n            " 
                 end
