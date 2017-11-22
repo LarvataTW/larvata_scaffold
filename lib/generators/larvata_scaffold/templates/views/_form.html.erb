@@ -37,6 +37,8 @@
     <%= "<%= link_to t('button.back'), #{'admin_' if admin?}#{plural_name}_path, class: 'an-btn an-btn-default' %%>" %>
 <%= "<% end %%>" %>
 
+<%= "<%= render 'common/attachments', model: @#{singular_name} %%>" if attachable?%>
+
 <%= "<%= content_for :post_scripts do %%>" %>
 
 <%= "<% end %%>" %>

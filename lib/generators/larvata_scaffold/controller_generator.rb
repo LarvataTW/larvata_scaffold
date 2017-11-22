@@ -12,7 +12,9 @@ module LarvataScaffold
 
       class_option :skip_row_editor, type: :boolean, default: false, desc: "Skip \"Row Editor\" action"
       class_option :admin, type: :boolean, default: false, desc: "Backend function"
-# We don’t need to call methods in the generator class. All public methods will be called one by one on generating.
+      class_option :attachable, type: :boolean, default: false, desc: "Can function attach files?"
+
+      # We don’t need to call methods in the generator class. All public methods will be called one by one on generating.
       def copy_controller_and_spec_files
         controller_path = admin? ? "app/controllers/admin" : "app/controllers"
         template "controller.rb", File.join(controller_path , "#{controller_file_name}_controller.rb")
