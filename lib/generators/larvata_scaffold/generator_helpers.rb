@@ -60,7 +60,7 @@ module LarvataScaffold
 
       def attachable?
         class_const = class_name.constantize
-        options['attachable'] and class_const.respond_to? "attachments"
+        options['attachable'] and class_const.instance_methods.include? :attachments
       end
     end
   end
