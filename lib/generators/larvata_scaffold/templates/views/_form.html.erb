@@ -12,7 +12,7 @@
                     component += "<%= f.input_field :#{attr.name}, class:'form-control' %%>\n            " 
                 end
             elsif attr.type == "text"
-                component += "<%= f.input_field :#{attr.name}, class:'form-control floara-editor' %%>\n            " 
+                component += "<%= f.input_field :#{attr.name}, class:'form-control froala-editor' %%>\n            " 
             elsif attr.type == "datetime"
                 component += "<%= f.input_field :#{attr.name}, as: :string, class:'form-control datetimepicker' %%>\n            " 
             elsif attr.type == "boolean"
