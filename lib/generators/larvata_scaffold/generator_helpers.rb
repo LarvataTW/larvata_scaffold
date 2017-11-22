@@ -57,6 +57,11 @@ module LarvataScaffold
         
         class_const.respond_to? plural_column_name and class_const.send(plural_column_name).is_a? ActiveSupport::HashWithIndifferentAccess
       end
+
+      def attachable?
+        class_const = class_name.constantize
+        options['attachable'] and class_const.respond_to? "attachments"
+      end
     end
   end
 end

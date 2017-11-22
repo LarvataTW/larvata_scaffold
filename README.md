@@ -16,10 +16,20 @@ And then execute:
 
 需要先建立好 Model 之後，才能使用此 controller scaffold 功能：
 
-$ rails g larvata_scaffold:controller model_name [--admin] [--skip-row-editor]
+$ rails g larvata_scaffold:controller model_name [--admin] [--skip-row-editor] [--attachable]
 
 --admin 表示為後台功能，會將功能放置在 namespace admin 下。
 --skip-row-editor 表示會將 datatables 的 inline editing 功能關閉。
+--attachable 表示會啟用附件上傳功能。
+
+啟用附件上傳功能前，需要在 model 中設定附件關連：
+```ruby
+has_many :attachments, as: :attachable
+accepts_nested_attributes_for :attachments, :allow_destroy => true
+
+```
+
+在 model 中設定 enum 資料欄位的話，會在___ _form.html.erb 自動產生對應的下拉選單。
 
 ## Contributing
 
