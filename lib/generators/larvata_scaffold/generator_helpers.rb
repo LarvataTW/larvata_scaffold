@@ -35,6 +35,26 @@ module LarvataScaffold
         end
       end
 
+      def editable_attributes_and_except_sorting_and_datetime_and_number
+        model_columns_for_editable_attributes_and_except_sorting_and_datetime_and_number = model_columns_for_editable_attributes_and_except_sorting.reject do |column|
+          %w(datetime integer float decimal).include? column.type.to_s and not is_enum? column
+        end
+
+        attributes ||= model_columns_for_editable_attributes_and_except_sorting_and_datetime_and_number.map do |column|
+          Rails::Generators::GeneratedAttribute.new(column.name.to_s, column.type.to_s)
+        end
+      end
+
+      def editable_datetime_and_number_attributes_and_except_sorting_and_enum
+        model_columns_for_editable_datetime_and_number_attributes_and_except_sorting = model_columns_for_editable_attributes_and_except_sorting.select do |column|
+          %w(datetime integer float decimal).include? column.type.to_s and not is_enum? column
+        end
+
+        attributes ||= model_columns_for_editable_datetime_and_number_attributes_and_except_sorting.map do |column|
+          Rails::Generators::GeneratedAttribute.new(column.name.to_s, column.type.to_s)
+        end
+      end
+
       def contains_sorting_column?
         sorting_columns = class_name.constantize.columns.select do |column|
           column.name.to_s =~ /^(sorting)$/

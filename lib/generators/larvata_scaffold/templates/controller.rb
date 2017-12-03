@@ -18,9 +18,13 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
         @page = (params[:start].to_i/params[:length].to_i) + 1 # 要顯示資料的頁數
       end
       
-      @keyword = params[:search][:value] unless params[:search].blank?
 
-      @q = <%= class_name %>.ransack(id_cont: @keyword)
+      @filters = DatatablesService.new.handle_filters(params)
+
+      @keyword = params[:search][:value] unless params[:search].blank?
+      @filters["id_cont".to_sym] = @keyword if @keyword
+
+      @q = <%= class_name %>.ransack(@filters)
 
       @q.sorts = @sorting_key.blank? ? "updated_at desc" : "#{params[:columns][@sorting_key.to_s][:name]} #{@sorting_dir}"
 
