@@ -7,10 +7,101 @@
 <div class="an-single-component with-shadow">
     <div class="an-component-header search_wrapper">
         <%= "<%= link_to t('button.new', model: #{class_name}.model_name.human), new_#{'admin_' if admin?}#{singular_name}_path, class: 'an-btn an-btn-primary' %%>" %>
-        <div class="an-sidebar-search p-0 searchbar">
-            <a class="collapse-sidebar-search-btn js-search-toggle" href="#"><i class="icon-search"></i></a>
-            <div class="an-search-field topbar js-search-show-clicked">
-                <%= "<input type='text' id='keyword_search' placeholder='<%= t('helpers.form.keyword_search') %%>' class: 'an-form-control no-redius border-bottom m-0 text_color'>" %>
+        <div class="panel panel-default an-sidebar-search">
+            <div class="panel-heading" role="tab" id="headingTwo">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#search_panel" aria-expanded="false" aria-controls="search_panel">篩選條件</a>
+                </h4>
+            </div>
+            <div id="search_panel" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="panel-body">
+
+                    <div class="form-group">
+                        <%= "<label class='col-sm-2 control-label l-h-34'><%= t('helpers.form.keyword_search_label') %%></label>" %>
+                        <div class="col-sm-10">
+                            <%= "<input type='text' id='keyword_search' placeholder='<%= t('helpers.form.keyword_search') %%>' class='an-form-control no-redius border-bottom m-0 text_color'>" %>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+
+                    <div class='form-group'>
+<%= editable_attributes_and_except_sorting_and_datetime_and_number.each_with_index.map{ |attr, i| 
+                    filter = "                        "
+
+                    filter += "<label class='col-sm-2 control-label l-h-34'><%= #{class_name}.human_attribute_name('#{attr.name}') %%></label>\n                        "
+                    filter += "<div class='col-sm-4'>\n                            "
+
+                    if is_enum? attr
+                        filter += "<%= simple_form_for([:admin, #{class_name}.new]) do | f | %%>\n                                "
+                        filter += "<%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{class_name}.#{attr.name.pluralize}_i18n, class: 'form-control select2 filter-#{attr.name}', include_blank: true, selected: nil %%>\n                        "
+                        filter += "<% end %%>\n                            "
+                    elsif attr.type == "boolean"
+                        filter += "<%= simple_form_for(:admin) do | f | %%>\n                                "
+                        filter += "<%= f.input_field :#{attr.name}, name: '#{attr.name}', collection:[[t('helpers.select.true_option'),true],[t('helpers.select.false_option'),false]], class: 'form-control select2 filter-#{attr.name}', include_blank: true %%>\n                            "
+                        filter += "<% end %%>\n                        "
+                    else
+                        filter += "<input type='text' name='#{attr.name}' placeholder='<%= t('helpers.form.placeholder', column: #{class_name}.human_attribute_name('#{attr.name}')) %%>' class='an-form-control no-redius border-bottom m-0 text_color filter-#{attr.name}'>\n                        "
+                    end
+
+                    filter += "</div>\n                        "
+
+                    filter += "<div class='clear'></div>\n                    " if i >= 1 and i%2 == 1
+                    filter += "</div>\n\n                    " if i >= 1 and i%2 == 1
+                    filter += "<div class='form-group'>" if i >= 1 and i%2 == 1
+
+                    filter
+                }.join("\n") 
+%>
+                        <div class='clear'></div>
+                    </div>
+
+<%= editable_datetime_and_number_attributes_and_except_sorting_and_enum.map{ |attr| 
+                    filter = "<div class='form-group'>\n                        "
+                    filter += "<label class='col-sm-2 control-label l-h-34'><%= #{class_name}.human_attribute_name('#{attr.name}') %%></label>\n                        "
+                    filter += "<div class='col-sm-10'>\n                        "
+                    filter += "<div class='col-sm-5 no-padding'>\n                            "
+                    filter += "<div class='col-sm-12 no-padding'>\n                                "
+
+                    if attr.type == "datetime"
+                        filter += "<input type='text' name='#{attr.name}_start' placeholder='<%= t('helpers.form.start_at') %%>' class='an-form-control no-redius border-bottom m-0 text_color datetimepicker filter-#{attr.name}'>\n                                "
+                    else
+                        filter += "<input type='number' name='#{attr.name}_start' placeholder='<%= t('helpers.form.start_number') %%>' class='an-form-control no-redius border-bottom m-0 text_color filter-#{attr.name}'>\n                                "
+                    end
+
+                    filter += "</div>\n                            "
+                    filter += "</div>\n                            "
+                    filter += "<div class='col-sm-1 no-padding l-h-34 t-center'> ~ </div>\n                            "
+                    filter += "<div class='col-sm-6 no-padding'>\n                                "
+                    filter += "<div class='col-sm-12 no-padding'>\n                                "
+
+                    if attr.type == "datetime"
+                        filter += "<input type='text' name='#{attr.name}_end' placeholder='<%= t('helpers.form.end_at') %%>' class='an-form-control no-redius border-bottom m-0 text_color datetimepicker filter-#{attr.name}'>\n                                "
+                    else
+                        filter += "<input type='number' name='#{attr.name}_end' placeholder='<%= t('helpers.form.start_number') %%>' class='an-form-control no-redius border-bottom m-0 text_color filter-#{attr.name}'>\n                                "
+                    end
+
+                    filter += "</div>\n                            "
+                    filter += "</div>\n                            "
+                    filter += "<div class='clear'></div>\n                            "
+                    filter += "</div>\n                            "
+                    filter += "<div class='clear'></div>\n                            "
+                    filter += "</div>\n"
+
+                    filter 
+                }.join("\n") 
+%>
+                    <div class="form-group pull-right">
+                        <div class="col-sm-12">
+                            <button class="btn btn-default reset-button">
+                                <%= "<%= t('button.reset') %%>" %>
+                            </button>
+                            <button class="btn btn-info filter-button">
+                                <%= "<%= t('button.filter') %%>" %>
+                            </button>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="clear"></div>
