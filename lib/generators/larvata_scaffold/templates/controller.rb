@@ -19,7 +19,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
       end
       
 
-      @filters = DatatablesService.new.handle_filters(params)
+      @filters = DatatablesService.new({class_name: "<%= class_name %>"}).handle_filters(params)
 
       @keyword = params[:search][:value] unless params[:search].blank?
       @filters["id_cont".to_sym] = @keyword if @keyword
@@ -125,7 +125,20 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
     <%= plural_name %>.map do |<%= singular_name %>|
       {
         DT_RowId: "#{<%= singular_name %>.id}",
-        <%= all_attributes.map{ |attr| "#{attr.name}: #{singular_name}.#{attr.name}" }.join(",\n        ") %>
+        <%= all_attributes.map{ |attr| 
+          if is_enum? attr
+            row_attr = "#{attr.name}: #{singular_name}.#{attr.name},\n        " 
+            row_attr += "#{attr.name}_i18n: #{singular_name}.#{attr.name}_i18n," 
+            row_attr
+          elsif attr.type == 'boolean'
+            "#{attr.name}: #{singular_name}.#{attr.name} == true ? I18n.t('helpers.select.true_option') : I18n.t('helpers.select.false_option')," 
+          elsif attr.type == 'datetime'
+            "#{attr.name}: #{singular_name}.#{attr.name}&.strftime('%Y-%m-%d %H:%M:%S')," 
+          else
+            "#{attr.name}: #{singular_name}.#{attr.name}," 
+          end
+        }.join("\n        ") 
+        %>
       }
     end
   end
