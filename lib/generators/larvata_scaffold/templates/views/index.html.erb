@@ -26,12 +26,19 @@
 
                     <div class='form-group'>
 <%= editable_attributes_and_except_sorting_and_datetime_and_number.each_with_index.map{ |attr, i| 
+                    belongs_to_assoc = association_by_foreign_key(attr)
+
                     filter = "                        "
 
                     filter += "<label class='col-sm-2 control-label l-h-34'><%= #{class_name}.human_attribute_name('#{attr.name}') %%></label>\n                        "
                     filter += "<div class='col-sm-4'>\n                            "
 
-                    if is_enum? attr
+                    if belongs_to_assoc 
+                        assoc_class_name = belongs_to_assoc.name.to_s.classify
+                        filter += "<%= simple_form_for([:admin, #{class_name}.new]) do | f | %%>\n                                "
+                        filter += "<%= f.collection_select :#{attr.name}, #{assoc_class_name}.none, :id, :id, {include_blank: true},{class: 'form-control select2'} %%>\n            "
+                        filter += "<% end %%>\n                            "
+                    elsif is_enum? attr
                         filter += "<%= simple_form_for([:admin, #{class_name}.new]) do | f | %%>\n                                "
                         filter += "<%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{class_name}.#{attr.name.pluralize}_i18n, class: 'form-control select2 filter-#{attr.name}', include_blank: true, selected: nil %%>\n                        "
                         filter += "<% end %%>\n                            "
@@ -55,7 +62,7 @@
                         <div class='clear'></div>
                     </div>
 
-<%= editable_datetime_and_number_attributes_and_except_sorting_and_enum.map{ |attr| 
+<%= editable_datetime_and_number_attributes_and_except_sorting_and_enum_and_assoc.map{ |attr| 
                     filter = "<div class='form-group'>\n                        "
                     filter += "<label class='col-sm-2 control-label l-h-34'><%= #{class_name}.human_attribute_name('#{attr.name}') %%></label>\n                        "
                     filter += "<div class='col-sm-10'>\n                        "
@@ -118,4 +125,5 @@
 
 <%= "<% content_for :post_scripts do %%>" %>
 <%= "  <%= javascript_include_tag '#{'admin/' if admin?}#{plural_name}_datatables' %%>" %>
+<%= "  <%= javascript_include_tag '#{'admin/' if admin?}#{plural_name}' %%>" %>
 <%= "<% end %%>" %>

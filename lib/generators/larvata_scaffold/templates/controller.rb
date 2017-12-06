@@ -106,6 +106,33 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   end
 <% end -%>
 
+<% # 建立 belongs_to associations select2 options method
+editable_attributes_and_except_sorting_and_datetime_and_number.each do |attr| 
+  belongs_to_assoc = association_by_foreign_key(attr)
+  if belongs_to_assoc 
+    assoc_class_name = belongs_to_assoc.name.to_s.classify
+    assoc_singular_name = belongs_to_assoc.name.to_s
+    assoc_plural_name = assoc_singular_name.pluralize
+%>
+  def <%= assoc_plural_name %>_for_select2
+    per = params[:per]
+    page = params[:page]
+    filter = params[:search]
+
+    q = <%= assoc_class_name %>.ransack(id_eq: filter)
+    <%= assoc_plural_name %> = q.result.page(page).per(per)
+
+    filtered_count = q.result.count
+    
+    <%= assoc_plural_name %> = <%= assoc_plural_name %>.map{|<%= assoc_singular_name%>| {id: <%= assoc_singular_name%>.id, text: <%= assoc_singular_name%>.id}}
+
+    render json: {results: <%= assoc_plural_name %>, filtered_count: filtered_count, per: per}
+  end
+<% 
+  end 
+end 
+%>
+
   private
 
   def set_<%= singular_name %>
