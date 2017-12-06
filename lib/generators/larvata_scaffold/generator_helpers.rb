@@ -37,7 +37,7 @@ module LarvataScaffold
 
       def editable_attributes_and_except_sorting_and_datetime_and_number
         model_columns_for_editable_attributes_and_except_sorting_and_datetime_and_number = model_columns_for_editable_attributes_and_except_sorting.reject do |column|
-          %w(datetime integer float decimal).include? column.type.to_s and not is_enum? column
+          %w(datetime integer float decimal).include? column.type.to_s and not is_enum? column and not association_by_foreign_key(column)
         end
 
         attributes ||= model_columns_for_editable_attributes_and_except_sorting_and_datetime_and_number.map do |column|
@@ -45,9 +45,9 @@ module LarvataScaffold
         end
       end
 
-      def editable_datetime_and_number_attributes_and_except_sorting_and_enum
+      def editable_datetime_and_number_attributes_and_except_sorting_and_enum_and_assoc
         model_columns_for_editable_datetime_and_number_attributes_and_except_sorting = model_columns_for_editable_attributes_and_except_sorting.select do |column|
-          %w(datetime integer float decimal).include? column.type.to_s and not is_enum? column
+          %w(datetime integer float decimal).include? column.type.to_s and not is_enum? column and not association_by_foreign_key(column)
         end
 
         attributes ||= model_columns_for_editable_datetime_and_number_attributes_and_except_sorting.map do |column|
@@ -81,6 +81,12 @@ module LarvataScaffold
       def attachable?
         class_const = class_name.constantize
         options['attachable'] and class_const.instance_methods.include? :attachments
+      end
+
+      def association_by_foreign_key column
+        class_const = class_name.constantize
+        assocs = class_const.reflect_on_all_associations(:belongs_to)
+        assocs.select{|assoc| assoc.foreign_key == column.name}&.first
       end
     end
   end

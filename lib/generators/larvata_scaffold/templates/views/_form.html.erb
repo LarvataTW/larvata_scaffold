@@ -4,8 +4,13 @@
             component += "<label class='col-sm-2 control-label'><%= #{class_name}.human_attribute_name('#{attr.name}') %%></label>\n        "
             component += "<div class='col-sm-10'>\n            " 
 
+            belongs_to_assoc = association_by_foreign_key attr
+
             # 針對不同資料型態會呈現出不同的元件
-            if attr.type == "string"
+            if belongs_to_assoc 
+                assoc_class_name = belongs_to_assoc.name.to_s.classify
+                component += "<%= f.collection_select :#{attr.name}, #{assoc_class_name}.none, :id, :id, {include_blank: true},{class: 'form-control select2'} %%>\n            "
+            elsif attr.type == "string"
                 if is_enum? attr
                     component += "<%= f.input_field :#{attr.name}, collection: #{class_name}.#{attr.name.pluralize}_i18n, class: 'form-control select2', include_blank: false %%>\n            "
                 else
@@ -40,5 +45,5 @@
 <%= "<%= render 'common/attachments', model: @#{singular_name} %%>" if attachable? %>
 
 <%= "<%= content_for :post_scripts do %%>" %>
-
+<%= "  <%= javascript_include_tag '#{'admin/' if admin?}#{plural_name}' %%>" %>
 <%= "<% end %%>" %>

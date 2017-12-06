@@ -38,6 +38,7 @@ module LarvataScaffold
       def copy_js_files
         js_path = admin? ? "app/assets/javascripts/admin" : "app/assets/javascripts"
         template "assets/javascripts/datatables.js", File.join(js_path, "#{controller_file_path}_datatables.js")
+        template "assets/javascripts/model.js", File.join(js_path, "#{plural_name}.js")
       end
 
       def add_routes
@@ -49,6 +50,19 @@ module LarvataScaffold
         routes_string += "post :datatables\n        "
         routes_string += "patch :update_row_sorting\n        " if contains_sorting_column?
         routes_string += "patch :update_row\n      "
+
+        # 建立 belongs_to associations select2 options route
+        editable_attributes_and_except_sorting_and_datetime_and_number.each do |attr| 
+          belongs_to_assoc = association_by_foreign_key(attr)
+          if belongs_to_assoc 
+            routes_string += "  "
+
+            assoc_singular_name = belongs_to_assoc.name.to_s
+            assoc_plural_name = assoc_singular_name.pluralize
+            routes_string += "post :#{assoc_plural_name}_for_select2\n      "
+          end
+        end
+
         routes_string += "end\n    "
         routes_string += "end\n  "
         routes_string += "end\n" if admin?
