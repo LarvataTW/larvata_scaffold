@@ -36,7 +36,7 @@
                     if belongs_to_assoc 
                         assoc_class_name = belongs_to_assoc.name.to_s.classify
                         filter += "<%= simple_form_for([:admin, #{class_name}.new]) do | f | %%>\n                                "
-                        filter += "<%= f.collection_select :#{attr.name}, #{assoc_class_name}.none, :id, :id, include_blank: true, class: 'form-control select2' %%>\n            "
+                        filter += "<%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{assoc_class_name}.none, value_method: :id, label_method: :id, class: 'form-control select2 filter-#{attr.name}', include_blank: true, selected: nil %%>\n            "
                         filter += "<% end %%>\n                            "
                     elsif is_enum? attr
                         filter += "<%= simple_form_for([:admin, #{class_name}.new]) do | f | %%>\n                                "
@@ -124,6 +124,6 @@
 </div>
 
 <%= "<% content_for :post_scripts do %%>" %>
-<%= "  <%= javascript_include_tag '#{'admin/' if admin?}#{plural_name}_datatables' %%>" %>
 <%= "  <%= javascript_include_tag '#{'admin/' if admin?}#{plural_name}' %%>" %>
+<%= "  <%= javascript_include_tag '#{'admin/' if admin?}#{plural_name}_datatables' %%>" %>
 <%= "<% end %%>" %>
