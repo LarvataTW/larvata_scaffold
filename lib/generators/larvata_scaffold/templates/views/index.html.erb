@@ -36,7 +36,7 @@
                     if belongs_to_assoc 
                         assoc_class_name = belongs_to_assoc.name.to_s.classify
                         filter += "<%= simple_form_for([:admin, #{class_name}.new]) do | f | %%>\n                                "
-                        filter += "<%= f.collection_select :#{attr.name}, #{assoc_class_name}.none, :id, :id, {include_blank: true},{class: 'form-control select2'} %%>\n            "
+                        filter += "<%= f.collection_select :#{attr.name}, #{assoc_class_name}.none, :id, :id, include_blank: true, class: 'form-control select2' %%>\n            "
                         filter += "<% end %%>\n                            "
                     elsif is_enum? attr
                         filter += "<%= simple_form_for([:admin, #{class_name}.new]) do | f | %%>\n                                "
