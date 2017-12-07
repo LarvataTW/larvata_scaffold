@@ -17,7 +17,6 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
         @sorting_dir = params[:order]['0'][:dir] # 降冪升冪
         @page = (params[:start].to_i/params[:length].to_i) + 1 # 要顯示資料的頁數
       end
-      
 
       @filters = DatatablesService.new({class_name: "<%= class_name %>"}).handle_filters(params)
 
@@ -120,6 +119,7 @@ editable_attributes_and_except_sorting_and_datetime_and_number.each do |attr|
     filter = params[:search]
 
     q = <%= assoc_class_name %>.ransack(id_eq: filter)
+    q.sorts = "created_at desc"
     <%= assoc_plural_name %> = q.result.page(page).per(per)
 
     filtered_count = q.result.count
