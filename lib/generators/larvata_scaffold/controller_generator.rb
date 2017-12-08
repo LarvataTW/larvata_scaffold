@@ -11,17 +11,16 @@ module LarvataScaffold
       desc "Generates controller, controller_spec and views for the model with the given NAME."
 
       class_option :skip_row_editor, type: :boolean, default: false, desc: "Skip \"Row Editor\" action"
-      class_option :admin, type: :boolean, default: false, desc: "Backend function"
+      class_option :admin, type: :boolean, default: false, desc: "Backend function?"
       class_option :attachable, type: :boolean, default: false, desc: "Can function attach files?"
+      class_option :controller, type: :string, default: nil, desc: "Specifie controller class name."
 
       # We don’t need to call methods in the generator class. All public methods will be called one by one on generating.
       def copy_controller_and_spec_files
-        controller_path = admin? ? "app/controllers/admin" : "app/controllers"
         template "controller.rb", File.join(controller_path , "#{controller_file_name}_controller.rb")
       end
 
       def copy_view_files
-        views_path = admin? ? "app/views/admin" : "app/views"
         directory_path = File.join(views_path, controller_file_path)
         empty_directory directory_path
 
@@ -36,16 +35,15 @@ module LarvataScaffold
       end
 
       def copy_js_files
-        js_path = admin? ? "app/assets/javascripts/admin" : "app/assets/javascripts"
         template "assets/javascripts/datatables.js", File.join(js_path, "#{controller_file_path}_datatables.js")
-        template "assets/javascripts/model.js", File.join(js_path, "#{plural_name}.js")
+        template "assets/javascripts/model.js", File.join(js_path, "#{controller_file_path}.js")
       end
 
       def add_routes
         routes_string = ""
 
         routes_string += "namespace :admin do\n    " if admin?
-        routes_string += "resources :#{plural_name} do\n      "
+        routes_string += "resources :#{controller_file_name} do\n      "
         routes_string += "collection do\n        "
         routes_string += "post :datatables\n        "
         routes_string += "patch :update_row_sorting\n        " if contains_sorting_column?
