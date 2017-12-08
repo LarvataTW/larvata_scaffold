@@ -88,6 +88,38 @@ module LarvataScaffold
         assocs = class_const.reflect_on_all_associations(:belongs_to)
         assocs.select{|assoc| assoc.foreign_key == column.name}&.first
       end
+
+      def custom_controller
+        options['controller']
+      end
+
+      def singular_controller_name
+        options['controller'] || file_name
+      end
+
+      def controller_path 
+        admin? ? "app/controllers/admin" : "app/controllers"
+      end
+
+      def views_path
+        admin? ? "app/views/admin" : "app/views"
+      end
+
+      def js_path 
+        admin? ? "app/assets/javascripts/admin" : "app/assets/javascripts"
+      end
+
+      def controller_file_path 
+        custom_controller&.pluralize || super
+      end
+
+      def controller_class_name 
+        custom_controller&.classify&.pluralize || super
+      end
+
+      def controller_file_name 
+        custom_controller&.pluralize || super
+      end
     end
   end
 end

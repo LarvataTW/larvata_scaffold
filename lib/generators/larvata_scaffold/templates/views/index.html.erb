@@ -6,7 +6,7 @@
 
 <div class="an-single-component with-shadow">
     <div class="an-component-header search_wrapper">
-        <%= "<%= link_to t('button.new', model: #{class_name}.model_name.human), new_#{'admin_' if admin?}#{singular_name}_path, class: 'an-btn an-btn-primary' %%>" %>
+        <%= "<%= link_to t('button.new', model: #{class_name}.model_name.human), new_#{'admin_' if admin?}#{singular_controller_name}_path, class: 'an-btn an-btn-primary' %%>" %>
         <div class="panel panel-default an-sidebar-search">
             <div class="panel-heading" role="tab" id="headingTwo">
                 <h4 class="panel-title">
@@ -124,6 +124,6 @@
 </div>
 
 <%= "<% content_for :post_scripts do %%>" %>
-<%= "  <%= javascript_include_tag '#{'admin/' if admin?}#{plural_name}' %%>" %>
-<%= "  <%= javascript_include_tag '#{'admin/' if admin?}#{plural_name}_datatables' %%>" %>
+<%= "  <%= javascript_include_tag '#{'admin/' if admin?}#{controller_file_name}' %%>" %>
+<%= "  <%= javascript_include_tag '#{'admin/' if admin?}#{controller_file_name}_datatables' %%>" %>
 <%= "<% end %%>" %>
