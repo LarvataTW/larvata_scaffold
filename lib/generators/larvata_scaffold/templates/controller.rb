@@ -48,7 +48,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   def create
     @<%= singular_name %> = <%= class_name %>.new(<%= singular_name %>_params)
     if @<%= singular_name %>.save
-      redirect_to <%= 'admin_' if admin? %><%= plural_name %>_path(@<%= singular_name %>), notice: '已成功建立<%= human_name %>資料'
+      redirect_to <%= 'admin_' if admin? %><%= controller_file_path %>_path(@<%= singular_name %>), notice: '已成功建立<%= human_name %>資料'
     else
       render :new
     end
@@ -60,7 +60,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
 
   def update
     if @<%= singular_name %>.update(<%= singular_name %>_params)
-      redirect_to <%= 'admin_' if admin? %><%= plural_name %>_path(@<%= singular_name %>), notice: '已成功更新<%= human_name %>資料'
+      redirect_to <%= 'admin_' if admin? %><%= controller_file_path %>_path(@<%= singular_name %>), notice: '已成功更新<%= human_name %>資料'
     else
       render :edit
     end
@@ -68,7 +68,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   
   def destroy
     @<%= singular_name %>.destroy
-    redirect_to <%= 'admin_' if admin? %><%= plural_name %>_url, notice: '已成功刪除<%= human_name %>資料'
+    redirect_to <%= 'admin_' if admin? %><%= controller_file_path %>_url, notice: '已成功刪除<%= human_name %>資料'
   end
 
 <% if enable_row_editor? -%>
