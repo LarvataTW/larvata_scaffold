@@ -4,12 +4,18 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
 <% end -%>
 
   before_action :set_<%= singular_name %>, only: [:show, :edit, :update, :destroy]
+  before_action :class_authorize, only: [:index, :new, :create]
 
   def index
 
   end
 
   def datatables
+<% if enable_pundit? -%>
+    <%= "authorize [:admin, #{class_name}], :index?" if admin? %>
+    <%= "authorize #{class_name}, :index?" unless admin? %>
+<% end -%>
+    
     respond_to do |format|
       # 設定排序條件
       unless params[:order].blank?
@@ -48,7 +54,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   def create
     @<%= singular_name %> = <%= class_name %>.new(<%= singular_name %>_params)
     if @<%= singular_name %>.save
-      redirect_to <%= 'admin_' if admin? %><%= plural_name %>_path(@<%= singular_name %>), notice: '已成功建立<%= human_name %>資料'
+      redirect_to <%= 'admin_' if admin? %><%= controller_file_path %>_path(@<%= singular_name %>), notice: '已成功建立<%= human_name %>資料'
     else
       render :new
     end
@@ -60,7 +66,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
 
   def update
     if @<%= singular_name %>.update(<%= singular_name %>_params)
-      redirect_to <%= 'admin_' if admin? %><%= plural_name %>_path(@<%= singular_name %>), notice: '已成功更新<%= human_name %>資料'
+      redirect_to <%= 'admin_' if admin? %><%= controller_file_path %>_path(@<%= singular_name %>), notice: '已成功更新<%= human_name %>資料'
     else
       render :edit
     end
@@ -68,7 +74,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   
   def destroy
     @<%= singular_name %>.destroy
-    redirect_to <%= 'admin_' if admin? %><%= plural_name %>_url, notice: '已成功刪除<%= human_name %>資料'
+    redirect_to <%= 'admin_' if admin? %><%= controller_file_path %>_url, notice: '已成功刪除<%= human_name %>資料'
   end
 
 <% if enable_row_editor? -%>
@@ -78,6 +84,11 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
       respond_to do |format|
         format.json {
           <%= singular_name %> = <%= class_name %>.find_by(id: id)
+
+<% if enable_pundit? -%>
+          <%= "authorize [:admin, #{singular_name}]" if admin? %>
+          <%= "authorize #{singular_name}" unless admin? %>
+<% end -%>
 
           <%= singular_name %>_params = <%= singular_name %>_row_params(column_values)
 
@@ -137,6 +148,10 @@ end
 
   def set_<%= singular_name %>
     @<%= singular_name %> = <%= class_name %>.find(params[:id])
+<% if enable_pundit? -%>
+    <%= "authorize [:admin, @#{singular_name}]" if admin? %>
+    <%= "authorize @#{singular_name}" unless admin? %>
+<% end -%>
   end
 
   def <%= singular_name %>_params
@@ -169,4 +184,11 @@ end
       }
     end
   end
+
+<% if enable_pundit? -%>
+  def class_authorize
+    <%= "authorize [:admin, #{class_name}]" if admin? %>
+    <%= "authorize #{class_name}" unless admin? %>
+  end
+<% end -%>
 end
