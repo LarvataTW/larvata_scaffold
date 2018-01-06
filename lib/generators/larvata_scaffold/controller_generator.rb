@@ -11,13 +11,14 @@ module LarvataScaffold
       desc "Generates controller, controller_spec and views for the model with the given NAME."
 
       class_option :skip_row_editor, type: :boolean, default: false, desc: "Skip \"Row Editor\" action"
+      class_option :skip_pundit, type: :boolean, default: false, desc: "Skip Pundit setting."
       class_option :admin, type: :boolean, default: false, desc: "Backend function?"
       class_option :attachable, type: :boolean, default: false, desc: "Can function attach files?"
       class_option :controller, type: :string, default: nil, desc: "Specifie controller class name."
 
       # We don’t need to call methods in the generator class. All public methods will be called one by one on generating.
       def copy_controller_and_spec_files
-        template "controller.rb", File.join(controller_path , "#{controller_file_name}_controller.rb")
+        template "controller.rb", File.join(controller_path, "#{controller_file_name}_controller.rb")
       end
 
       def copy_view_files
@@ -37,6 +38,10 @@ module LarvataScaffold
       def copy_js_files
         template "assets/javascripts/datatables.js", File.join(js_path, "#{controller_file_path}_datatables.js")
         template "assets/javascripts/model.js", File.join(js_path, "#{controller_file_path}.js")
+      end
+
+      def pundit_file
+        template "policies/pundit.rb", File.join(policies_path, "#{singular_name}_policy.rb")
       end
 
       def add_routes

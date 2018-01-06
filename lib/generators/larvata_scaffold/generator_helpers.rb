@@ -67,6 +67,10 @@ module LarvataScaffold
         !options['skip_row_editor']
       end
 
+      def enable_pundit?
+        !options['skip_pundit']
+      end
+
       def admin?
         options['admin']
       end
@@ -107,6 +111,10 @@ module LarvataScaffold
 
       def js_path 
         admin? ? "app/assets/javascripts/admin" : "app/assets/javascripts"
+      end
+
+      def policies_path
+        admin? ? "app/policies/admin" : "app/policies"
       end
 
       def controller_file_path 
