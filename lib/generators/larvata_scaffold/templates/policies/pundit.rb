@@ -1,4 +1,4 @@
-class <%= 'Admin::' if admin? %><%= singular_name %>Policy < <%= admin? ? 'Admin' : 'Application' %>Policy
+class <%= 'Admin::' if admin? %><%= class_name %>Policy < <%= admin? ? 'Admin' : 'Application' %>Policy
   def index?
     user.has_role? :admin
   end
