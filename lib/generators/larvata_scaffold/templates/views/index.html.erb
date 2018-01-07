@@ -7,7 +7,7 @@
 <div class="an-single-component with-shadow">
     <div class="an-component-header search_wrapper">
         <%= "<%= link_to t('button.new', model: #{class_name}.model_name.human), new_#{'admin_' if admin?}#{singular_controller_name}_path, class: 'an-btn an-btn-primary' %%>" %>
-        <div class="panel panel-default an-sidebar-search">
+        <div class="panel panel-default an-sidebar-search filter-condition-panel">
             <div class="panel-heading" role="tab" id="headingTwo">
                 <h4 class="panel-title">
                     <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#search_panel" aria-expanded="false" aria-controls="search_panel">篩選條件</a>
