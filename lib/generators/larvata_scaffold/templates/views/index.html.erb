@@ -36,18 +36,18 @@
                     if belongs_to_assoc 
                         assoc_class_name = belongs_to_assoc.name.to_s.classify
                         filter += "<%= simple_form_for([:admin, #{class_name}.new]) do | f | %%>\n                                "
-                        filter += "<%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{assoc_class_name}.none, value_method: :id, label_method: :id, class: 'form-control select2 filter-#{attr.name}', include_blank: true, selected: nil %%>\n            "
+                        filter += "<%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{assoc_class_name}.none, value_method: :id, label_method: :id, class: 'form-control select2 filter-#{attr.name} filter-select-condition', include_blank: true, selected: nil %%>\n            "
                         filter += "<% end %%>\n                            "
                     elsif is_enum? attr
                         filter += "<%= simple_form_for([:admin, #{class_name}.new]) do | f | %%>\n                                "
-                        filter += "<%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{class_name}.#{attr.name.pluralize}_i18n, class: 'form-control select2 filter-#{attr.name}', include_blank: true, selected: nil %%>\n                        "
+                        filter += "<%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{class_name}.#{attr.name.pluralize}_i18n, class: 'form-control select2 filter-#{attr.name} filter-select-condition', include_blank: true, selected: nil %%>\n                        "
                         filter += "<% end %%>\n                            "
                     elsif attr.type == "boolean"
                         filter += "<%= simple_form_for(:admin) do | f | %%>\n                                "
-                        filter += "<%= f.input_field :#{attr.name}, name: '#{attr.name}', collection:[[t('helpers.select.true_option'),true],[t('helpers.select.false_option'),false]], class: 'form-control select2 filter-#{attr.name}', include_blank: true %%>\n                            "
+                        filter += "<%= f.input_field :#{attr.name}, name: '#{attr.name}', collection:[[t('helpers.select.true_option'),true],[t('helpers.select.false_option'),false]], class: 'form-control select2 filter-#{attr.name} filter-select-condition', include_blank: true %%>\n                            "
                         filter += "<% end %%>\n                        "
                     else
-                        filter += "<input type='text' name='#{attr.name}' placeholder='<%= t('helpers.form.placeholder', column: #{class_name}.human_attribute_name('#{attr.name}')) %%>' class='an-form-control no-redius border-bottom m-0 text_color filter-#{attr.name}'>\n                        "
+                        filter += "<input type='text' name='#{attr.name}' placeholder='<%= t('helpers.form.placeholder', column: #{class_name}.human_attribute_name('#{attr.name}')) %%>' class='an-form-control no-redius border-bottom m-0 text_color filter-#{attr.name} filter-condition'>\n                        "
                     end
 
                     filter += "</div>\n                        "
@@ -70,9 +70,9 @@
                     filter += "<div class='col-sm-12 no-padding'>\n                                "
 
                     if attr.type == "datetime"
-                        filter += "<input type='text' name='#{attr.name}_start' placeholder='<%= t('helpers.form.start_at') %%>' class='an-form-control no-redius border-bottom m-0 text_color datetimepicker filter-#{attr.name}'>\n                                "
+                        filter += "<input type='text' name='#{attr.name}_start' placeholder='<%= t('helpers.form.start_at') %%>' class='an-form-control no-redius border-bottom m-0 text_color datetimepicker filter-#{attr.name} filter-range-condition'>\n                                "
                     else
-                        filter += "<input type='number' name='#{attr.name}_start' placeholder='<%= t('helpers.form.start_number') %%>' class='an-form-control no-redius border-bottom m-0 text_color filter-#{attr.name}'>\n                                "
+                        filter += "<input type='number' name='#{attr.name}_start' placeholder='<%= t('helpers.form.start_number') %%>' class='an-form-control no-redius border-bottom m-0 text_color filter-#{attr.name} filter-range-condition'>\n                                "
                     end
 
                     filter += "</div>\n                            "
@@ -82,9 +82,9 @@
                     filter += "<div class='col-sm-12 no-padding'>\n                                "
 
                     if attr.type == "datetime"
-                        filter += "<input type='text' name='#{attr.name}_end' placeholder='<%= t('helpers.form.end_at') %%>' class='an-form-control no-redius border-bottom m-0 text_color datetimepicker filter-#{attr.name}'>\n                                "
+                        filter += "<input type='text' name='#{attr.name}_end' placeholder='<%= t('helpers.form.end_at') %%>' class='an-form-control no-redius border-bottom m-0 text_color datetimepicker filter-#{attr.name} filter-range-condition'>\n                                "
                     else
-                        filter += "<input type='number' name='#{attr.name}_end' placeholder='<%= t('helpers.form.start_number') %%>' class='an-form-control no-redius border-bottom m-0 text_color filter-#{attr.name}'>\n                                "
+                        filter += "<input type='number' name='#{attr.name}_end' placeholder='<%= t('helpers.form.start_number') %%>' class='an-form-control no-redius border-bottom m-0 text_color filter-#{attr.name} filter-range-condition'>\n                                "
                     end
 
                     filter += "</div>\n                            "
