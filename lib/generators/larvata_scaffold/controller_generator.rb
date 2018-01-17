@@ -32,7 +32,7 @@ module LarvataScaffold
       end
 
       def view_files
-        actions = %w(index _table new edit _form)
+        actions = %w(index new edit _form _table _search_filter)
         actions
       end
 
