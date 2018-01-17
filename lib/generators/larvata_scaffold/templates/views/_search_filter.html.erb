@@ -14,48 +14,70 @@
         <div class="panel-body">
 
             <div class="form-group">
-                <%= "<label class='col-sm-2 control-label l-h-34'><%= t('helpers.form.keyword_search_label') %%></label>" %>
+                <label class='col-sm-2 control-label'><%%= t('helpers.form.keyword_search_label') %></label>
                 <div class="col-sm-10">
-                    <%= "<input type='text' id='keyword_search' placeholder='<%= t('helpers.form.keyword_search') %%>' class='an-form-control no-redius border-bottom m-0 text_color'>" %>
+                  <input type='text' id='keyword_search' placeholder="<%%= t('helpers.form.keyword_search') %>"
+                         class='an-form-control no-redius border-bottom m-0 text_color'>
                 </div>
                 <div class="clear"></div>
             </div>
 
             <div class='form-group'>
-<%= editable_attributes_and_except_sorting_and_datetime_and_number.each_with_index.map{ |attr, i|
-            belongs_to_assoc = association_by_foreign_key(attr)
 
-            filter = "                        "
+            <%= editable_attributes_and_except_sorting_and_datetime_and_number.each_with_index.map { | attr, i |
 
-            filter += "<label class='col-sm-2 control-label l-h-34'><%= #{class_name}.human_attribute_name('#{attr.name}') %%></label>\n                        "
-            filter += "<div class='col-sm-4'>\n                            "
+              belongs_to_assoc = association_by_foreign_key(attr)
 
-            if belongs_to_assoc
+              filter = <<-HEREDOC
+                <label class='col-sm-2 control-label'><%= #{class_name}.human_attribute_name('#{attr.name}') %%></label>
+                <div class='col-sm-4'>
+              HEREDOC
+
+              if belongs_to_assoc
                 assoc_class_name = belongs_to_assoc.name.to_s.classify
-                filter += "<%= simple_form_for([:admin, #{class_name}.new]) do | f | %%>\n                                "
-                filter += "<%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{assoc_class_name}.none, value_method: :id, label_method: :id, class: 'form-control select2 filter-#{attr.name} filter-select-condition', include_blank: true, selected: nil %%>\n            "
-                filter += "<% end %%>\n                            "
-            elsif is_enum? attr
-                filter += "<%= simple_form_for([:admin, #{class_name}.new]) do | f | %%>\n                                "
-                filter += "<%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{class_name}.#{attr.name.pluralize}_i18n, class: 'form-control select2 filter-#{attr.name} filter-select-condition', include_blank: true, selected: nil %%>\n                        "
-                filter += "<% end %%>\n                            "
-            elsif attr.type == "boolean"
-                filter += "<%= simple_form_for(:admin) do | f | %%>\n                                "
-                filter += "<%= f.input_field :#{attr.name}, name: '#{attr.name}', collection:[[t('helpers.select.true_option'),true],[t('helpers.select.false_option'),false]], class: 'form-control select2 filter-#{attr.name} filter-select-condition', include_blank: true %%>\n                            "
-                filter += "<% end %%>\n                        "
-            else
-                filter += "<input type='text' name='#{attr.name}' placeholder='<%= t('helpers.form.placeholder', column: #{class_name}.human_attribute_name('#{attr.name}')) %%>' class='an-form-control no-redius border-bottom m-0 text_color filter-#{attr.name} filter-condition'>\n                        "
-            end
+                _filter = <<-HEREDOC
+                  <%= simple_form_for([:admin, #{class_name}.new]) do | f | %%>
+                  <%= f.input_field :#{attr.name}, name: '#{attr.name}',
+                        collection: #{assoc_class_name}.none, value_method: :id, label_method: :id,
+                        class: 'form-control select2 filter-#{attr.name} filter-select-condition', include_blank: true, selected: nil %%>
+                  <% end %%>
+                HEREDOC
+                filter = filter + _filter
+              elsif is_enum? attr
+                _filter = <<-HEREDOC
+                  <%= simple_form_for([:admin, #{class_name}.new]) do | f | %%>
+                  <%= f.input_field :#{attr.name}, name: '#{attr.name}',
+                        collection: #{class_name}.#{attr.name.pluralize}_i18n,
+                        class: 'form-control select2 filter-#{attr.name} filter-select-condition', include_blank: true, selected: nil %%>
+                  <% end %%>
+                HEREDOC
+                filter = filter + _filter
+              elsif attr.type == "boolean"
+                _filter = <<-HEREDOC
+                  <%= simple_form_for(:admin) do | f | %%>
+                  <%= f.input_field :#{attr.name}, name: '#{attr.name}',
+                        collection:[[t('helpers.select.true_option'),true], [t('helpers.select.false_option'),false]],
+                        class: 'form-control select2 filter-#{attr.name} filter-select-condition', include_blank: true %%>
+                  <% end %%>
+                HEREDOC
+                filter = filter + _filter
+              else
+                _filter = <<-HEREDOC
+                  <input type='text' name='#{attr.name}'
+                   placeholder='<%= t('helpers.form.placeholder', column: #{class_name}.human_attribute_name('#{attr.name}')) %%>'
+                   class='an-form-control no-redius border-bottom m-0 text_color filter-#{attr.name} filter-condition'>
+                HEREDOC
+                filter = filter + _filter
+              end
 
-            filter += "</div>\n                        "
+              _filter = <<-HEREDOC
+                </div>
+              HEREDOC
 
-            filter += "<div class='clear'></div>\n                    " if i >= 1 and i%2 == 1
-            filter += "</div>\n\n                    " if i >= 1 and i%2 == 1
-            filter += "<div class='form-group'>" if i >= 1 and i%2 == 1
+              filter + _filter
 
-            filter
-        }.join("\n")
-%>
+              }.join("\n")
+            %>
                 <div class='clear'></div>
             </div>
 
