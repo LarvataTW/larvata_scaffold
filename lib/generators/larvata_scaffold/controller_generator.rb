@@ -17,6 +17,7 @@ module LarvataScaffold
       class_option :controller, type: :string, default: nil, desc: "Specifie controller class name."
 
       # We don’t need to call methods in the generator class. All public methods will be called one by one on generating.
+
       def copy_controller_and_spec_files
         template "controller.rb", File.join(controller_path, "#{controller_file_name}_controller.rb")
       end
@@ -31,7 +32,7 @@ module LarvataScaffold
       end
 
       def view_files
-        actions = %w(index _table new edit _form)
+        actions = %w(index new edit _form _table _search_filter)
         actions
       end
 
@@ -55,9 +56,9 @@ module LarvataScaffold
         routes_string += "patch :update_row\n      "
 
         # 建立 belongs_to associations select2 options route
-        editable_attributes_and_except_sorting_and_datetime_and_number.each do |attr| 
+        editable_attributes_and_except_sorting_and_datetime_and_number.each do |attr|
           belongs_to_assoc = association_by_foreign_key(attr)
-          if belongs_to_assoc 
+          if belongs_to_assoc
             routes_string += "  "
 
             assoc_singular_name = belongs_to_assoc.name.to_s
