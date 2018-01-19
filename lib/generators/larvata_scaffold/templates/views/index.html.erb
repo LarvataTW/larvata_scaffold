@@ -1,23 +1,22 @@
 <div class="an-body-topbar wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
-    <div class="an-page-title">
-        <h2><%= "<%= t('helpers.page_title.index', model: #{class_name}.model_name.human) %%>" %></h2>
-    </div>
+  <div class="an-page-title">
+    <h2><%= "<%= t('helpers.page_title.index', model: #{class_name}.model_name.human) %%>" %></h2>
+  </div>
 </div>
 
 <div class="an-single-component with-shadow">
-    <div class="an-component-header search_wrapper">
-        <%= "<%= link_to t('button.new', model: #{class_name}.model_name.human), new_#{'admin_' if admin?}#{singular_controller_name}_path, class: 'an-btn an-btn-primary' %%>" %>
-        <%= "<%= render 'search_filter' %%>" %>
-        <div class="clear"></div>
-    </div>
+  <div class="an-component-header search_wrapper">
+    <%= "<%= render 'search_filter' %%>" %>
+  </div>
 
-    <div class="an-component-body">
-        <div class="an-helper-block">
-            <div class="table-responsive">
-                <%= "<%= render 'table' %%>" %>
-            </div>
-        </div>
+  <div class="an-component-body">
+    <div class="an-helper-block">
+      <%= "<%= link_to t('button.new', model: #{class_name}.model_name.human),
+               new_#{'admin_' if admin?}#{singular_controller_name}_path,
+               class: 'an-btn an-btn-primary' %%>" %>
     </div>
+    <%= "<%= render 'table' %%>" %>
+  </div>
 </div>
 
 <%= "<% content_for :post_scripts do %%>" %>
