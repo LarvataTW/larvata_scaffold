@@ -1,30 +1,30 @@
 class <%= 'Admin::' if admin? %><%= class_name %>Policy < <%= admin? ? 'Admin' : 'Application' %>Policy
   def index?
-    user.has_role? :admin
+    common_permission
   end
 
   def new?
-    user.has_role? :admin
+    common_permission
   end
 
   def create?
-    user.has_role? :admin
+    common_permission
   end
 
   def show?
-    user.has_role? :admin
+    common_permission
   end
 
   def edit?
-    user.has_role? :admin
+    common_permission
   end
 
   def update?
-    user.has_role? :admin
+    common_permission
   end
 
   def destroy?
-    user.has_role? :admin
+    common_permission
   end
 
   class Scope < Scope

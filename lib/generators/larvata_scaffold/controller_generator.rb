@@ -42,6 +42,11 @@ module LarvataScaffold
 
       def pundit_file
         template "policies/pundit.rb", File.join(policies_path, "#{singular_name}_policy.rb")
+
+        # 如果有自定 controller 名稱，就用 controller 名稱來額外產生需要的 pundit 程式
+        unless custom_controller.nil?
+          template "policies/controller_pundit.rb", File.join(policies_path, "#{custom_controller}_policy.rb")
+        end
       end
 
       def add_routes
