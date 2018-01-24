@@ -7,7 +7,10 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   before_action :class_authorize, only: [:index, :new, :create]
 
   def index
-
+<% unless tab.nil? -%>
+    <%= "@#{tab}_group_row_counts = #{class_name}.group(:#{tab}).count" %>
+    @all_row_count = @<%= tab %>_group_row_counts.inject(0) { |row_count, <%= tab %>_group| row_count + <%= tab %>_group[1] }
+<% end -%>
   end
 
   def datatables
