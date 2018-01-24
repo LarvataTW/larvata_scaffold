@@ -40,7 +40,7 @@
       if belongs_to_assoc
         assoc_class_name = belongs_to_assoc.name.to_s.classify
         _filter = <<-HEREDOC
-          <%= simple_form_for([:admin, #{class_name}.new]) do | f | %%>
+          <%= simple_form_for([:admin, #{class_name}.new], url: '/#{'admin' if admin?}/#{controller_file_path}/') do | f | %%>
           <%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{assoc_class_name}.none, value_method: :id, label_method: :id,
                 class: 'form-control select2 filter-#{attr.name} filter-select-condition', include_blank: true, selected: nil %%>
           <% end %%>
@@ -48,7 +48,7 @@
         filter = filter + _filter
       elsif is_enum? attr
         _filter = <<-HEREDOC
-          <%= simple_form_for([:admin, #{class_name}.new]) do | f | %%>
+          <%= simple_form_for([:admin, #{class_name}.new], url: '/#{'admin' if admin?}/#{controller_file_path}/') do | f | %%>
           <%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{class_name}.#{attr.name.pluralize}_i18n,
                 class: 'form-control select2 filter-#{attr.name} filter-select-condition', include_blank: true, selected: nil %%>
           <% end %%>
