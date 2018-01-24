@@ -31,7 +31,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
 
       @q = <%= class_name %>.ransack(@filters)
 
-      @q.sorts = @sorting_key.blank? ? "updated_at desc" : "#{params[:columns][@sorting_key.to_s][:name]} #{@sorting_dir}"
+      @q.sorts = @sorting_key.blank? ? "updated_at desc" : "#{params[:columns][@sorting_key.to_s][:data]} #{@sorting_dir}"
 
       @<%= plural_name %> = @q.result.page(@page).per(params[:length])
       @filtered_count = @q.result.count

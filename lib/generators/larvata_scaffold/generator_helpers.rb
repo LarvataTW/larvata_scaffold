@@ -128,6 +128,10 @@ module LarvataScaffold
       def controller_file_name
         custom_controller&.pluralize || super
       end
+
+      def tab
+        options['tab'] || ""
+      end
     end
   end
 end
