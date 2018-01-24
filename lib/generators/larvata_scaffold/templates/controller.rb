@@ -15,7 +15,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
     <%= "authorize [:admin, #{class_name}], :index?" if admin? %>
     <%= "authorize #{class_name}, :index?" unless admin? %>
 <% end -%>
-    
+
     respond_to do |format|
       # 設定排序條件
       unless params[:order].blank?
@@ -71,7 +71,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
       render :edit
     end
   end
-  
+
   def destroy
     @<%= singular_name %>.destroy
     redirect_to <%= 'admin_' if admin? %><%= controller_file_path %>_url, notice: '已成功刪除<%= human_name %>資料'
@@ -117,9 +117,9 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
 <% end -%>
 
 <% # 建立 belongs_to associations select2 options method
-editable_attributes_and_except_sorting_and_datetime_and_number.each do |attr| 
+editable_attributes_and_except_sorting_and_datetime_and_number.each do |attr|
   belongs_to_assoc = association_by_foreign_key(attr)
-  if belongs_to_assoc 
+  if belongs_to_assoc
     assoc_class_name = belongs_to_assoc.name.to_s.classify
     assoc_singular_name = belongs_to_assoc.name.to_s
     assoc_plural_name = assoc_singular_name.pluralize
@@ -134,14 +134,14 @@ editable_attributes_and_except_sorting_and_datetime_and_number.each do |attr|
     <%= assoc_plural_name %> = q.result.page(page).per(per)
 
     filtered_count = q.result.count
-    
+
     <%= assoc_plural_name %> = <%= assoc_plural_name %>.map{|<%= assoc_singular_name%>| {id: <%= assoc_singular_name%>.id, text: <%= assoc_singular_name%>.id}}
 
     render json: {results: <%= assoc_plural_name %>, filtered_count: filtered_count, per: per}
   end
-<% 
-  end 
-end 
+<%
+  end
+end
 %>
 
   private
@@ -167,19 +167,19 @@ end
     <%= plural_name %>.map do |<%= singular_name %>|
       {
         DT_RowId: "#{<%= singular_name %>.id}",
-        <%= all_attributes.map{ |attr| 
+        <%= all_attributes.map{ |attr|
           if is_enum? attr
-            row_attr = "#{attr.name}: #{singular_name}.#{attr.name},\n        " 
-            row_attr += "#{attr.name}_i18n: #{singular_name}.#{attr.name}_i18n," 
+            row_attr = "#{attr.name}: #{singular_name}.#{attr.name},\n        "
+            row_attr += "#{attr.name}_i18n: #{singular_name}.#{attr.name}_i18n,"
             row_attr
           elsif attr.type == 'boolean'
-            "#{attr.name}: #{singular_name}.#{attr.name} == true ? I18n.t('helpers.select.true_option') : I18n.t('helpers.select.false_option')," 
+            "#{attr.name}: #{singular_name}.#{attr.name} == true ? I18n.t('helpers.select.true_option') : I18n.t('helpers.select.false_option'),"
           elsif attr.type == 'datetime'
-            "#{attr.name}: #{singular_name}.#{attr.name}&.strftime('%Y-%m-%d %H:%M:%S')," 
+            "#{attr.name}: #{singular_name}.#{attr.name}&.strftime('%Y-%m-%d %H:%M:%S'),"
           else
-            "#{attr.name}: #{singular_name}.#{attr.name}," 
+            "#{attr.name}: #{singular_name}.#{attr.name},"
           end
-        }.join("\n        ") 
+        }.join("\n        ")
         %>
       }
     end
