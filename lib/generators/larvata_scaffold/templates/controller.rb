@@ -7,7 +7,10 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   before_action :class_authorize, only: [:index, :new, :create]
 
   def index
-
+<% unless tab.nil? -%>
+    <%= "@#{tab}_group_row_counts = #{class_name}.group(:#{tab}).count" %>
+    @all_row_count = @<%= tab %>_group_row_counts.inject(0) { |row_count, <%= tab %>_group| row_count + <%= tab %>_group[1] }
+<% end -%>
   end
 
   def datatables
@@ -31,7 +34,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
 
       @q = <%= class_name %>.ransack(@filters)
 
-      @q.sorts = @sorting_key.blank? ? "updated_at desc" : "#{params[:columns][@sorting_key.to_s][:name]} #{@sorting_dir}"
+      @q.sorts = @sorting_key.blank? ? "updated_at desc" : "#{params[:columns][@sorting_key.to_s][:data]} #{@sorting_dir}"
 
       @<%= plural_name %> = @q.result.page(@page).per(params[:length])
       @filtered_count = @q.result.count

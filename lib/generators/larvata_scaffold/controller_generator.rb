@@ -15,6 +15,7 @@ module LarvataScaffold
       class_option :admin, type: :boolean, default: false, desc: "Backend function?"
       class_option :attachable, type: :boolean, default: false, desc: "Can function attach files?"
       class_option :controller, type: :string, default: nil, desc: "Specifie controller class name."
+      class_option :tab, type: :string, default: nil, desc: "Specifie enum field to generate tabs in index.html.erb."
 
       # We don’t need to call methods in the generator class. All public methods will be called one by one on generating.
 

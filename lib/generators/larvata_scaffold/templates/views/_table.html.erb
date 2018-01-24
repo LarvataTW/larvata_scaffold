@@ -1,17 +1,17 @@
 <div class="table-responsive">
-  <table id='<%= plural_name %>_datatable' class='table table-bordered table_breaking'>
-    <thead>
-      <tr>
-      <% if contains_sorting_column? -%>
-      <%= "<th class='all'><%= #{class_name}.human_attribute_name('sorting') %%></th>" %>
-      <% end -%>
-      <% editable_attributes_and_except_sorting.each do | attr | -%>
-      <%= "<th class='all'><%= #{class_name}.human_attribute_name('#{attr.name}') %%></th>" %>
-      <% end -%>
-      <%= "<th class='all'><%= t('helpers.datatables.actions') %%></th>" %>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
+    <%= "<table id='<%= tab_key %%>_#{plural_name}_table' data-tab_key='<%= tab_key %%>' class='table table-bordered table_breaking #{plural_name}_table '>" %>
+        <thead>
+            <tr>
+                <% if contains_sorting_column? -%>
+                    <%= "<th class='all'><%= #{class_name}.human_attribute_name('sorting') %%></th>" %>
+                <% end -%>
+                <% editable_attributes_and_except_sorting.each do | attr | -%>
+                    <%= "<th class='all'><%= #{class_name}.human_attribute_name('#{attr.name}') %%></th>" %>
+                <% end -%>
+                <%= "<th class='all'><%= t('helpers.datatables.actions') %%></th>" %>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 </div>

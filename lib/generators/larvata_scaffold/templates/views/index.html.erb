@@ -1,22 +1,49 @@
 <div class="an-body-topbar wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
-  <div class="an-page-title">
-    <h2><%= "<%= t('helpers.page_title.index', model: #{class_name}.model_name.human) %%>" %></h2>
-  </div>
+    <div class="an-page-title">
+        <h2><%= "<%= t('helpers.page_title.index', model: #{class_name}.model_name.human) %%>" %></h2>
+    </div>
 </div>
 
 <div class="an-single-component with-shadow">
-  <div class="an-component-header search_wrapper">
-    <%= "<%= render 'search_filter' %%>" %>
-  </div>
+    <div class="an-component-header search_wrapper">
+        <%= "<%= render 'search_filter' %%>" %>
+    </div>
 
-  <div class="an-component-body">
-    <div class="an-helper-block">
-      <%= "<%= link_to t('button.new', model: #{class_name}.model_name.human),
+    <div class="an-component-body">
+        <div class="an-helper-block">
+            <%= "<%= link_to t('button.new', model: #{class_name}.model_name.human),
                new_#{'admin_' if admin?}#{singular_controller_name}_path,
                class: 'an-btn an-btn-primary' %%>" %>
+        </div>
+
+<% unless tab.nil? -%>
+        <div class="an-bootstrap-custom-tab">
+            <div class="an-tab-control">
+                <ul class="nav nav-tabs text-left" role="tablist">
+                    <%= "<% {'all'=>t('helpers.datatables.tab_all')}.merge(#{class_name}.#{tab.pluralize}_i18n).each_with_index do |tab, index| %%>" %>
+                        <%= "<li role='presentation' class='<%= 'active' if index == 0 %%>'>" %>
+                            <%= "<a href='#{singular_name}_<%= tab[0] %%>_tabpanel' aria-controls='#{singular_name}_#{tab}_tab' role='tab' data-toggle='tab' data-tab_key='<%= tab[0] %%>' class='#{singular_name}_#{tab}_tab'>" %>
+                                <i class="ion-happy-outline"></i>
+                                <%= "<%= \"\#{tab[1]}(\#{index == 0 ? @all_row_count : @#{tab}_group_row_counts[tab[0].to_sym] || 0})\" %%>" %>
+                            </a>
+                        </li>
+                    <%= "<% end %%>" %>
+                </ul>
+            </div>
+
+            <div class="tab-content">
+                <%= "<% {'all'=>t('helpers.datatables.tab_all')}.merge(#{class_name}.#{tab.pluralize}_i18n).each_with_index do |status, index| %%>" %>
+                    <%= "<div role='tabpanel' class='tab-pane fade in <%= 'active' if index == 0 %%>' id='#{singular_name}_<%= #{tab}[0] %%>_tabpanel'>" %>
+                        <%= "<%= render 'table', tab_key: #{tab}[0] %%>" %>
+                    </div>
+                <%= "<% end %%>" %>
+            </div>
+        </div>
+<% else -%>
+        <%= "<%= render 'table', tab_key: 'all' %%>" %>
+<% end -%>
+
     </div>
-    <%= "<%= render 'table' %%>" %>
-  </div>
 </div>
 
 <%= "<% content_for :post_scripts do %%>" %>
