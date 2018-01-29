@@ -130,7 +130,7 @@ module LarvataScaffold
       end
 
       def tab
-        options['tab'] || ""
+        options['tab']
       end
     end
   end
