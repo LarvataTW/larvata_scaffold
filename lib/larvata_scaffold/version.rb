@@ -1,3 +1,3 @@
 module LarvataScaffold
-  VERSION = "0.2.0.3"
+  VERSION = "0.2.0.5"
 end
