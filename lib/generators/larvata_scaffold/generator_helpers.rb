@@ -98,7 +98,7 @@ module LarvataScaffold
       end
 
       def singular_controller_name
-        options['controller'].singularize || file_name
+        options['controller']&.singularize || file_name
       end
 
       def controller_path
