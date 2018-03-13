@@ -8,8 +8,8 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
 
   def index
 <% unless tab.nil? -%>
-    <%= "@#{tab}_group_row_counts = #{class_name}.group(:#{tab}).count" %>
-    @all_row_count = @<%= tab %>_group_row_counts.inject(0) { |row_count, <%= tab %>_group| row_count + <%= tab %>_group[1] }
+    <%= "@#{controller_file_name}_#{tab}_group_row_counts = #{class_name}.group(:#{tab}).count" %>
+    @<%= controller_file_name %>_all_row_count = @<%= controller_file_name %>_<%= tab %>_group_row_counts.inject(0) { |row_count, <%= tab %>_group| row_count + <%= tab %>_group[1] }
 <% end -%>
   end
 

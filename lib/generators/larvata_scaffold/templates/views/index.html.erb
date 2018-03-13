@@ -24,7 +24,7 @@
                         <%= "<li role='presentation' class='<%= 'active' if index == 0 %%>'>" %>
                             <%= "<a href='##{singular_name}_<%= tab[0] %%>_tabpanel' aria-controls='#{singular_name}_#{tab}_tab' role='tab' data-toggle='tab' data-tab_key='<%= tab[0] %%>' class='#{singular_name}_#{tab}_tab'>" %>
                                 <i class="ion-happy-outline"></i>
-                                <%= "<%= \"\#{tab[1]}(\#{index == 0 ? @all_row_count : @#{tab}_group_row_counts[tab[0]] || 0})\" %%>" %>
+                                <%= "<%= \"\#{tab[1]}(\#{index == 0 ? @#{controller_file_name}_all_row_count : @#{controller_file_name}_#{tab}_group_row_counts[tab[0]] || 0})\" %%>" %>
                             </a>
                         </li>
                     <%= "<% end %%>" %>
