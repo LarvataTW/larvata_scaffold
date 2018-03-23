@@ -222,14 +222,14 @@ new_#{'admin_' if admin?}#{detail_controller.singularize}_path(
         # 增加程式到 datatables 方法內，讓查詢 detail 時，會帶入 master id
         insert_into_file detail_controller_file, before: "      @q = active_record_query.ransack(@filters)\n" do
           _eof_content = <<-EOF
-      active_record_query = active_record_query.includes(:#{master}).where(#{master.pluralize}: {id: params[:#{master}_id]}) unless params[:#{master}_id].nil?
+      active_record_query = active_record_query.includes(:#{master}).where(#{master.pluralize}: {id: params[:#{master}_id]}) unless params[:#{master}_id].blank?
           EOF
 
           _eof_content 
         end
       end
 
-      def modify_detail_datatable_js
+      def modify_detail_datatable_js_file
         detail_datatables_js_file = File.join(js_path, "#{detail_controller}_datatables.js")
 
         # 讓 datatable url 加上 master pk query string
@@ -289,6 +289,11 @@ new_#{'admin_' if admin?}#{detail_controller.singularize}_path(
 
           gsub_file detail_form_file, /admin_#{detail_controller}_path/, _eof_content.strip
         end
+      end
+
+      # 調整 master model js file
+      def modify_master_model_js_file
+
       end
 
       private 
