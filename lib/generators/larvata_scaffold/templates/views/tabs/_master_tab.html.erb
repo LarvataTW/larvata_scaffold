@@ -1,0 +1,10 @@
+<%= "<%= render '#{'admin/' if admin?}#{controller_file_path}/form', readonly: true %%>" %>
+
+<hr class="style3">
+
+<%= "<%= render 'common/attachments', model: @#{singular_name}, upload: false, destroy: false %%>" %>
+
+<%= "<%= content_for :post_scripts do %%>" %>
+<%= "    <%= javascript_include_tag '#{'admin/' if admin?}#{controller_file_path}' %%>" %>
+<%= "<% end %%>" %>
+

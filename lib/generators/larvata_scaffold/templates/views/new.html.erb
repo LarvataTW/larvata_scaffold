@@ -6,7 +6,7 @@
             <h4><%= "<%= #{class_name}.model_name.human %%>" %></h4>
         </div>
         <div class="panel-body">
-            <%= "<%= render 'form' %%>" %>
+            <%= "<%= render '#{'admin/' if admin?}#{controller_file_name}/form' %%>" %>
         </div>
     </div>
 </div>

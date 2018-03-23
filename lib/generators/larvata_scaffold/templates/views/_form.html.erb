@@ -39,10 +39,10 @@
     %>
 
     <%= "<%= f.submit t('button.save'), class: 'an-btn an-btn-primary' %%>" %>
-    <%= "<%= link_to t('button.back'), #{'admin_' if admin?}#{controller_file_path}_path, class: 'an-btn an-btn-default' %%>" %>
+    <%= "<%= link_to t('button.back'), \"\#{$navigation[:master_show_url]}?master_show_tab=\#{$navigation[:master_show_tab]}\", class: 'an-btn an-btn-default' %%>" %>
 <%= "<% end %%>" %>
 
-<%= "<%= render 'common/attachments', model: @#{singular_name} %%>" if attachable? %>
+<%= "<%= render 'common/attachments', model: @#{singular_name}, upload: true, destroy: true %%>" if attachable? %>
 
 <%= "<%= content_for :post_scripts do %%>" %>
 <%= "  <%= javascript_include_tag '#{'admin/' if admin?}#{controller_file_path}' %%>" %>

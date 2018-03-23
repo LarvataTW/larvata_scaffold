@@ -1,7 +1,6 @@
 require 'generators/larvata_scaffold/generator_helpers'
 
-module LarvataScaffold
-  module Generators
+module LarvataScaffold module Generators
     class ControllerGenerator < Rails::Generators::NamedBase
       include Rails::Generators::ResourceHelpers
       include LarvataScaffold::Generators::GeneratorHelpers
@@ -33,8 +32,15 @@ module LarvataScaffold
       end
 
       def view_files
-        actions = %w(index new edit _form _table _search_filter)
+        actions = %w(index _index_datatables new edit show _form _table _search_filter)
         actions
+      end
+
+      def copy_view_tab_files
+        directory_path = File.join(views_path, controller_file_path, 'tabs')
+        empty_directory directory_path
+
+        template "views/tabs/_master_tab.html.erb", File.join(directory_path, "_#{singular_name}_tab.html.erb")
       end
 
       def copy_js_files
@@ -56,6 +62,12 @@ module LarvataScaffold
 
         routes_string += "namespace :admin do\n    " if admin?
         routes_string += "resources :#{controller_file_name} do\n      "
+
+        routes_string += "member do\n        "
+        routes_string += "get :change_show_tab\n          "
+        routes_string += "get :render_tab_content\n          "
+        routes_string += "end\n    "
+
         routes_string += "collection do\n        "
         routes_string += "post :datatables\n        "
         routes_string += "patch :update_row_sorting\n        " if contains_sorting_column?
