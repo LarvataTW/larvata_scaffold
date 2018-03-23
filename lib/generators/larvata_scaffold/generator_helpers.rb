@@ -132,6 +132,22 @@ module LarvataScaffold
       def tab
         options['tab']
       end
+
+      def master
+        singular_name 
+      end
+
+      def master_controller
+        options['master_controller'] || master&.pluralize
+      end
+
+      def detail
+        options['detail']
+      end
+
+      def detail_controller
+        options['detail_controller'] || detail&.pluralize
+      end
     end
   end
 end

@@ -4,12 +4,16 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
 <% end -%>
 
   before_action :set_<%= singular_name %>, only: [:show, :edit, :update, :destroy]
+  before_action :set_navigation, only: [:new, :edit, :show]
   before_action :class_authorize, only: [:index, :new, :create]
+
+  # 儲存返回主檔資訊
+  $navigation = {}
 
   def index
 <% unless tab.nil? -%>
-    <%= "@#{tab}_group_row_counts = #{class_name}.group(:#{tab}).count" %>
-    @all_row_count = @<%= tab %>_group_row_counts.inject(0) { |row_count, <%= tab %>_group| row_count + <%= tab %>_group[1] }
+    <%= "@#{controller_file_name}_#{tab}_group_row_counts = #{class_name}.group(:#{tab}).count" %>
+    @<%= controller_file_name %>_all_row_count = @<%= controller_file_name %>_<%= tab %>_group_row_counts.inject(0) { |row_count, <%= tab %>_group| row_count + <%= tab %>_group[1] }
 <% end -%>
   end
 
@@ -32,7 +36,8 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
       @keyword = params[:search][:value] unless params[:search].blank?
       @filters["id_cont".to_sym] = @keyword if @keyword
 
-      @q = <%= class_name %>.ransack(@filters)
+      active_record_query = <%= class_name %>
+      @q = active_record_query.ransack(@filters)
 
       @q.sorts = @sorting_key.blank? ? "updated_at desc" : "#{params[:columns][@sorting_key.to_s][:data]} #{@sorting_dir}"
 
@@ -51,13 +56,13 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   end
 
   def new
-    @<%= singular_name %> = <%= class_name %>.new
+    @<%= singular_name %> ||= <%= class_name %>.new
   end
 
   def create
     @<%= singular_name %> = <%= class_name %>.new(<%= singular_name %>_params)
     if @<%= singular_name %>.save
-      redirect_to <%= 'admin_' if admin? %><%= controller_file_path %>_path(@<%= singular_name %>), notice: '已成功建立<%= human_name %>資料'
+      redirect_to "#{$navigation[:master_show_url]}?master_show_tab=#{$navigation[:master_show_tab]}", notice: '已成功更新<%= human_name %>資料'
     else
       render :new
     end
@@ -67,9 +72,13 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
 
   end
 
+  def show
+    @tabs = tabs
+  end
+
   def update
     if @<%= singular_name %>.update(<%= singular_name %>_params)
-      redirect_to <%= 'admin_' if admin? %><%= controller_file_path %>_path(@<%= singular_name %>), notice: '已成功更新<%= human_name %>資料'
+      redirect_to "#{$navigation[:master_show_url]}?master_show_tab=#{$navigation[:master_show_tab]}", notice: '已成功更新<%= human_name %>資料'
     else
       render :edit
     end
@@ -147,6 +156,32 @@ editable_attributes_and_except_sorting_and_datetime_and_number.each do |attr|
 end
 %>
 
+  # 設定連結所屬明細頁籤
+  def tabs
+    tabs_array = []
+    tabs_array << {name: '<%= master %>'}
+    tabs_array
+  end
+
+  # 變換頁籤顯示內容
+  def change_show_tab
+    @current_tab = tabs.select{ |tab| tab[:name] == params[:tab] }.first
+
+    row_count_vars_of_tab(@current_tab[:name])
+
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
+  def render_tab_content
+    master_show_tab = params[:master_show_tab]
+
+    row_count_vars_of_tab(master_show_tab)
+
+    render partial: "<%= 'admin/' if admin? %><%= controller_file_path %>/tabs/#{master_show_tab}_tab", locals: { <%= singular_name %>: @<%= singular_name %>, master_show_tab: master_show_tab }
+  end
+
   private
 
   def set_<%= singular_name %>
@@ -178,13 +213,26 @@ end
           elsif attr.type == 'boolean'
             "#{attr.name}: #{singular_name}.#{attr.name} == true ? I18n.t('helpers.select.true_option') : I18n.t('helpers.select.false_option'),"
           elsif attr.type == 'datetime'
-            "#{attr.name}: #{singular_name}.#{attr.name}&.strftime('%Y-%m-%d %H:%M:%S'),"
+            "#{attr.name}: #{singular_name}.#{attr.name}&.strftime('%F %T'),"
           else
             "#{attr.name}: #{singular_name}.#{attr.name},"
           end
         }.join("\n        ")
         %>
       }
+    end
+  end
+
+  def set_navigation
+    referrer = request.referrer
+    $navigation[:master_show_url] = referrer[0, referrer.index('?') || referrer.length]
+    $navigation[:master_show_tab] = params[:master_show_tab]
+  end
+
+  # 計算列表頁面上的資料筆數統計值
+  def row_count_vars_of_tab(tab_name)
+    case params[:tab]
+    when '<%= master %>'
     end
   end
 

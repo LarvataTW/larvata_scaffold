@@ -1,0 +1,41 @@
+<h2><%= "<%= t('helpers.page_title.show', model: #{class_name}.model_name.human) %%>" %></h2>
+
+<div class="col-md-12">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h4><%= "<%= #{class_name}.model_name.human %%>" %></h4>
+        </div>
+        <div class="panel-body">
+            <div class="an-bootstrap-custom-tab">
+                <div id="tabs" class="an-tab-control">
+                    <ul class="nav nav-tabs text-left" role="tablist">
+                        <%= "<% @tabs.each_with_index do |tab, index| %%>" %>
+                            <%= "<li role='presentation' class='<%= 'active' if index == 0 %%>'>" %>
+                                <%= "<a href='<%= change_show_tab_admin_#{controller_file_path}_path(tab: tab[:name]) %%>' aria-controls='<%= tab[:name] %%>_tab' role='tab' data-toggle='' data-remote='true' class='<%= tab[:name] %%>_tab'>" %>
+                                    <i class="ion-happy-outline"></i>
+                                    <%= "<%= t \"labels.property.\#{tab[:name]}_info\" %%>" %>
+                                </a>
+                            </li>
+                        <%= "<% end %%>" %>
+                    </ul>
+                </div>
+
+                <div class="tab-content">
+                    <%= "<% @tabs.each_with_index do |tab, index| %%>" %>
+                        <%= "<div role='tabpanel' class='tab-pane fade in <%= 'active' if index == 0 %%>' id='<%= tab[:name] %%>_tabpanel'>" %>
+                            <%= "<%= render \"#{'admin/' if admin?}#{controller_file_path}/tabs/\#{tab[:name]}_tab\", #{singular_name}: @#{singular_name} if index == 0 %%>" %>
+                        </div>
+                    <%= "<% end %%>" %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%= "<%= content_for :post_scripts do %%>" %>
+<%= "    <script>" %>
+<%= "        var #{singular_name}_id = '<%= @#{singular_name}.id %%>';" %>
+<%= "        var master_show_tab = '<%= params[:master_show_tab] %%>';" %>
+<%= "    </script>" %>
+<%= "    <%= javascript_include_tag '#{'admin/' if admin?}#{controller_file_path}' %%>" %>
+<%= "<% end %%>" %>

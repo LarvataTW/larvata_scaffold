@@ -27,6 +27,18 @@ class <%= 'Admin::' if admin? %><%= class_name %>Policy < <%= admin? ? 'Admin' :
     common_permission
   end
 
+  def update_row? 
+    common_permission
+  end
+
+  def change_show_tab?
+    common_permission
+  end
+
+  def render_tab_content?
+    common_permission
+  end
+
   class Scope < Scope
     def resolve
       scope.all
