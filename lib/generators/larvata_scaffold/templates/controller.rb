@@ -225,7 +225,7 @@ end
 
   def set_navigation
     referrer = request.referrer
-    $navigation[:master_show_url] = referrer[0, referrer.index('?') || referrer.length]
+    $navigation[:master_show_url] = referrer[0, referrer.index('?') || referrer.length] unless referrer.nil?
     $navigation[:master_show_tab] = params[:master_show_tab]
   end
 
