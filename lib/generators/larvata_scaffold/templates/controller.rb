@@ -231,7 +231,7 @@ end
 
   # 計算列表頁面上的資料筆數統計值
   def row_count_vars_of_tab(tab_name)
-    case params[:tab]
+    case tab_name
     when '<%= master %>'
     end
   end

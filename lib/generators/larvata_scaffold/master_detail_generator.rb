@@ -103,6 +103,23 @@ module LarvataScaffold
           end
         end
 
+        # 確認 row_count_vars_of_tab 是否存在，不存在則建立
+        if File.readlines(master_controller_file).grep(/def row_count_vars_of_tab/).size == 0
+          insert_into_file master_controller_file, before: "  private\n" do
+            _eof_content = <<-EOF
+  # 計算列表頁面上的資料筆數統計值
+  def row_count_vars_of_tab(tab_name)
+    case tab_name
+    when '#{detail}'
+    end
+  end
+
+            EOF
+
+            _eof_content 
+          end
+        end
+
         # 增加 detail index row count variables 程式到 row_count_vars_of_tab 方法內
         if File.readlines(master_controller_file).grep(/@#{detail_controller}_status_group_row_counts/).size == 0
           insert_into_file master_controller_file, after: "when '#{master}'\n" do
@@ -201,6 +218,91 @@ module LarvataScaffold
     $navigation[:master_show_url] = referrer[0, referrer.index('?') || referrer.length] unless referrer.nil?
     $navigation[:master_show_tab] = params[:master_show_tab]
   end
+            EOF
+
+            _eof_content 
+          end
+        end
+
+        # 增加 @tabs 宣告到 show 內
+        if File.readlines(detail_controller_file).grep(/@tabs = tabs/).size == 0
+          insert_into_file detail_controller_file, after: "def show\n" do
+            _eof_content = <<-EOF
+            @tabs = tabs
+            EOF
+
+            _eof_content 
+          end
+        end
+        
+        # 確認 tabs 是否存在，不存在則建立
+        if File.readlines(detail_controller_file).grep(/def tabs/).size == 0
+          insert_into_file detail_controller_file, before: "  private\n" do
+            _eof_content = <<-EOF
+  # 設定連結所屬明細頁籤
+  def tabs
+    tabs_array = []
+    tabs_array << {name: '#{detail}'}
+    tabs_array
+  end
+
+            EOF
+
+            _eof_content 
+          end
+        end
+        
+        # 確認 change_show_tab 是否存在，不存在則建立
+        if File.readlines(detail_controller_file).grep(/def change_show_tab/).size == 0
+          insert_into_file detail_controller_file, before: "  private\n" do
+            _eof_content = <<-EOF
+  # 變換頁籤顯示內容
+  def change_show_tab
+    @current_tab = tabs.select{ |tab| tab[:name] == params[:tab] }.first
+
+    row_count_vars_of_tab(@current_tab[:name])
+
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
+            EOF
+
+            _eof_content 
+          end
+        end
+
+        # 確認 render_tab_content 是否存在，不存在則建立
+        if File.readlines(detail_controller_file).grep(/def render_tab_content/).size == 0
+          insert_into_file detail_controller_file, before: "  private\n" do
+            _eof_content = <<-EOF
+  # 進入 master show 頁面後，依據 master_show_tab 的內容切換頁籤
+  def render_tab_content
+    master_show_tab = params[:master_show_tab]
+
+    row_count_vars_of_tab(master_show_tab)
+
+    render partial: "#{'admin/' if admin?}#{master_controller}/tabs/\#{master_show_tab}_tab", locals: { #{master}: @#{master}, master_show_tab: master_show_tab }
+  end
+
+            EOF
+
+            _eof_content 
+          end
+        end
+
+        # 確認 row_count_vars_of_tab 是否存在，不存在則建立
+        if File.readlines(detail_controller_file).grep(/def row_count_vars_of_tab/).size == 0
+          insert_into_file detail_controller_file, before: "  private\n" do
+            _eof_content = <<-EOF
+  # 計算列表頁面上的資料筆數統計值
+  def row_count_vars_of_tab(tab_name)
+    case tab_name
+    when '#{master}'
+    end
+  end
+
             EOF
 
             _eof_content 
