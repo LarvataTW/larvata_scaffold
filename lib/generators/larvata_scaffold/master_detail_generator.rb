@@ -20,10 +20,7 @@ module LarvataScaffold
       # 產生 master 需要的 js.erb 檔案
       def copy_master_jserb_view_files
         directory_path = File.join(views_path, master_controller)
-
-        master_jserb_view_files.each do |file_name|
-          template "views/#{file_name}.js.erb", File.join(directory_path, "#{file_name}.js.erb")
-        end
+        template "views/change_show_tab.js.erb", File.join(directory_path, "change_show_tab.js.erb")
       end
 
       def copy_master_tab_view_file
@@ -34,6 +31,28 @@ module LarvataScaffold
 
       def modify_master_controller_file
         master_controller_file = File.join(controller_path, "#{master_controller}_controller.rb")
+
+        # 增加 :change_show_tab 到 before_action 內
+        if File.readlines(master_controller_file).grep(/:change_show_tab/).size == 0
+          insert_into_file master_controller_file, after: "before_action :set_#{master}, only: [" do
+            _eof_content = <<-EOF
+            :change_show_tab, 
+            EOF
+
+            _eof_content.strip
+          end
+        end
+        
+        # 增加 :render_tab_content 到 before_action 內
+        if File.readlines(master_controller_file).grep(/:render_tab_content/).size == 0
+          insert_into_file master_controller_file, after: "before_action :set_#{master}, only: [" do
+            _eof_content = <<-EOF
+            :render_tab_content, 
+            EOF
+
+            _eof_content.strip
+          end
+        end
 
         # 增加 @tabs 宣告到 show 內
         if File.readlines(master_controller_file).grep(/@tabs = tabs/).size == 0
@@ -53,7 +72,7 @@ module LarvataScaffold
   # 設定連結所屬明細頁籤
   def tabs
     tabs_array = []
-    tabs_array << {name: '#{master}'}
+    tabs_array << {name: '#{master_controller.singularize}'}
     tabs_array
   end
 
@@ -70,6 +89,8 @@ module LarvataScaffold
   # 變換頁籤顯示內容
   def change_show_tab
     @current_tab = tabs.select{ |tab| tab[:name] == params[:tab] }.first
+
+    @current_tab = tabs.first if @current_tab.nil?
 
     row_count_vars_of_tab(@current_tab[:name])
 
@@ -91,6 +112,8 @@ module LarvataScaffold
   # 進入 master show 頁面後，依據 master_show_tab 的內容切換頁籤
   def render_tab_content
     master_show_tab = params[:master_show_tab]
+
+    master_show_tab = tabs.first[:name] if tabs.select{ |tab| tab[:name] == master_show_tab }.count == 0
 
     row_count_vars_of_tab(master_show_tab)
 
@@ -176,8 +199,37 @@ module LarvataScaffold
         end
       end
 
+      def copy_master_tab_view_file_for_detail
+        directory_path = File.join(views_path, detail_controller, 'tabs')
+        empty_directory directory_path
+
+        template "views/tabs/_master_tab_for_detail.html.erb", File.join(directory_path, "_#{detail_controller.singularize}_tab.html.erb")
+      end
+
       def modify_detail_controller_file
         detail_controller_file = File.join(controller_path, "#{detail_controller}_controller.rb")
+
+        # 增加 :change_show_tab 到 before_action 內
+        if File.readlines(detail_controller_file).grep(/:change_show_tab/).size == 0
+          insert_into_file detail_controller_file, after: "before_action :set_#{detail}, only: [" do
+            _eof_content = <<-EOF
+            :change_show_tab, 
+            EOF
+
+            _eof_content.strip
+          end
+        end
+        
+        # 增加 :render_tab_content 到 before_action 內
+        if File.readlines(detail_controller_file).grep(/:render_tab_content/).size == 0
+          insert_into_file detail_controller_file, after: "before_action :set_#{detail}, only: [" do
+            _eof_content = <<-EOF
+            :render_tab_content, 
+            EOF
+
+            _eof_content.strip
+          end
+        end
 
         # 調整 create、update 的 redirect_to url
         if File.readlines(detail_controller_file).grep(/redirect_to admin_#{detail_controller}_path/).size != 0
@@ -201,7 +253,7 @@ module LarvataScaffold
         if File.readlines(detail_controller_file).grep(/navigation = /).size == 0
           insert_into_file detail_controller_file, before: "  def index\n" do
             _eof_content = <<-EOF
-  before_action :set_navigation, only: [:new, :edit, :show]
+  before_action :set_navigation, only: [:new, :edit, :show, :destroy]
 
   $navigation = {}
 
@@ -424,6 +476,12 @@ new_#{'admin_' if admin?}#{detail_controller.singularize}_path(
         end
       end
 
+      # 產生 detail 原主檔功能需要的 js.erb 檔案
+      def copy_detail_jserb_view_files
+        directory_path = File.join(views_path, detail_controller)
+        template "views/change_show_tab_for_detail.js.erb", File.join(directory_path, "change_show_tab.js.erb")
+      end
+
       # 調整 master model js file
       def modify_master_model_js_file
 
@@ -431,10 +489,6 @@ new_#{'admin_' if admin?}#{detail_controller.singularize}_path(
 
       private 
 
-      def master_jserb_view_files
-        actions = %w(change_show_tab)
-        actions
-      end
     end
   end
 end
