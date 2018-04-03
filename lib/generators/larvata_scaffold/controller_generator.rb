@@ -36,11 +36,16 @@ module LarvataScaffold module Generators
         actions
       end
 
+      def copy_view_js_erb_files
+        directory_path = File.join(views_path, controller_file_path)
+        template "views/change_show_tab.js.erb", File.join(directory_path, "change_show_tab.js.erb")
+      end
+
       def copy_view_tab_files
         directory_path = File.join(views_path, controller_file_path, 'tabs')
         empty_directory directory_path
 
-        template "views/tabs/_master_tab.html.erb", File.join(directory_path, "_#{singular_name}_tab.html.erb")
+        template "views/tabs/_master_tab.html.erb", File.join(directory_path, "_#{controller_file_name.singularize}_tab.html.erb")
       end
 
       def copy_js_files

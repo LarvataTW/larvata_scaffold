@@ -3,8 +3,8 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   layout "admin"
 <% end -%>
 
-  before_action :set_<%= singular_name %>, only: [:show, :edit, :update, :destroy]
-  before_action :set_navigation, only: [:new, :edit, :show]
+  before_action :set_<%= singular_name %>, only: [:show, :edit, :update, :destroy, :change_show_tab, :render_tab_content]
+  before_action :set_navigation, only: [:new, :edit, :show, :destroy]
   before_action :class_authorize, only: [:index, :new, :create]
 
   # 儲存返回主檔資訊
@@ -167,6 +167,8 @@ end
   def change_show_tab
     @current_tab = tabs.select{ |tab| tab[:name] == params[:tab] }.first
 
+    @current_tab = tabs.first if @current_tab.nil?
+
     row_count_vars_of_tab(@current_tab[:name])
 
     respond_to do |format|
@@ -176,6 +178,8 @@ end
 
   def render_tab_content
     master_show_tab = params[:master_show_tab]
+
+    master_show_tab = tabs.first[:name] if tabs.select{ |tab| tab[:name] == master_show_tab }.count == 0
 
     row_count_vars_of_tab(master_show_tab)
 
@@ -225,13 +229,13 @@ end
 
   def set_navigation
     referrer = request.referrer
-    $navigation[:master_show_url] = referrer[0, referrer.index('?') || referrer.length]
+    $navigation[:master_show_url] = referrer[0, referrer.index('?') || referrer.length] unless referrer.nil?
     $navigation[:master_show_tab] = params[:master_show_tab]
   end
 
   # 計算列表頁面上的資料筆數統計值
   def row_count_vars_of_tab(tab_name)
-    case params[:tab]
+    case tab_name
     when '<%= master %>'
     end
   end

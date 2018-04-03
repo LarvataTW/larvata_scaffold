@@ -1,0 +1,8 @@
+<%= "<%= render '#{'admin/' if admin?}#{detail_controller}/form', readonly: true %%>" %>
+
+<%= "<%= render 'common/attachments', model: @#{detail}, upload: false, destroy: false %%>" %>
+
+<%= "<%= content_for :post_scripts do %%>" %>
+<%= "    <%= javascript_include_tag '#{'admin/' if admin?}#{detail_controller}' %%>" %>
+<%= "<% end %%>" %>
+
