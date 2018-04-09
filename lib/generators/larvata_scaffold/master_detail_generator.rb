@@ -484,7 +484,74 @@ new_#{'admin_' if admin?}#{detail_controller.singularize}_path(
 
       # 調整 master model js file
       def modify_master_model_js_file
+        master_model_js_file = File.join(js_path, "#{master_controller}.js")
 
+        if File.readlines(master_model_js_file).grep(/typeof master_show_tab !== 'undefined' && master_show_tab != ""/).size == 0
+          insert_into_file master_model_js_file, after: "$(function() {\n" do
+            _eof_content = <<-EOF
+    // 依據傳入的 master_show_tab 參數來切換 show 頁面的 detail 頁籤內容
+    if( typeof #{master}_id !== 'undefined' && #{master}_id != "" && typeof master_show_tab !== 'undefined' && master_show_tab != "" ) {
+        $.ajax({
+            url: "/#{'admin/' if admin? }#{master_controller}/"+ #{master}_id +"/render_tab_content",
+            method: 'get',
+            dataType: 'html',
+            data: { master_show_tab: master_show_tab }
+        }).success(function(tab_html){
+            if(tab_html !== '') {
+                $('.tab-pane.active').removeClass('active');
+                $('.tab.active').removeClass('active');
+
+                if($('#'+master_show_tab+'_tab').length === 0) {
+                    master_show_tab = '<%= singular_name %>';
+                }
+
+                $('#'+master_show_tab+'_tab').addClass('active');
+                $('#'+master_show_tab+'_tabpanel').addClass('active').html($(tab_html));
+            }
+        }); 
+    }
+
+            EOF
+
+            _eof_content 
+          end
+        end
+      end
+
+      # 調整 detail model js file
+      def modify_detail_model_js_file
+        detail_datatables_js_file = File.join(js_path, "#{detail_controller}.js")
+
+        if File.readlines(detail_datatables_js_file).grep(/typeof master_show_tab !== 'undefined' && master_show_tab != ""/).size == 0
+          insert_into_file detail_datatables_js_file, after: "$(function() {\n" do
+            _eof_content = <<-EOF
+    // 依據傳入的 master_show_tab 參數來切換 show 頁面的 detail 頁籤內容
+    if( typeof #{detail}_id !== 'undefined' && #{detail}_id != "" && typeof master_show_tab !== 'undefined' && master_show_tab != "" ) {
+        $.ajax({
+            url: "/#{'admin/' if admin? }#{detail_controller}/"+ #{detail}_id +"/render_tab_content",
+            method: 'get',
+            dataType: 'html',
+            data: { master_show_tab: master_show_tab }
+        }).success(function(tab_html){
+            if(tab_html !== '') {
+                $('.tab-pane.active').removeClass('active');
+                $('.tab.active').removeClass('active');
+
+                if($('#'+master_show_tab+'_tab').length === 0) {
+                    master_show_tab = '<%= singular_name %>';
+                }
+
+                $('#'+master_show_tab+'_tab').addClass('active');
+                $('#'+master_show_tab+'_tabpanel').addClass('active').html($(tab_html));
+            }
+        }); 
+    }
+
+            EOF
+
+            _eof_content 
+          end
+        end
       end
 
       private 

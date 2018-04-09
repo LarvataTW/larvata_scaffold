@@ -36,7 +36,11 @@
             </div>
         </div>
 <% else -%>
-        <%= "<%= render '#{'admin/' if admin?}#{controller_file_name}/table', tab_key: 'all' %%>" %>
+        <div class="an-bootstrap-custom-tab">
+            <div class="an-tab-control">
+                <%= "<%= render '#{'admin/' if admin?}#{controller_file_name}/table', tab_key: 'all' %%>" %>
+            </div>
+        </div>
 <% end -%>
 
     </div>
