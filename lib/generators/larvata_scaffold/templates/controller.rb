@@ -43,7 +43,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
 
       @<%= plural_name %> = @q.result.page(@page).per(params[:length])
       @filtered_count = @q.result.count
-      @total_count = <%= class_name %>.count
+      @total_count = active_record_query.count
 
       format.json {
         render json: {
