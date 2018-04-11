@@ -61,10 +61,20 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
 
   def create
     @<%= singular_name %> = <%= class_name %>.new(<%= singular_name %>_params)
-    if @<%= singular_name %>.save
-      redirect_to "#{$navigation[:master_show_url]}?master_show_tab=#{$navigation[:master_show_tab]}", notice: '已成功更新<%= human_name %>資料'
-    else
-      render :new
+    respond_to do |format|
+      if @<%= singular_name %>.save
+        format.html {
+          redirect_to "#{$navigation[:master_show_url]}?master_show_tab=#{$navigation[:master_show_tab]}", notice: '已成功更新<%= human_name %>資料'
+        }
+
+        format.js {}
+      else
+        format.html {
+          render :new
+        }
+
+        format.js {}
+      end
     end
   end
 
@@ -77,10 +87,20 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   end
 
   def update
-    if @<%= singular_name %>.update(<%= singular_name %>_params)
-      redirect_to "#{$navigation[:master_show_url]}?master_show_tab=#{$navigation[:master_show_tab]}", notice: '已成功更新<%= human_name %>資料'
-    else
-      render :edit
+    respond_to do |format|
+      if @<%= singular_name %>.update(<%= singular_name %>_params)
+        format.html {
+          redirect_to "#{$navigation[:master_show_url]}?master_show_tab=#{$navigation[:master_show_tab]}", notice: '已成功更新<%= human_name %>資料'
+        }
+
+        format.js {}
+      else
+        format.html {
+          render :edit
+        }
+
+        format.js {}
+      end
     end
   end
 

@@ -18,9 +18,11 @@ module LarvataScaffold
       # We don’t need to call methods in the generator class. All public methods will be called one by one on generating.
 
       # 產生 master 需要的 js.erb 檔案
-      def copy_master_jserb_view_files
+      def copy_master_js_erb_view_files
         directory_path = File.join(views_path, master_controller)
         template "views/change_show_tab.js.erb", File.join(directory_path, "change_show_tab.js.erb")
+        template "views/create.js.erb", File.join(directory_path, "create.js.erb")
+        template "views/update.js.erb", File.join(directory_path, "update.js.erb")
       end
 
       def copy_master_tab_view_file
@@ -477,9 +479,11 @@ new_#{'admin_' if admin?}#{detail_controller.singularize}_path(
       end
 
       # 產生 detail 原主檔功能需要的 js.erb 檔案
-      def copy_detail_jserb_view_files
+      def copy_detail_js_erb_view_files
         directory_path = File.join(views_path, detail_controller)
         template "views/change_show_tab_for_detail.js.erb", File.join(directory_path, "change_show_tab.js.erb")
+        template "views/create_for_detail.js.erb", File.join(directory_path, "create.js.erb")
+        template "views/update_for_detail.js.erb", File.join(directory_path, "update.js.erb")
       end
 
       # 調整 master model js file

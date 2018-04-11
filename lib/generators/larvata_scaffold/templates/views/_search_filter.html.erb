@@ -42,7 +42,7 @@
         _filter = <<-HEREDOC
           <%= simple_form_for([:admin, #{class_name}.new], url: '/#{'admin' if admin?}/#{controller_file_path}/') do | f | %%>
           <%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{assoc_class_name}.none, value_method: :id, label_method: :id,
-                class: 'form-control select2 filter-#{attr.name} filter-select-condition', include_blank: true, selected: nil %%>
+                class: 'form-control filter-#{attr.name}', include_blank: true, selected: nil %%>
           <% end %%>
         HEREDOC
         filter = filter + _filter

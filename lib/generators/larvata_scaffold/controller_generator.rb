@@ -39,6 +39,8 @@ module LarvataScaffold module Generators
       def copy_view_js_erb_files
         directory_path = File.join(views_path, controller_file_path)
         template "views/change_show_tab.js.erb", File.join(directory_path, "change_show_tab.js.erb")
+        template "views/create.js.erb", File.join(directory_path, "create.js.erb")
+        template "views/update.js.erb", File.join(directory_path, "update.js.erb")
       end
 
       def copy_view_tab_files

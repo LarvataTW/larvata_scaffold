@@ -1,4 +1,6 @@
-<%= "<%= simple_form_for(#{admin? ? '[:admin, @' + singular_name + ']' : '@' + singular_name}, url: '/#{'admin' if admin?}/#{controller_file_path}/'+@#{singular_name}.id.to_s, html: { multipart: true }) do | f | %%>" %>
+<%= "<% readonly = (defined? readonly) ? readonly : false -%%>" %>
+
+<%= "<%= simple_form_for(#{admin? ? '[:admin, @' + singular_name + ']' : '@' + singular_name}, url: '/#{'admin' if admin?}/#{controller_file_path}/'+@#{singular_name}.id.to_s, remote: true, html: { multipart: true }) do | f | %%>" %>
     <%= editable_attributes_and_except_sorting.map{ |attr| 
             component = "<div class='form-group'>\n        "
             component += "<label class='col-sm-2 control-label'><%= #{class_name}.human_attribute_name('#{attr.name}') %%></label>\n        "
@@ -12,21 +14,21 @@
                 component += "<%= f.collection_select :#{attr.name}, #{assoc_class_name}.none, :id, :id, {include_blank: true},{class: 'form-control select2'} %%>\n            "
             elsif attr.type == "string"
                 if is_enum? attr
-                    component += "<%= f.input_field :#{attr.name}, collection: #{class_name}.#{attr.name.pluralize}_i18n, class: 'form-control select2', include_blank: false %%>\n            "
+                    component += "<%= f.input_field :#{attr.name}, collection: #{class_name}.#{attr.name.pluralize}_i18n, class: 'form-control select2', include_blank: false, disabled: readonly %%>\n            "
                 else
-                    component += "<%= f.input_field :#{attr.name}, class:'form-control' %%>\n            " 
+                    component += "<%= f.input_field :#{attr.name}, class:'form-control', readonly: readonly %%>\n            " 
                 end
             elsif attr.type == "text"
-                component += "<%= f.input_field :#{attr.name}, class:'form-control froala-editor' %%>\n            " 
+                component += "<%= f.input_field :#{attr.name}, class:'form-control froala-editor', readonly: readonly %%>\n            " 
             elsif attr.type == "datetime"
-                component += "<%= f.input_field :#{attr.name}, as: :string, class:'form-control datetimepicker' %%>\n            " 
+                component += "<%= f.input_field :#{attr.name}, as: :string, class:'form-control datetimepicker', disabled: readonly %%>\n            " 
             elsif attr.type == "boolean"
-                component += "<%= f.input_field :#{attr.name}, as: :boolean %%>\n            " 
+                component += "<%= f.input_field :#{attr.name}, as: :boolean, disabled: readonly %%>\n            " 
             elsif %w(integer float decimal).include? attr.type
                 if is_enum? attr
-                    component += "<%= f.input_field :#{attr.name}, collection: #{class_name}.#{attr.name.pluralize}_i18n, class: 'form-control select2', include_blank: false %%>\n            "
+                    component += "<%= f.input_field :#{attr.name}, collection: #{class_name}.#{attr.name.pluralize}_i18n, class: 'form-control select2', include_blank: false, disabled: readonly %%>\n            "
                 else
-                    component += "<%= f.input_field :#{attr.name}, class:'form-control' %%>\n            " 
+                    component += "<%= f.input_field :#{attr.name}, class:'form-control', readonly: readonly %%>\n            " 
                 end
             end
 
@@ -38,7 +40,8 @@
         }.join("\n    ") 
     %>
 
-    <%= "<%= f.submit t('button.save'), class: 'an-btn an-btn-primary' %%>" %>
+    <%= "<%= link_to t('button.edit'), edit_#{'admin_' if admin}#{singular_name}_path(@#{singular_name}), class: 'an-btn an-btn-primary' if readonly %%>" %>
+    <%= "<%= f.submit t('button.save'), class: 'an-btn an-btn-primary' unless readonly %%>" %>
     <%= "<%= link_to t('button.back'), \"\#{$navigation[:master_show_url]}?master_show_tab=\#{$navigation[:master_show_tab]}\", class: 'an-btn an-btn-primary' %%>" %>
 <%= "<% end %%>" %>
 

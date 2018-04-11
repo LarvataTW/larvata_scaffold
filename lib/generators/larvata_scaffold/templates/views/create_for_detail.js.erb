@@ -1,0 +1,18 @@
+<%
+jserb = <<-EOF
+<% if @#{detail}.errors.full_messages.blank? %%>
+    swal('<%= t('helpers.form.create_success', model: #{detail.classify}.model_name.human) %%>', '', 'success');
+<% else %%>
+    $( "span.full_error" ).remove();
+
+    swal('<%= t('helpers.form.create_error', model: #{detail.classify}.model_name.human) %%>', '<%= @#{detail}.errors.full_messages.join('\\n') %%>', 'error');
+
+     <% @#{detail}.errors.messages.each do |message| %%>
+        $( "<span class='error full_error'><%= message[1].join('; ') %%></span>" ).insertAfter( "##{detail}_<%= message[0].to_s %%>" );
+    <% end %%>
+<% end %%>
+
+      EOF
+-%>
+
+<%= jserb.strip %>
