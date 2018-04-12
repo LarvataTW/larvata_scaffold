@@ -37,5 +37,4 @@
 <%= "        var #{singular_name}_id = '<%= @#{singular_name}.id %%>';" %>
 <%= "        var master_show_tab = '<%= params[:master_show_tab] %%>';" %>
 <%= "    </script>" %>
-<%= "    <%= javascript_include_tag '#{'admin/' if admin?}#{controller_file_path}' %%>" %>
 <%= "<% end %%>" %>

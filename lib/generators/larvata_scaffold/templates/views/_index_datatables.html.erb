@@ -1,3 +1,5 @@
+<%= "<% master_show_tab = (defined? master_show_tab) ? master_show_tab : '' -%%>" %>
+
 <div class="an-single-component with-shadow">
     <div class="an-component-header search_wrapper">
         <%= "<%= render '#{'admin/' if admin?}#{controller_file_name}/search_filter' %%>" %>
@@ -7,7 +9,7 @@
         <div class="an-helper-block">
             <%= "<%= link_to t('button.new', model: #{class_name}.model_name.human),
                 new_#{'admin_' if admin?}#{singular_controller_name}_path(
-                    master_show_tab: (defined? master_show_tab) ? master_show_tab : '',
+                    master_show_tab: master_show_tab,
                 ), 
                 class: 'an-btn an-btn-primary' %%>" %>
         </div>
