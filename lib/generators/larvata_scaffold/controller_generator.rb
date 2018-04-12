@@ -41,6 +41,7 @@ module LarvataScaffold module Generators
         template "views/change_show_tab.js.erb", File.join(directory_path, "change_show_tab.js.erb")
         template "views/create.js.erb", File.join(directory_path, "create.js.erb")
         template "views/update.js.erb", File.join(directory_path, "update.js.erb")
+        template "views/destroy.js.erb", File.join(directory_path, "destroy.js.erb")
       end
 
       def copy_view_tab_files
@@ -79,6 +80,7 @@ module LarvataScaffold module Generators
         routes_string += "post :datatables\n        "
         routes_string += "patch :update_row_sorting\n        " if contains_sorting_column?
         routes_string += "patch :update_row\n      "
+        routes_string += "get :back\n      "
 
         # 建立 belongs_to associations select2 options route
         editable_attributes_and_except_sorting_and_datetime_and_number.each do |attr|

@@ -23,6 +23,7 @@ module LarvataScaffold
         template "views/change_show_tab.js.erb", File.join(directory_path, "change_show_tab.js.erb")
         template "views/create.js.erb", File.join(directory_path, "create.js.erb")
         template "views/update.js.erb", File.join(directory_path, "update.js.erb")
+        template "views/destroy.js.erb", File.join(directory_path, "destroy.js.erb")
       end
 
       def copy_master_tab_view_file
@@ -135,7 +136,7 @@ module LarvataScaffold
   # 計算列表頁面上的資料筆數統計值
   def row_count_vars_of_tab(tab_name)
     case tab_name
-    when '#{detail}'
+    when '#{master}'
     end
   end
 
@@ -236,7 +237,7 @@ module LarvataScaffold
         # 調整 create、update 的 redirect_to url
         if File.readlines(detail_controller_file).grep(/redirect_to admin_#{detail_controller}_path/).size != 0
           _eof_content = <<-EOF
-      redirect_to \"\#{$navigation[:master_show_url]}?master_show_tab=\#{$navigation[:master_show_tab]}\"
+      back
           EOF
 
           gsub_file detail_controller_file, /redirect_to admin_#{detail_controller}_path/, _eof_content.strip
@@ -245,7 +246,7 @@ module LarvataScaffold
         # 調整 destroy 的 redirect_to url
         if File.readlines(detail_controller_file).grep(/redirect_to admin_#{detail_controller}_url/).size != 0
           _eof_content = <<-EOF
-      redirect_to \"\#{$navigation[:master_show_url]}?master_show_tab=\#{$navigation[:master_show_tab]}\"
+      back
           EOF
 
           gsub_file detail_controller_file, /redirect_to admin_#{detail_controller}_url/, _eof_content.strip
@@ -257,8 +258,27 @@ module LarvataScaffold
             _eof_content = <<-EOF
   before_action :set_navigation, only: [:new, :edit, :show, :destroy]
 
-  $navigation = {}
+            EOF
 
+            _eof_content 
+          end
+
+          insert_into_file detail_controller_file, after: "  def index\n" do
+            _eof_content = <<-EOF
+  session[:navigation] = []
+            EOF
+
+            _eof_content 
+          end
+
+          insert_into_file detail_controller_file, before: "  private\n" do
+            _eof_content = <<-EOF
+
+  def back
+    _navigation = session[:navigation].pop
+    redirect_to #{'admin_' if admin?}#{detail_controller}_path if _navigation.nil?
+    redirect_to \"\#{_navigation[:master_show_url] || _navigation['master_show_url']}?master_show_tab=\#{_navigation[:master_show_tab] || _navigation['master_show_tab']}&ignore_set_navigation=true\" unless _navigation.nil?
+  end
             EOF
 
             _eof_content 
@@ -268,14 +288,23 @@ module LarvataScaffold
             _eof_content = <<-EOF
 
   def set_navigation
+    return if params[:ignore_set_navigation]
+
     referrer = request.referrer
-    $navigation[:master_show_url] = referrer[0, referrer.index('?') || referrer.length] unless referrer.nil?
-    $navigation[:master_show_tab] = params[:master_show_tab]
+    return if referrer.blank?
+
+    session[:navigation] ||= []
+    _navigation = {}
+    _navigation[:master_show_url] = referrer[0, referrer.index('?') || referrer.length]
+    _navigation[:master_show_tab] = params[:master_show_tab]
+    session[:navigation] << _navigation
   end
             EOF
 
             _eof_content 
           end
+
+
         end
 
         # 增加 @tabs 宣告到 show 內
@@ -353,7 +382,7 @@ module LarvataScaffold
   # 計算列表頁面上的資料筆數統計值
   def row_count_vars_of_tab(tab_name)
     case tab_name
-    when '#{master}'
+    when '#{detail}'
     end
   end
 
@@ -471,10 +500,10 @@ new_#{'admin_' if admin?}#{detail_controller.singularize}_path(
 
         if File.readlines(detail_form_file).grep(/admin_#{detail_controller}_path/).size != 0
           _eof_content = <<-EOF
-      \"\#{$navigation[:master_show_url]}?master_show_tab=\#{$navigation[:master_show_tab]}\"
+      back_#{'admin_' if admin?}#{detail_controller}
           EOF
 
-          gsub_file detail_form_file, /admin_#{detail_controller}_path/, _eof_content.strip
+          gsub_file detail_form_file, /#{'admin_' if admin?}#{detail_controller}_path/, _eof_content.strip
         end
       end
 
@@ -484,6 +513,7 @@ new_#{'admin_' if admin?}#{detail_controller.singularize}_path(
         template "views/change_show_tab_for_detail.js.erb", File.join(directory_path, "change_show_tab.js.erb")
         template "views/create_for_detail.js.erb", File.join(directory_path, "create.js.erb")
         template "views/update_for_detail.js.erb", File.join(directory_path, "update.js.erb")
+        template "views/destroy_for_detail.js.erb", File.join(directory_path, "destroy.js.erb")
       end
 
       # 調整 master model js file

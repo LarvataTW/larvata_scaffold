@@ -7,14 +7,12 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   before_action :set_navigation, only: [:new, :edit, :show, :destroy]
   before_action :class_authorize, only: [:index, :new, :create]
 
-  # 儲存返回主檔資訊
-  $navigation = {}
-
   def index
 <% unless tab.nil? -%>
     <%= "@#{controller_file_name}_#{tab}_group_row_counts = #{class_name}.group(:#{tab}).count" %>
     @<%= controller_file_name %>_all_row_count = @<%= controller_file_name %>_<%= tab %>_group_row_counts.inject(0) { |row_count, <%= tab %>_group| row_count + <%= tab %>_group[1] }
 <% end -%>
+    session[:navigation] = []
   end
 
   def datatables
@@ -64,7 +62,8 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
     respond_to do |format|
       if @<%= singular_name %>.save
         format.html {
-          redirect_to "#{$navigation[:master_show_url]}?master_show_tab=#{$navigation[:master_show_tab]}", notice: '已成功更新<%= human_name %>資料'
+          flash[:notice] = I18n.t('helpers.form.create_success', model: <%= class_name %>.model_name.human)
+          back
         }
 
         format.js {}
@@ -90,7 +89,8 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
     respond_to do |format|
       if @<%= singular_name %>.update(<%= singular_name %>_params)
         format.html {
-          redirect_to "#{$navigation[:master_show_url]}?master_show_tab=#{$navigation[:master_show_tab]}", notice: '已成功更新<%= human_name %>資料'
+          flash[:notice] = I18n.t('helpers.form.update_success', model: <%= class_name %>.model_name.human)
+          back
         }
 
         format.js {}
@@ -106,7 +106,13 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
 
   def destroy
     @<%= singular_name %>.destroy
-    redirect_to <%= 'admin_' if admin? %><%= controller_file_path %>_url, notice: '已成功刪除<%= human_name %>資料'
+
+    format.html {
+      flash[:notice] = I18n.t('helpers.form.destroy_success', model: <%= class_name %>.model_name.human)
+      back
+    }
+
+    format.js {}
   end
 
 <% if enable_row_editor? -%>
@@ -192,7 +198,7 @@ end
     row_count_vars_of_tab(@current_tab[:name])
 
     respond_to do |format|
-      format.js { }
+      format.js {}
     end
   end
 
@@ -204,6 +210,12 @@ end
     row_count_vars_of_tab(master_show_tab)
 
     render partial: "<%= 'admin/' if admin? %><%= controller_file_path %>/tabs/#{master_show_tab}_tab", locals: { <%= singular_name %>: @<%= singular_name %>, master_show_tab: master_show_tab }
+  end
+
+  def back
+    _navigation = session[:navigation].pop
+    redirect_to <%= "#{'admin_' if admin?}#{controller_file_path}_path" %> if _navigation.nil?
+    redirect_to "#{_navigation[:master_show_url] || _navigation['master_show_url']}?master_show_tab=#{_navigation[:master_show_tab] || _navigation['master_show_tab']}&ignore_set_navigation=true" unless _navigation.nil?
   end
 
   private
@@ -248,9 +260,16 @@ end
   end
 
   def set_navigation
+    return if params[:ignore_set_navigation]
+
     referrer = request.referrer
-    $navigation[:master_show_url] = referrer[0, referrer.index('?') || referrer.length] unless referrer.nil?
-    $navigation[:master_show_tab] = params[:master_show_tab]
+    return if referrer.blank?
+
+    session[:navigation] ||= []
+    _navigation = {}
+    _navigation[:master_show_url] = referrer[0, referrer.index('?') || referrer.length]
+    _navigation[:master_show_tab] = params[:master_show_tab]
+    session[:navigation] << _navigation
   end
 
   # 計算列表頁面上的資料筆數統計值
