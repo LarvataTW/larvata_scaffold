@@ -95,12 +95,14 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   def destroy
     @<%= singular_name %>.destroy
 
-    format.html {
-      flash[:notice] = I18n.t('helpers.form.destroy_success', model: <%= class_name %>.model_name.human)
-      back
-    }
+    respond_to do |format|
+      format.html {
+        flash[:notice] = I18n.t('helpers.form.destroy_success', model: <%= class_name %>.model_name.human)
+        back
+      }
 
-    format.js {}
+      format.js {}
+    end
   end
 
 <% if enable_row_editor? -%>
