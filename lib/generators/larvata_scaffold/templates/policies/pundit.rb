@@ -48,7 +48,8 @@ class <%= 'Admin::' if admin? %><%= class_name %>Policy < <%= admin? ? 'Admin' :
   private
 
   def common_permission
-    user.has_role? :admin
+    true
+    #user.has_role? :admin
   end
 end
 
