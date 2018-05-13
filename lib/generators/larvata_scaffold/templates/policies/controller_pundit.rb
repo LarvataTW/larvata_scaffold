@@ -14,7 +14,8 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Policy < <%= admin? 
   private
 
   def common_permission
-    user.has_role? :admin
+    true
+    #user.has_role? :admin
   end
 end
 

@@ -3,9 +3,9 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   layout "admin"
 <% end -%>
 
-  before_action :set_<%= singular_name %>, only: [:show, :edit, :update, :destroy, :change_show_tab, :render_tab_content]
-  before_action :set_navigation, only: [:new, :edit, :show, :destroy]
-  before_action :class_authorize, only: [:index, :new, :create]
+  before_action :set_<%= singular_name %>, only: [:update, :destroy, :change_show_tab, :render_tab_content]
+  before_action :set_navigation, only: [:destroy]
+  before_action :class_authorize, only: [:index, :create]
 
   def index
 <% unless tab.nil? -%>
@@ -53,10 +53,6 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
     end
   end
 
-  def new
-    @<%= singular_name %> ||= <%= class_name %>.new
-  end
-
   def create
     @<%= singular_name %> = <%= class_name %>.new(<%= singular_name %>_params)
     respond_to do |format|
@@ -75,14 +71,6 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
         format.js {}
       end
     end
-  end
-
-  def edit
-
-  end
-
-  def show
-    @tabs = tabs
   end
 
   def update

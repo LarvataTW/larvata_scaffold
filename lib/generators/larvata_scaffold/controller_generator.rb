@@ -69,7 +69,7 @@ module LarvataScaffold module Generators
         routes_string = ""
 
         routes_string += "namespace :admin do\n    " if admin?
-        routes_string += "resources :#{controller_file_name} do\n      "
+        routes_string += "resources :#{controller_file_name}, only: [:index, :create, :update, :destroy] do\n      "
 
         routes_string += "member do\n        "
         routes_string += "get :change_show_tab\n          "
