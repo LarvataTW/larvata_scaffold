@@ -77,7 +77,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
             success: false,
             data: to_datatables(<%= class_name %>.all),
             message: I18n.t('helpers.form.create_error', model: <%= class_name %>.model_name.human),
-            details: @<%= singular_name %>.errors.full_messages.join('\n')
+            details: @<%= singular_name %>.errors.full_messages.join(',')
           }
         end
       }
@@ -142,7 +142,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
               success: false,
               data: to_datatables(<%= class_name %>.all),
               message: I18n.t('helpers.form.create_error', model: <%= class_name %>.model_name.human),
-              details: <%= singular_name %>.errors.full_messages.join('\n')
+              details: <%= singular_name %>.errors.full_messages.join(',')
             }
           end
         }
