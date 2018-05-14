@@ -54,22 +54,33 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   end
 
   def create
-    @<%= singular_name %> = <%= class_name %>.new(<%= singular_name %>_params)
+    params[:data].each do |id, column_values|
+      <%= singular_name %>_params = <%= singular_name %>_row_params(column_values)
+      @<%= singular_name %> = <%= class_name %>.new(<%= singular_name %>_params)
+    end
     respond_to do |format|
-      if @<%= singular_name %>.save
-        format.html {
-          flash[:notice] = I18n.t('helpers.form.create_success', model: <%= class_name %>.model_name.human)
-          back
-        }
+      format.json {
+        <% if enable_pundit? -%>
+          <%= "authorize [:admin, #{singular_name}]" if admin? %>
+          <%= "authorize #{singular_name}" unless admin? %>
+        <% end -%>
 
-        format.js {}
-      else
-        format.html {
-          render :new
-        }
-
-        format.js {}
-      end
+        if <%= singular_name %>.save
+          <%= plural_name %> = <%= class_name %>.where(id: @<%= singular_name %>.id)
+          render json: {
+            success: true,
+            data: to_datatables(<%= plural_name %>),
+            message: I18n.t('helpers.form.create_success', model: <%= class_name %>.model_name.human)
+          }
+        else
+          render json: {
+            success: false,
+            data: to_datatables(<%= class_name %>.all),
+            message: message: I18n.t('helpers.form.create_error', model: <%= class_name %>.model_name.human),
+            details: @<%= singular_name %>.errors.full_messages.join('\n')
+          }
+        end
+      }
     end
   end
 
@@ -105,7 +116,6 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
     end
   end
 
-<% if enable_row_editor? -%>
   # 更新列表的單筆 row 資料
   def update_row
     params[:data].each do |id, column_values|
@@ -122,13 +132,23 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
 
           if <%= singular_name %>&.update(<%= singular_name %>_params)
             <%= plural_name %> = <%= class_name %>.where(id: id)
-            render json: {data: to_datatables(<%= plural_name %>)}
+            render json: {
+              success: true,
+              data: to_datatables(<%= plural_name %>),
+              message: I18n.t('helpers.form.update_success', model: <%= class_name %>.model_name.human)
+            }
+          else
+            render json: {
+              success: false,
+              data: to_datatables(<%= class_name %>.all),
+              message: message: I18n.t('helpers.form.create_error', model: <%= class_name %>.model_name.human),
+              details: @<%= singular_name %>.errors.full_messages.join('\n')
+            }
           end
         }
       end
     end
   end
-<% end -%>
 
 <% if contains_sorting_column? -%>
   # 更新列表的排序
