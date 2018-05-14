@@ -76,7 +76,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
           render json: {
             success: false,
             data: to_datatables(<%= class_name %>.all),
-            message: message: I18n.t('helpers.form.create_error', model: <%= class_name %>.model_name.human),
+            message: I18n.t('helpers.form.create_error', model: <%= class_name %>.model_name.human),
             details: @<%= singular_name %>.errors.full_messages.join('\n')
           }
         end
@@ -141,7 +141,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
             render json: {
               success: false,
               data: to_datatables(<%= class_name %>.all),
-              message: message: I18n.t('helpers.form.create_error', model: <%= class_name %>.model_name.human),
+              message: I18n.t('helpers.form.create_error', model: <%= class_name %>.model_name.human),
               details: @<%= singular_name %>.errors.full_messages.join('\n')
             }
           end
