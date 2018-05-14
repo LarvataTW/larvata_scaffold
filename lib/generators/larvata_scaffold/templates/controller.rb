@@ -61,11 +61,11 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
     respond_to do |format|
       format.json {
         <% if enable_pundit? -%>
-          <%= "authorize [:admin, #{singular_name}]" if admin? %>
-          <%= "authorize #{singular_name}" unless admin? %>
+          <%= "authorize [:admin, @#{singular_name}]" if admin? %>
+          <%= "authorize @#{singular_name}" unless admin? %>
         <% end -%>
 
-        if <%= singular_name %>.save
+        if @<%= singular_name %>.save
           <%= plural_name %> = <%= class_name %>.where(id: @<%= singular_name %>.id)
           render json: {
             success: true,
