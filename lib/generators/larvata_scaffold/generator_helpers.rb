@@ -87,6 +87,10 @@ module LarvataScaffold
         options['attachable'] and class_const.instance_methods.include? :attachments
       end
 
+      def enable_ranking?
+        !options['skip_ranking']
+      end
+
       def association_by_foreign_key column
         class_const = class_name.constantize
         assocs = class_const.reflect_on_all_associations(:belongs_to)

@@ -3,7 +3,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   layout "admin"
 <% end -%>
 
-  before_action :set_<%= singular_name %>, only: [:update, :destroy, :change_show_tab, :render_tab_content]
+  before_action :set_<%= singular_name %>, only: [:update, :destroy, :change_show_tab, :render_tab_content<%= ", :rank_up, :rank_down" if enable_ranking? %>]
   before_action :set_navigation, only: [:destroy]
   before_action :class_authorize, only: [:index, :create]
 
@@ -227,6 +227,24 @@ end
     redirect_to <%= "#{'admin_' if admin?}#{controller_file_path}_path" %> if _navigation.nil?
     redirect_to "#{_navigation[:master_show_url] || _navigation['master_show_url']}?master_show_tab=#{_navigation[:master_show_tab] || _navigation['master_show_tab']}&ignore_set_navigation=true" unless _navigation.nil?
   end
+
+  <% if enable_ranking? %>
+  def rank_up
+    authorize [:admin, @<%= singular_name %>]
+    if @<%= singular_name %>.rank >= 2
+      @<%= singular_name %>.rank -= 1
+      @<%= singular_name %>.save
+    end
+    render json: { success: true }
+  end
+
+  def rank_down
+    authorize [:admin, @<%= singular_name %>]
+    @<%= singular_name %>.rank += 1
+    @<%= singular_name %>.save
+    render json: { success: true  }
+  end
+  <% end %>
 
   private
 

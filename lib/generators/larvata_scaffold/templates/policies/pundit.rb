@@ -39,6 +39,16 @@ class <%= 'Admin::' if admin? %><%= class_name %>Policy < <%= admin? ? 'Admin' :
     common_permission
   end
 
+  <% if enable_ranking? %>
+  def rank_up?
+    common_permission
+  end
+
+  def rank_down?
+    common_permission
+  end
+  <% end %>
+
   class Scope < Scope
     def resolve
       scope.all

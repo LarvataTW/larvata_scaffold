@@ -74,6 +74,8 @@ module LarvataScaffold module Generators
         routes_string += "member do\n        "
         routes_string += "get :change_show_tab\n          "
         routes_string += "get :render_tab_content\n          "
+        routes_string += "patch :rank_up\n          " if enable_ranking?
+        routes_string += "patch :rank_down\n          " if enable_ranking?
         routes_string += "end\n    "
 
         routes_string += "collection do\n        "

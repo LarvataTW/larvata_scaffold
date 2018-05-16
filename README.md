@@ -24,6 +24,7 @@ Then execute:
 >--admin 表示為後台功能，會將功能放置在 namespace admin 下。    
 --skip-row-editor 表示會將 datatables 的 inline editing 功能關閉。   
 --skip-pundit 表示會將 pundit 功能關閉。    
+--skip-ranking 表示會將 ranking 功能關閉。    
 --attachable 表示會啟用附件上傳功能。    
 --controller [controller_name] 表示可以產生不同於 model 名稱的 resource 功能。    
 --tab [enum_field_name] 表示可以用 enum_field_name 的 Array 內容來產生 index.html.erb 的頁籤功能。    
