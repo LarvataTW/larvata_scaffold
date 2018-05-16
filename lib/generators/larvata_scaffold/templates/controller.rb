@@ -232,7 +232,6 @@ end
   def rank_up
     authorize [:admin, @<%= singular_name %>]
     Ranker.new(@<%= singular_name %>, 'up').sort
-    end
     render json: { success: true }
   end
 
