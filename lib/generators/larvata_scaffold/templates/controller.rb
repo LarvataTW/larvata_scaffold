@@ -231,17 +231,14 @@ end
   <% if enable_ranking? %>
   def rank_up
     authorize [:admin, @<%= singular_name %>]
-    if @<%= singular_name %>.rank >= 2
-      @<%= singular_name %>.rank -= 1
-      @<%= singular_name %>.save
+    Ranker.new(@<%= singular_name %>, 'up').sort
     end
     render json: { success: true }
   end
 
   def rank_down
     authorize [:admin, @<%= singular_name %>]
-    @<%= singular_name %>.rank += 1
-    @<%= singular_name %>.save
+    Ranker.new(@<%= singular_name %>, 'down').sort
     render json: { success: true  }
   end
   <% end %>
