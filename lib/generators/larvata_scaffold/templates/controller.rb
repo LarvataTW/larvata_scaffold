@@ -112,6 +112,10 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
         back
       }
 
+      format.json {
+        render json: { 'message': I18n.t('helpers.form.destroy_success', model: <%= class_name %>.model_name.human) }
+      }
+
       format.js {}
     end
   end
