@@ -235,13 +235,13 @@ end
   <% if enable_ranking? %>
   def rank_up
     authorize [:admin, @<%= singular_name %>]
-    Ranker.new(@<%= singular_name %>, 'up').sort
+    Ranker.new(@<%= singular_name %>, 'up', <%= class_name %>.order(:rank).pluck(:id, :rank)).sort!
     render json: { success: true }
   end
 
   def rank_down
     authorize [:admin, @<%= singular_name %>]
-    Ranker.new(@<%= singular_name %>, 'down').sort
+    Ranker.new(@<%= singular_name %>, 'down', <%= class_name %>.order(:rank).pluck(:id, :rank)).sort!
     render json: { success: true  }
   end
   <% end %>
