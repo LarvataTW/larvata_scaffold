@@ -1,7 +1,13 @@
-<div class="an-body-topbar wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
-    <div class="an-page-title">
-        <h2><%= "<%= t('helpers.page_title.index', model: #{class_name}.model_name.human) %%>" %></h2>
+<div class="m-subheader">
+  <div class="d-flex align-items-center">
+    <div class="mr-auto">
+      <div class="m-subheader__title m-subheader__title--separator">
+        <h3><%= "<%= t('helpers.page_title.index', model: #{class_name}.model_name.human) %%>", class: "m-subheader__title m-subheader__title--separator" %></h3>
+      </div>
+      <%# Use add_path(:label, :url) to chain items to breadcrumb %>
+      <%= render_breadcrumb %>
     </div>
+  </div>
 </div>
 
 <%= "<%= render '#{'admin/' if admin?}#{controller_file_name}/index_datatables' %%>" %>
