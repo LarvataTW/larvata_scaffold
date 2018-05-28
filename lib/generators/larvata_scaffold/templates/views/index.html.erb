@@ -7,6 +7,6 @@
 <%= "<%= render '#{'admin/' if admin?}#{controller_file_name}/index_datatables' %%>" %>
 
 <%= "<% content_for :post_scripts do %%>" %>
-<%= "  <%= javascript_include_tag '#{'admin/' if admin?}#{controller_file_name}' %%>" %>
-<%= "  <%= javascript_include_tag '#{'admin/' if admin?}#{controller_file_name}_datatables' %%>" %>
+<%= "    <%= javascript_include_tag '#{'admin/' if admin?}#{controller_file_name}' %%>" %>
+<%= "    <%= javascript_include_tag '#{'admin/' if admin?}#{controller_file_name}_datatables' %%>" %>
 <%= "<% end %%>" %>

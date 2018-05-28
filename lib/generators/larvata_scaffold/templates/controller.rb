@@ -34,7 +34,8 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
       @keyword = params[:search][:value] unless params[:search].blank?
       @filters["id_cont".to_sym] = @keyword if @keyword
 
-      active_record_query = <%= class_name %>
+      class_scope = <%= 'Admin::' if admin? %><%= class_name %>Policy::Scope.new(current_user, <%= class_name %>).resolve
+      active_record_query = class_scope 
       @q = active_record_query.ransack(@filters)
 
       @q.sorts = @sorting_key.blank? ? "updated_at desc" : "#{params[:columns][@sorting_key.to_s][:data]} #{@sorting_dir}"
@@ -107,12 +108,14 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   def destroy
     @<%= singular_name %>.destroy
 
-    format.html {
-      flash[:notice] = I18n.t('helpers.form.destroy_success', model: <%= class_name %>.model_name.human)
-      back
-    }
+    respond_to do |format|
+      format.html {
+        flash[:notice] = I18n.t('helpers.form.destroy_success', model: <%= class_name %>.model_name.human)
+        back
+      }
 
-    format.js {}
+      format.js {}
+    end
   end
 
 <% if enable_row_editor? -%>
@@ -281,8 +284,11 @@ end
 
 <% if enable_pundit? -%>
   def class_authorize
-    <%= "authorize [:admin, #{class_name}]" if admin? %>
-    <%= "authorize #{class_name}" unless admin? %>
+    <%= "authorize [:admin, #{class_name}]" if admin? and custom_controller.nil? %>
+    <%= "authorize #{class_name}" unless admin? and custom_controller.nil? %>
+
+    <%= "authorize [:admin, :#{custom_controller}]" if admin? and custom_controller.present? %>
+    <%= "authorize :#{custom_controller}" unless admin? and custom_controller.present? %>
   end
 <% end -%>
 end

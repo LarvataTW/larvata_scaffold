@@ -1,7 +1,10 @@
 <%
 jserb = <<-EOF
 <% if @#{singular_name}.errors.full_messages.blank? %%>
-    swal('<%= t('helpers.form.update_success', model: #{class_name}.model_name.human) %%>', '', 'success');
+    swal('<%= t('helpers.form.update_success', model: #{class_name}.model_name.human) %%>', '', 'success')
+        .then(function(){
+            window.location.href = '<%= "#{'admin_' if admin?}#{controller_file_path}_url(@#{singular_name}, ignore_set_navigation: true) %>';
+        });
 <% else %%>
     $( "span.full_error" ).remove();
 

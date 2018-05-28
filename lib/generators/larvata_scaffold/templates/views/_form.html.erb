@@ -11,7 +11,7 @@
             # 針對不同資料型態會呈現出不同的元件
             if belongs_to_assoc 
                 assoc_class_name = belongs_to_assoc.name.to_s.classify
-                component += "<%= f.collection_select :#{attr.name}, #{assoc_class_name}.where(id: @#{singular_name}.#{attr.name}), :id, :id, {include_blank: true},{class: 'form-control'} %%>\n            "
+                component += "<%= f.collection_select :#{attr.name}, #{assoc_class_name}.where(id: @#{singular_name}.#{attr.name}), :id, :id, {include_blank: true},{class: 'form-control', disabled: readonly} %%>\n            "
             elsif attr.type == "string"
                 if is_enum? attr
                     component += "<%= f.input_field :#{attr.name}, collection: #{class_name}.#{attr.name.pluralize}_i18n, class: 'form-control select2', include_blank: false, disabled: readonly %%>\n            "
@@ -28,7 +28,7 @@
                 if is_enum? attr
                     component += "<%= f.input_field :#{attr.name}, collection: #{class_name}.#{attr.name.pluralize}_i18n, class: 'form-control select2', include_blank: false, disabled: readonly %%>\n            "
                 else
-                    component += "<%= f.input_field :#{attr.name}, class:'form-control', readonly: readonly %%>\n            " 
+                    component += "<%= f.input_field :#{attr.name}, class:'js-stop-wheel form-control', readonly: readonly %%>\n            " 
                 end
             end
 
@@ -48,5 +48,9 @@
 <%= "<%= render 'common/attachments', model: @#{singular_name}, upload: true, destroy: true %%>" if attachable? %>
 
 <%= "<%= content_for :post_scripts do %%>" %>
-<%= "  <%= javascript_include_tag '#{'admin/' if admin?}#{controller_file_path}' %%>" %>
+<%= "    <script>" %>
+<%= "        var #{singular_name}_id = '<%= @#{singular_name}.id %%>';" %>
+<%= "        var master_show_tab = '<%= params[:master_show_tab] %%>';" %>
+<%= "    </script>" %>
+<%= "    <%= javascript_include_tag '#{'admin/' if admin?}#{controller_file_path}' %%>" %>
 <%= "<% end %%>" %>
