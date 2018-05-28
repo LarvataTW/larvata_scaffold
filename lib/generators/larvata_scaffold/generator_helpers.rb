@@ -45,6 +45,12 @@ module LarvataScaffold
         end
       end
 
+      def editable_editor_columns
+        attributes ||= model_columns_for_datatable_editors.map do |column|
+          Rails::Generators::GeneratedAttribute.new(column.name.to_s, column.type.to_s)
+        end
+      end
+
       def editable_attributes_and_except_sorting_and_datetime_and_number
         model_columns_for_editable_attributes_and_except_sorting_and_datetime_and_number = model_columns_for_editable_attributes_and_except_sorting.reject do |column|
           %w(datetime integer float decimal).include? column.type.to_s and not is_enum? column and not association_by_foreign_key(column)
