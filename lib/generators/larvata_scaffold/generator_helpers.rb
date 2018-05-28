@@ -17,6 +17,16 @@ module LarvataScaffold
         end
       end
 
+      def model_columns_for_datatable_editors
+        class_name.constantize.columns.reject do |column|
+          column.name.to_s =~ /(^(id|user_id|created_at|updated_at|sorting)$)|token|password|rank|enabled/
+        end
+      end
+
+      def has_enabled_column?
+        class_name.constantize.columns.any? { |column| column == 'enabled' }
+      end
+
       def editable_attributes
         attributes ||= model_columns_for_editable_attributes.map do |column|
           Rails::Generators::GeneratedAttribute.new(column.name.to_s, column.type.to_s)
