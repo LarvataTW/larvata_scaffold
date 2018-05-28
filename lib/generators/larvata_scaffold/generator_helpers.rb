@@ -24,7 +24,7 @@ module LarvataScaffold
       end
 
       def has_enabled_column?
-        class_name.constantize.columns.any? { |column| column == 'enabled' }
+        class_name.constantize.columns.map(&:name).any? { |column| column == 'enabled' }
       end
 
       def editable_attributes
