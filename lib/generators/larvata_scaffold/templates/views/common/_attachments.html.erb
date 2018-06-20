@@ -1,0 +1,109 @@
+<hr class="style3">
+
+<h4><%= t('helpers.page_title.index', model: Attachment.model_name.human) %></h4>
+
+<%= simple_form_for Attachment.new, html: { :multipart => true, :id => "fileupload" } do |f| %>
+    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+    <div class="fileupload-buttonbar">
+        <div class="span7">
+            <!-- The fileinput-button span is used to style the file input field as button -->
+            <span class="btn btn-success fileinput-button <%= 'hide' if defined? upload and not upload %>">
+                <i class="icon-plus icon-white"></i>
+                <span>Add files...</span>
+                <%= file_field_tag 'attachment', multiple: false, name: "attachment" %>
+            </span>
+        </div>
+        <div class="span5">
+            <!-- The global progress bar -->
+            <div class="progress progress-success progress-striped active fade">
+                <div class="bar" style="width:0%;"></div>
+            </div>
+        </div>
+    </div>
+    <!-- The loading indicator is shown during image processing -->
+    <div class="fileupload-loading"></div>
+    <br>
+    <!-- The table listing the files available for upload/download -->
+    <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
+    </table>
+<% end %>
+
+<script>
+var fileUploadErrors = {
+    maxFileSize: 'File is too big',
+    minFileSize: 'File is too small',
+    acceptFileTypes: 'Filetype not allowed',
+    maxNumberOfFiles: 'Max number of files exceeded',
+    uploadedBytes: 'Uploaded bytes exceed file size',
+    emptyResult: 'Empty file upload result'
+};
+</script>
+
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+            <tr class="template-upload fade">
+                <td class="preview"><span class="fade"></span></td>
+                <td class="name"><span>{%=file.name%}</span></td>
+                <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+                {% if (file.error) { %}
+                    <td class="error" colspan="2"><span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
+                {% } else if (o.files.valid && !i) { %}
+                    <td>
+                        <div class="progress progress-success progress-striped active"><div class="bar" style="width:0%;"></div></div>
+                    </td>
+                    <td class="start">{% if (!o.options.autoUpload) { %}
+                        <button class="btn btn-primary">
+                            <i class="icon-upload icon-white"></i>
+                            <span>{%=locale.fileupload.start%}</span>
+                        </button>
+                    {% } %}</td>
+                {% } else { %}
+                    <td colspan="2"></td>
+                {% } %}
+                <td class="cancel">{% if (!i) { %}
+                    <button class="btn btn-warning">
+                        <i class="icon-ban-circle icon-white"></i>
+                        <span>{%=locale.fileupload.cancel%}</span>
+                    </button>
+                {% } %}</td>
+            </tr>
+        {% } %}
+</script>
+
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+            <tr class="template-download fade">
+                {% if (file.error) { %}
+                    <td></td>
+                    <td class="name"><span>{%=file.name%}</span></td>
+                    <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+                    <td class="error" colspan="2"><span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
+                {% } else { %}
+                    <td class="preview">{% if (file.thumbnail_url) { %}
+                        <a href="{%=file.url%}" title="{%=file.name%}" rel="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
+                    {% } %}</td>
+                    <td class="name">
+                        <a href="{%=file.url%}" title="{%=file.name%}" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
+                    </td>
+                    <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+                    <td colspan="2"></td>
+                {% } %}
+                <td class="delete <%= 'hide' if defined? destroy and not destroy %>">
+                    <a href="{%=file.delete_url%}" class="btn btn-danger" rel="nofollow" data-filename="{%=file.name%}" data-method="delete" data-remote="true">
+                        <i class="icon-trash icon-white"></i>
+                        <span>{%=locale.fileupload.destroy%}</span>
+                    </a>
+                </td>
+            </tr>
+        {% } %}
+</script>
+
+<%= content_for :post_scripts do %>
+    <script type="text/javascript" charset="utf-8">
+        $(function () {
+            common_attachments.initialize('<%= model.class.name %>', '<%= model.id %>');
+        });
+    </script>
+<% end %>

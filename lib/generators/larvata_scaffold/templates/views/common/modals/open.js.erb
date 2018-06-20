@@ -1,0 +1,32 @@
+<% if @error_message.nil? %>
+    // 載入 partial 頁面，區分是否有關聯 master 資料
+    <% if @associate_model_name.blank? %>
+        var partial_page_html = '<%= j render "/#{@controller_name}/#{@partial_page}", readonly: @readonly, modal: true %>';
+    <% else %>
+        var partial_page_html = '<%= j render "/#{@controller_name}/#{@partial_page}", readonly: @readonly, modal: true, "#{@associate_model_name}": instance_variable_get("@#{@associate_model_name}") %>';
+    <% end %>
+
+    if( partial_page_html !== '' ) {
+        var dialog = bootbox.dialog({
+            title: '<%= @page_title %>',
+            message: partial_page_html,
+            onEscape: function() {
+                return '<%= @action_name %>' === 'index';
+            },
+            backdrop: true,
+            closeButton: true,
+            animate: true,
+            size: 'large',
+            className: "bootbox-modal-width",
+        });
+
+        dialog.init(function(){
+            if('<%= @action_name %>' === 'index') { // 列表類型的頁面
+                eval( '<%= @controller_name.split("/").join("_") %>.datatables.initialize();' );
+            } else { // 表單類型的頁面
+                eval( '<%= @controller_name.split("/").join("_") %>.initialize();' );
+                eval( 'common_attachments.initialize("<%= @model_name %>", "<%= @id %>");' );
+            }
+        });
+    }
+<% end %>
