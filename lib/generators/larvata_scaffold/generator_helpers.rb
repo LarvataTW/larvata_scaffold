@@ -7,13 +7,13 @@ module LarvataScaffold
 
       def model_columns_for_editable_attributes
         class_name.constantize.columns.reject do |column|
-          column.name.to_s =~ /(^(id|user_id|created_at|updated_at)$)|token|password/
+          column.name.to_s =~ /(^(id|user_id|created_at|updated_at|deleted_at)$)|token|password/
         end
       end
 
       def model_columns_for_editable_attributes_and_except_sorting
         class_name.constantize.columns.reject do |column|
-          column.name.to_s =~ /(^(id|user_id|created_at|updated_at|sorting)$)|token|password/
+          column.name.to_s =~ /(^(id|user_id|created_at|updated_at|sorting|deleted_at)$)|token|password/
         end
       end
 

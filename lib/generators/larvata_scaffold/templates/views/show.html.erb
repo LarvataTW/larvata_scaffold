@@ -11,7 +11,7 @@
                     <ul class="nav nav-tabs text-left" role="tablist">
                         <%= "<% @tabs.each_with_index do |tab, index| %%>" %>
                             <%= "<li role='presentation' class='<%= 'active' if index == 0 %%>'>" %>
-                                <%= "<a href='<%= change_show_tab_admin_#{controller_file_path.singularize}_path(tab: tab[:name]) %%>' aria-controls='<%= tab[:name] %%>_tab' role='tab' data-toggle='' data-remote='true' class='<%= tab[:name] %%>_tab'>" %>
+                                <%= "<a href='<%= change_show_tab_#{'admin_' if admin?}#{controller_file_path.singularize}_path(tab: tab[:name]) %%>' aria-controls='<%= tab[:name] %%>_tab' role='tab' data-toggle='' data-remote='true' class='<%= tab[:name] %%>_tab'>" %>
                                     <i class="ion-happy-outline"></i>
                                     <%= "<%= t \"labels.#{singular_name}.\#{tab[:name]}_info\" %%>" %>
                                 </a>
@@ -31,10 +31,3 @@
         </div>
     </div>
 </div>
-
-<%= "<%= content_for :post_scripts do %%>" %>
-<%= "    <script>" %>
-<%= "        var #{singular_name}_id = '<%= @#{singular_name}.id %%>';" %>
-<%= "        var master_show_tab = '<%= params[:master_show_tab] %%>';" %>
-<%= "    </script>" %>
-<%= "<% end %%>" %>

@@ -2,15 +2,15 @@
 
   <div class="panel-heading" role="tab">
     <h4 class="panel-title">
-      <a class="collapsed" role="button" href="#search_panel"
+    <a class="collapsed" role="button" href="#<%= controller_file_path %>search_panel"
         data-toggle="collapse" data-parent="#accordion"
-        aria-expanded="false" aria-controls="search_panel">
-        篩選條件
+        aria-expanded="false" aria-controls="<%= controller_file_path %>search_panel">
+          <%= "<%= t('helpers.form.search_filter_block') %%>" %>
       </a>
     </h4>
   </div>
 
-  <div id="search_panel" class="panel-collapse collapse" role="search panel">
+  <div id="<%= controller_file_path %>search_panel" class="panel-collapse collapse" role="search panel">
     <div class="panel-body">
 
       <div class="form-group">

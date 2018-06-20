@@ -1,6 +1,6 @@
 <%= "<%= render '#{'admin/' if admin?}#{controller_file_path}/form', readonly: true %%>" %>
 
-<%= "<%= render 'common/attachments', model: @#{singular_name}, upload: false, destroy: false %%>" %>
+<%= "<%= render 'common/attachments', model: @#{singular_name}, upload: false, destroy: false %%>" if attachable? %>
 
 <%= "<%= content_for :post_scripts do %%>" %>
 <%= "    <%= javascript_include_tag '#{'admin/' if admin?}#{controller_file_path}' %%>" %>
