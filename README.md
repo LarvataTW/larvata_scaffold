@@ -15,6 +15,12 @@ Then execute:
 
     $ bundle
 
+## Install Required Files
+
+使用以下指令來建立所需要的檔案。
+
+    $ rails g larvata_scaffold:install
+
 ## Controller Scaffold Usage
 
 需要先建立好 Model 之後，才能使用此功能來產生基礎 CRUD 頁面功能。
