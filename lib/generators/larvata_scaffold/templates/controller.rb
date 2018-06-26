@@ -282,10 +282,10 @@ end
 <% if enable_pundit? -%>
   def class_authorize
     <%= "authorize [:admin, #{class_name}]" if admin? and custom_controller.nil? %>
-    <%= "authorize #{class_name}" unless admin? and custom_controller.nil? %>
+    <%= "authorize #{class_name}" if not admin? and custom_controller.nil? %>
 
     <%= "authorize [:admin, :#{custom_controller}]" if admin? and custom_controller.present? %>
-    <%= "authorize :#{custom_controller}" unless admin? and custom_controller.present? %>
+    <%= "authorize :#{custom_controller}" if not admin? and custom_controller.present? %>
   end
 <% end -%>
 end
