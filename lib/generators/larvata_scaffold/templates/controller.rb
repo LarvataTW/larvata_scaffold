@@ -146,14 +146,11 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
 <% if contains_sorting_column? -%>
   # 更新列表的排序
   def update_row_sorting
-    <%= plural_name %> = []
     params[:rows_sorting]&.each{|id, sorting|
       <%= singular_name %> = <%= class_name %>.find_by(id: id)
-      <%= singular_name %>.try(:sorting=, sorting)
+      <%= singular_name %>&.send(:sorting=, sorting)
       <%= singular_name %>&.save
-      <%= plural_name %> << <%= singular_name %>
     }
-    render json: {data: to_datatables(<%= plural_name %>)}
   end
 <% end -%>
 
