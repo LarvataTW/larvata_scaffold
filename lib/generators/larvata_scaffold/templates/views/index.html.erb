@@ -1,10 +1,13 @@
-<div class="an-body-topbar wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
-    <div class="an-page-title">
-        <h2><%= "<%= t('helpers.page_title.index', model: #{class_name}.model_name.human) %%>" %></h2>
-    </div>
-</div>
+<%= begin_subheader_tags %>
+    <%= begin_page_title_tags %>
+            <%= "<%= t('helpers.page_title.index', model: #{class_name}.model_name.human) %%>" %>
+    <%= end_page_title_tags %>
+<%= end_subheader_tags %>
 
-<%= "<%= render '#{'admin/' if admin?}#{controller_file_name}/index_datatables' %%>" %>
+<%= begin_page_content_tags %>
+    <%= "<%= render '#{'admin/' if admin?}#{controller_file_name}/index_datatables' %%>" %>
+<%= end_page_content_tags %>
+
 
 <%= "<% content_for :post_scripts do %%>" %>
 <%= "    <%= javascript_include_tag '#{'admin/' if admin?}#{controller_file_name}' %%>" %>

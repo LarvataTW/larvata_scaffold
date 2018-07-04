@@ -38,7 +38,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
       active_record_query = class_scope 
       @q = active_record_query.ransack(@filters)
 
-      @q.sorts = @sorting_key.blank? ? "updated_at desc" : "#{params[:columns][@sorting_key.to_s][:data]} #{@sorting_dir}"
+      @q.sorts = @sorting_key.blank? ? "updated_at desc" : "#{params[:columns][@sorting_key.to_s][:data]} #{@sorting_dir}".gsub('_i18n', '')
 
       @<%= plural_name %> = @q.result.page(@page).per(params[:length])
       @filtered_count = @q.result.count
