@@ -236,9 +236,9 @@ module LarvataScaffold
         def begin_filter_condition_panel_header_tags(controller_file_path)
           _eof_content = <<-EOF
 <div class="panel-heading" role="tab">
-      <h4 class="panel-title">
-          <a class="collapsed" role="button" href="##{controller_file_path}_search_panel" data-toggle="collapse" 
-              data-parent="#accordion" aria-expanded="false" aria-controls="#{controller_file_path}_search_panel">
+            <h4 class="panel-title">
+                <a class="collapsed" role="button" href="##{controller_file_path}_search_panel" data-toggle="collapse" 
+                    data-parent="#accordion" aria-expanded="false" aria-controls="#{controller_file_path}_search_panel">
           EOF
           _eof_content.rstrip
         end
@@ -247,8 +247,8 @@ module LarvataScaffold
         def end_filter_condition_panel_header_tags
           _eof_content = <<-EOF
         </a>
-        </h4>
-    </div>
+            </h4>
+        </div>
           EOF
           _eof_content.rstrip
         end
@@ -257,7 +257,7 @@ module LarvataScaffold
         def begin_filter_condition_panel_content_tags(controller_file_path)
           _eof_content = <<-EOF
 <div id="#{controller_file_path}_search_panel" class="panel-collapse collapse" role="search panel">
-        <div class="panel-body">
+            <div class="panel-body">
           EOF
           _eof_content.rstrip
         end
@@ -266,7 +266,7 @@ module LarvataScaffold
         def end_filter_condition_panel_content_tags
           _eof_content = <<-EOF
     </div>
-    </div>
+        </div>
           EOF
           _eof_content.rstrip
         end
@@ -379,7 +379,7 @@ module LarvataScaffold
         def begin_range_tags_of_search_form
           _eof_content = <<-EOF
 <div class='col-sm-5 no-padding'>
-                        <div class='col-sm-12 no-padding'>
+                            <div class='col-sm-12 no-padding'>
           EOF
           _eof_content.rstrip
         end
@@ -388,10 +388,10 @@ module LarvataScaffold
         def append_range_tags_of_search_form
           _eof_content = <<-EOF
 </div>
-                    </div>
-                    <div class='col-sm-1 no-padding t-center'> ~ </div>
-                    <div class='col-sm-6 no-padding'>
-                        <div class='col-sm-12 no-padding'>
+                        </div>
+                        <div class='col-sm-1 no-padding t-center'> ~ </div>
+                        <div class='col-sm-6 no-padding'>
+                            <div class='col-sm-12 no-padding'>
           EOF
           _eof_content.rstrip
         end
@@ -400,9 +400,9 @@ module LarvataScaffold
         def end_range_tags_of_search_form
           _eof_content = <<-EOF
     </div>
+                        </div>
+                        <div class='clear'></div>
                     </div>
-                    <div class='clear'></div>
-                </div>
           EOF
           _eof_content.rstrip
         end

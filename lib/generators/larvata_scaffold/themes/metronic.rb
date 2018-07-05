@@ -222,6 +222,7 @@ module LarvataScaffold
         def begin_filter_condition_panel_tags
           _eof_content = <<-EOF
 <div class="m-accordion m-accordion--default filter-condition-panel" role="tablist">
+    <div class="m-accordion__item">
           EOF
           _eof_content.rstrip
         end
@@ -229,6 +230,7 @@ module LarvataScaffold
         # 查詢區塊標籤（結束）
         def end_filter_condition_panel_tags
           _eof_content = <<-EOF
+    </div>
 </div>
           EOF
           _eof_content.rstrip
@@ -237,8 +239,7 @@ module LarvataScaffold
         # 查詢區塊標頭標籤（開始）
         def begin_filter_condition_panel_header_tags(controller_file_path)
           _eof_content = <<-EOF
-<div class="m-accordion__item">
-        <div class="m-accordion__item-head collapsed" role="tab" id="#{controller_file_path}_search_panel_header" data-toggle="collapse" href="##{controller_file_path}_search_panel_body" aria-expanded="false">
+<div class="m-accordion__item-head collapsed" role="tab" id="#{controller_file_path}_search_panel_header" data-toggle="collapse" href="##{controller_file_path}_search_panel_body" aria-expanded="false">
             <span class="m-accordion__item-icon">
                 <i class="fa flaticon-search"></i>
             </span>
@@ -250,10 +251,9 @@ module LarvataScaffold
         # 查詢區塊標頭標籤（結束）
         def end_filter_condition_panel_header_tags
           _eof_content = <<-EOF
-        </span>
+    </span>
             <span class="m-accordion__item-mode"></span>
         </div>
-    </div>
           EOF
           _eof_content.rstrip
         end
@@ -271,7 +271,7 @@ module LarvataScaffold
         def end_filter_condition_panel_content_tags
           _eof_content = <<-EOF
     </div>
-    </div>
+        </div>
           EOF
           _eof_content.rstrip
         end
@@ -392,10 +392,10 @@ module LarvataScaffold
         def append_range_tags_of_search_form
           _eof_content = <<-EOF
 <div class="input-group-append">
-                            <span class="input-group-text">
-                                <i class="la la-ellipsis-h"></i>
-                            </span>
-                        </div>
+                                <span class="input-group-text">
+                                    <i class="la la-ellipsis-h"></i>
+                                </span>
+                            </div>
           EOF
           _eof_content.rstrip
         end
