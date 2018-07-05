@@ -15,8 +15,16 @@ module LarvataScaffold module Generators
       class_option :attachable, type: :boolean, default: false, desc: "Can function attach files?"
       class_option :controller, type: :string, default: nil, desc: "Specifie controller class name."
       class_option :tab, type: :string, default: nil, desc: "Specifie enum field to generate tabs in index.html.erb."
+      class_option :theme, type: :string, default: 'analog', desc: "Specifie theme name(analog、metronic)."
 
       # We don’t need to call methods in the generator class. All public methods will be called one by one on generating.
+
+      def include_theme_module
+        require "generators/larvata_scaffold/themes/#{theme}"
+        if Module.const_defined?(theme_module)
+          self.singleton_class.send(:include, Module.const_get(theme_module))
+        end
+      end
 
       def copy_controller_and_spec_files
         template "controller.rb", File.join(controller_path, "#{controller_file_name}_controller.rb")

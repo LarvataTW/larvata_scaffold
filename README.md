@@ -25,7 +25,7 @@ Then execute:
 
 需要先建立好 Model 之後，才能使用此功能來產生基礎 CRUD 頁面功能。
 
-    $ rails g larvata_scaffold:controller model_name [--admin] [--skip-row-editor] [--skip-pundit] [--attachable] [--controller [controller_name]] [--tab [enum_field_name]]
+    $ rails g larvata_scaffold:controller model_name [--admin] [--skip-row-editor] [--skip-pundit] [--attachable] [--controller [controller_name]] [--tab [enum_field_name]] [--theme [supported_theme_name]]
 
 >--admin 表示為後台功能，會將功能放置在 namespace admin 下。    
 --skip-row-editor 表示會將 datatables 的 inline editing 功能關閉。   
@@ -33,6 +33,7 @@ Then execute:
 --attachable 表示會啟用附件上傳功能。    
 --controller [controller_name] 表示可以產生不同於 model 名稱的 resource 功能。    
 --tab [enum_field_name] 表示可以用 enum_field_name 的 Array 內容來產生 index.html.erb 的頁籤功能。    
+--theme [supported_theme_name] 讓產生出來的頁面可以符合指定的 theme 名稱，目前支援 analog 和 metronic，預設為 analog。    
 
 * 啟用附件上傳功能前，需要在 Model 中設定附件關連：
 

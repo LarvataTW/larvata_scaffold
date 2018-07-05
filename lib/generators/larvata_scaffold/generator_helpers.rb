@@ -148,6 +148,14 @@ module LarvataScaffold
       def detail_controller
         options['detail_controller'] || detail&.pluralize
       end
+
+      def theme
+        options['theme'] || 'analog'
+      end
+
+      def theme_module
+        "LarvataScaffold::Generators::Themes::#{theme.classify}"
+      end
     end
   end
 end

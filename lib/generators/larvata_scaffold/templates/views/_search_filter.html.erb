@@ -1,28 +1,21 @@
-<div class="panel panel-default an-sidebar-search filter-condition-panel">
+<%= begin_filter_condition_panel_tags %>
 
-  <div class="panel-heading" role="tab">
-    <h4 class="panel-title">
-    <a class="collapsed" role="button" href="#<%= controller_file_path %>search_panel"
-        data-toggle="collapse" data-parent="#accordion"
-        aria-expanded="false" aria-controls="<%= controller_file_path %>search_panel">
-          <%= "<%= t('helpers.form.search_filter_block') %%>" %>
-      </a>
-    </h4>
-  </div>
+        <%= begin_filter_condition_panel_header_tags(controller_file_path) %>
+            <%= "<%= t('helpers.form.search_filter_block') %%>" %>
+        <%= end_filter_condition_panel_header_tags %>
 
-  <div id="<%= controller_file_path %>search_panel" class="panel-collapse collapse" role="search panel">
-    <div class="panel-body">
+        <%= begin_filter_condition_panel_content_tags(controller_file_path) %>
 
-      <div class="form-group">
-        <div class="col-sm-2">
-          <label class='control-label'><%%= t('helpers.form.keyword_search_label') %></label>
-        </div>
-        <div class="col-sm-10">
-          <input type='text' id='keyword_search' placeholder="<%%= t('helpers.form.keyword_search') %>"
-                 class='an-form-control no-redius border-bottom m-0 text_color'>
-        </div>
-        <div class="clear"></div>
-      </div>
+                <div class="<%= "#{form_group_class_of_form}" %>">
+                    <div class="col-sm-2">
+                        <label class='<%= "#{input_label_class_of_form}" %>'><%%= t('helpers.form.keyword_search_label') %></label>
+                    </div>
+                    <div class="col-sm-10">
+                        <input type='text' id='keyword_search' placeholder="<%%= t('helpers.form.keyword_search') %>"
+                                                               class='<%= "#{form_control_class} #{input_class_of_search_form}" %>'>
+                    </div>
+                    <div class="clear"></div>
+                </div>
 
     <%= editable_attributes_and_except_sorting_and_datetime_and_number.each_with_index.map { | attr, i |
 
@@ -30,50 +23,50 @@
 
       filter = <<-HEREDOC
 
-      <div class='form-group'>
-        <div class="col-sm-2">
-          <label class='control-label'><%= #{class_name}.human_attribute_name('#{attr.name}') %%></label>
-        </div>
-        <div class='col-sm-10'>
+                <div class='#{form_group_class_of_form}'>
+                    <div class="col-sm-2">
+                        <label class='#{input_label_class_of_form}'><%= #{class_name}.human_attribute_name('#{attr.name}') %%></label>
+                    </div>
+                    <div class='col-sm-10'>
       HEREDOC
 
       if belongs_to_assoc
         assoc_class_name = belongs_to_assoc.name.to_s.classify
         _filter = <<-HEREDOC
-          <%= simple_form_for([:admin, #{class_name}.new], url: '/#{'admin' if admin?}/#{controller_file_path}/') do | f | %%>
-          <%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{assoc_class_name}.none, value_method: :id, label_method: :id,
-                class: 'form-control filter-#{attr.name}', include_blank: true, selected: nil %%>
-          <% end %%>
+                        <%= simple_form_for([:admin, #{class_name}.new], url: '/#{'admin' if admin?}/#{controller_file_path}/') do | f | %%>
+                            <%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{assoc_class_name}.none, value_method: :id, label_method: :id,
+                                class: '#{form_control_class} filter-#{attr.name}', include_blank: true, selected: nil %%>
+                        <% end %%>
         HEREDOC
         filter = filter + _filter
       elsif is_enum? attr
         _filter = <<-HEREDOC
-          <%= simple_form_for([:admin, #{class_name}.new], url: '/#{'admin' if admin?}/#{controller_file_path}/') do | f | %%>
-          <%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{class_name}.#{attr.name.pluralize}_i18n,
-                class: 'form-control select2 filter-#{attr.name} filter-select-condition', include_blank: true, selected: nil %%>
-          <% end %%>
+                        <%= simple_form_for([:admin, #{class_name}.new], url: '/#{'admin' if admin?}/#{controller_file_path}/') do | f | %%>
+                            <%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{class_name}.#{attr.name.pluralize}_i18n,
+                                class: '#{form_control_class} select2 filter-#{attr.name} filter-select-condition', include_blank: true, selected: nil %%>
+                        <% end %%>
         HEREDOC
         filter = filter + _filter
       elsif attr.type == "boolean"
         _filter = <<-HEREDOC
-          <%= simple_form_for(:admin) do | f | %%>
-          <%= f.input_field :#{attr.name}, name: '#{attr.name}', collection:[[t('helpers.select.true_option'),true], [t('helpers.select.false_option'),false]],
-                class: 'form-control select2 filter-#{attr.name} filter-select-condition', include_blank: true %%>
-          <% end %%>
+                        <%= simple_form_for(:admin) do | f | %%>
+                            <%= f.input_field :#{attr.name}, name: '#{attr.name}', collection:[[t('helpers.select.true_option'),true], [t('helpers.select.false_option'),false]],
+                                class: '#{form_control_class} select2 filter-#{attr.name} filter-select-condition', include_blank: true %%>
+                        <% end %%>
         HEREDOC
         filter = filter + _filter
       else
         _filter = <<-HEREDOC
-          <input type='text' name='#{attr.name}' placeholder='<%= t('helpers.form.placeholder', column: #{class_name}.human_attribute_name('#{attr.name}')) %%>'
-             class='an-form-control no-redius border-bottom m-0 text_color filter-#{attr.name} filter-condition'>
+                        <input type='text' name='#{attr.name}' placeholder='<%= t('helpers.form.placeholder', column: #{class_name}.human_attribute_name('#{attr.name}')) %%>'
+                            class='#{form_control_class} #{input_class_of_search_form} filter-#{attr.name} filter-condition'>
         HEREDOC
         filter = filter + _filter
       end
 
       _filter = <<-HEREDOC
-        </div>
-        <div class='clear'></div>
-      </div>
+                    </div>
+                    <div class='clear'></div>
+                </div>
       HEREDOC
 
       filter + _filter
@@ -85,57 +78,49 @@
 
       filter = <<-HEREDOC
 
-      <div class='form-group'>
-        <label class='col-sm-2 control-label l-h-34'><%= #{class_name}.human_attribute_name('#{attr.name}') %%></label>
-        <div class='col-sm-10'>
-          <div class='col-sm-5 no-padding'>
-            <div class='col-sm-12 no-padding'>
+                <div class='#{form_group_class_of_form}'>
+                    <label class='col-sm-2 #{input_label_class_of_form}'><%= #{class_name}.human_attribute_name('#{attr.name}') %%></label>
+                    <div class='col-sm-10'>
+                        #{begin_range_tags_of_search_form}
       HEREDOC
 
       if attr.type == "datetime"
         _filter = <<-HEREDOC
-              <input type='text' name='#{attr.name}_start' placeholder='<%= t('helpers.form.start_at') %%>'
-                     class='an-form-control no-redius border-bottom m-0 text_color datetimepicker filter-#{attr.name} filter-range-condition'>
+                                <input type='text' name='#{attr.name}_start' placeholder='<%= t('helpers.form.start_at') %%>'
+                                       class='#{form_control_class} #{input_class_of_search_form} datetimepicker filter-#{attr.name} filter-range-condition'>
         HEREDOC
         filter = filter + _filter
       else
         _filter = <<-HEREDOC
-              <input type='number' name='#{attr.name}_start' placeholder='<%= t('helpers.form.start_number') %%>'
-                     class='an-form-control no-redius border-bottom m-0 text_color filter-#{attr.name} filter-range-condition'>
+                                <input type='number' name='#{attr.name}_start' placeholder='<%= t('helpers.form.start_number') %%>'
+                                       class='#{form_control_class} #{input_class_of_search_form} filter-#{attr.name} filter-range-condition'>
         HEREDOC
         filter = filter + _filter
       end
 
       _filter = <<-HEREDOC
-            </div>
-          </div>
-          <div class='col-sm-1 no-padding l-h-34 t-center'> ~ </div>
-          <div class='col-sm-6 no-padding'>
-            <div class='col-sm-12 no-padding'>
+                            #{append_range_tags_of_search_form}
       HEREDOC
       filter = filter + _filter
 
       if attr.type == "datetime"
         _filter = <<-HEREDOC
-              <input type='text' name='#{attr.name}_end' placeholder='<%= t('helpers.form.end_at') %%>'
-                     class='an-form-control no-redius border-bottom m-0 text_color datetimepicker filter-#{attr.name} filter-range-condition'>
+                                <input type='text' name='#{attr.name}_end' placeholder='<%= t('helpers.form.end_at') %%>'
+                                       class='#{form_control_class} #{input_class_of_search_form} datetimepicker filter-#{attr.name} filter-range-condition'>
         HEREDOC
         filter = filter + _filter
       else
         _filter = <<-HEREDOC
-              <input type='number' name='#{attr.name}_end' placeholder='<%= t('helpers.form.start_number') %%>'
-                     class='an-form-control no-redius border-bottom m-0 text_color filter-#{attr.name} filter-range-condition'>
+                                <input type='number' name='#{attr.name}_end' placeholder='<%= t('helpers.form.end_number') %%>'
+                                       class='#{form_control_class} #{input_class_of_search_form} filter-#{attr.name} filter-range-condition'>
         HEREDOC
         filter = filter + _filter
       end
 
       _filter = <<-HEREDOC
-              </div>
-            </div>
-            <div class='clear'></div>
-          </div>
-        <div class='clear'></div>
-      </div>
+                        #{end_range_tags_of_search_form}
+                    <div class='clear'></div>
+                </div>
       HEREDOC
 
       filter + _filter
@@ -143,19 +128,18 @@
       }.join("\n")
     %>
 
-      <div class="form-group pull-right">
-        <div class="col-sm-12">
-          <button class="btn btn-default reset-button">
-            <%= "<%= t('button.reset') %%>" %>
-          </button>
-          <button class="btn btn-info filter-button">
-            <%= "<%= t('button.filter') %%>" %>
-          </button>
-        </div>
-        <div class="clear"></div>
-      </div>
+                <div class="form-group pull-right">
+                    <div class="col-sm-12">
+                        <button class="btn btn-default reset-button">
+                            <%= "<%= t('button.reset') %%>" %>
+                        </button>
+                        <button class="btn btn-info filter-button">
+                            <%= "<%= t('button.filter') %%>" %>
+                        </button>
+                    </div>
+                    <div class="clear"></div>
+                </div>
 
-    </div>
-  </div>
+        <%= end_filter_condition_panel_content_tags %>
 
-</div>
+<%= end_filter_condition_panel_tags %>

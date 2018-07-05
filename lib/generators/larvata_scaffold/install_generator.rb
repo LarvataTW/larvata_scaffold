@@ -35,6 +35,64 @@ module LarvataScaffold
 
         route _eof_content.strip
       end
+
+      # 補上缺少的 JS 設定
+      def add_js_settings
+        admin_js_file = File.join("app", "assets", "javascripts", "admin.js")
+
+        if File.readlines(admin_js_file).grep(/jquery-fileupload/).size == 0
+          insert_into_file admin_js_file, before: "$(function() {" do
+            _eof_content = <<~EOF
+  //= require jquery-fileupload
+
+            EOF
+
+            _eof_content
+          end
+        end
+
+        if File.readlines(admin_js_file).grep(/common\/modals/).size == 0
+          insert_into_file admin_js_file, before: "$(function() {" do
+            _eof_content = <<~EOF
+  //= require common/modals
+
+            EOF
+
+            _eof_content
+          end
+        end
+
+        if File.readlines(admin_js_file).grep(/common\/attachments/).size == 0
+          insert_into_file admin_js_file, before: "$(function() {" do
+            _eof_content = <<~EOF
+  //= require common/attachments
+
+            EOF
+
+            _eof_content
+          end
+        end
+
+      end
+
+
+      # 補上缺少的 CSS 設定
+      def add_css_settings
+        admin_css_file = File.join("app", "assets", "stylesheets", "admin.css.scss")
+
+        if File.readlines(admin_css_file).grep(/jquery.fileupload/).size == 0
+          append_to_file admin_css_file do
+            _eof_content = <<~EOF
+
+  @import "jquery.fileupload";
+  @import "jquery.fileupload-ui";
+            EOF
+
+            _eof_content
+          end
+        end
+
+      end
     end
   end
 end

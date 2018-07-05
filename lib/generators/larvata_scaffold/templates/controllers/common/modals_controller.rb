@@ -19,9 +19,10 @@ class Common::ModalsController < ApplicationController
             @page_title = params[:page_title] || t("helpers.page_title.#{@action_name}", model: model_class.model_name.human)
 
             if @action_name != 'index'
-              @readonly = @action_name != 'edit'
+              @readonly = ['new', 'edit'].exclude? @action_name
 
               instance_variable_set("@#{@model_name}", model_class.find_by(id: @id)) unless @id.blank?
+              instance_variable_set("@#{@model_name}", model_class.new) if @id.blank?
             else
               unless @associate_model_name.blank?
                 associate_class = @associate_model_name.classify.constantize 

@@ -38,7 +38,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
       active_record_query = class_scope 
       @q = active_record_query.ransack(@filters)
 
-      @q.sorts = @sorting_key.blank? ? "updated_at desc" : "#{params[:columns][@sorting_key.to_s][:data]} #{@sorting_dir}"
+      @q.sorts = @sorting_key.blank? ? "updated_at desc" : "#{params[:columns][@sorting_key.to_s][:data]} #{@sorting_dir}".gsub('_i18n', '')
 
       @<%= plural_name %> = @q.result.page(@page).per(params[:length])
       @filtered_count = @q.result.count
@@ -146,14 +146,11 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
 <% if contains_sorting_column? -%>
   # 更新列表的排序
   def update_row_sorting
-    <%= plural_name %> = []
     params[:rows_sorting]&.each{|id, sorting|
       <%= singular_name %> = <%= class_name %>.find_by(id: id)
-      <%= singular_name %>.try(:sorting=, sorting)
+      <%= singular_name %>&.send(:sorting=, sorting)
       <%= singular_name %>&.save
-      <%= plural_name %> << <%= singular_name %>
     }
-    render json: {data: to_datatables(<%= plural_name %>)}
   end
 <% end -%>
 
@@ -285,10 +282,10 @@ end
 <% if enable_pundit? -%>
   def class_authorize
     <%= "authorize [:admin, #{class_name}]" if admin? and custom_controller.nil? %>
-    <%= "authorize #{class_name}" unless admin? and custom_controller.nil? %>
+    <%= "authorize #{class_name}" if not admin? and custom_controller.nil? %>
 
     <%= "authorize [:admin, :#{custom_controller}]" if admin? and custom_controller.present? %>
-    <%= "authorize :#{custom_controller}" unless admin? and custom_controller.present? %>
+    <%= "authorize :#{custom_controller}" if not admin? and custom_controller.present? %>
   end
 <% end -%>
 end
