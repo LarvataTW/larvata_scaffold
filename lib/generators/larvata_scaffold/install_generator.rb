@@ -11,6 +11,8 @@ module LarvataScaffold
 
       # 產生需要的檔案
       def copy_require_files
+        copy_file "assets/javascripts/datatables.utils.js", "app/assets/javascripts/datatables.utils.js"
+
         copy_file "assets/javascripts/common/attachments.js", "app/assets/javascripts/common/attachments.js"
         copy_file "assets/javascripts/common/modals.js", "app/assets/javascripts/common/modals.js"
 
