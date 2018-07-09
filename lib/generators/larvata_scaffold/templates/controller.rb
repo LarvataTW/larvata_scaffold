@@ -24,10 +24,13 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
     respond_to do |format|
       # 設定排序條件
       unless params[:order].blank?
-        @sorting_key = params[:order]['0'][:column].to_i # 排序條件
-        @sorting_dir = params[:order]['0'][:dir] # 降冪升冪
-        @page = (params[:start].to_i/params[:length].to_i) + 1 # 要顯示資料的頁數
+        params[:order].each do |k,v|
+          @order_columns ||= []
+          @order_columns << "#{params[:columns][ v[:column] ][:data]} #{ v[:dir] }".gsub('_i18n', '')
+        end
       end
+
+      @page = (params[:start].to_i/params[:length].to_i) + 1 # 要顯示資料的頁數
 
       @filters = DatatablesService.new({class_name: "<%= class_name %>"}).handle_filters(params)
 
@@ -38,7 +41,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
       active_record_query = class_scope 
       @q = active_record_query.ransack(@filters)
 
-      @q.sorts = @sorting_key.blank? ? "updated_at desc" : "#{params[:columns][@sorting_key.to_s][:data]} #{@sorting_dir}".gsub('_i18n', '')
+      @q.sorts = @order_columns.empty? ? ["updated_at desc"] : @order_columns
 
       @<%= plural_name %> = @q.result.page(@page).per(params[:length])
       @filtered_count = @q.result.count
