@@ -21,6 +21,8 @@ module LarvataScaffold
 
         copy_file "controllers/common/modals_controller.rb", "app/controllers/common/modals_controller.rb"
         copy_file "controllers/attachments_controller.rb", "app/controllers/attachments_controller.rb"
+
+        copy_file "config/locales/zh-TW.yml", "config/locales/zh-TW.yml"
       end
 
       # 產生需要的 routes 設定

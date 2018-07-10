@@ -1,0 +1,357 @@
+zh-TW:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "校驗失敗: %{errors}"
+        restrict_dependent_destroy:
+          has_one: 由於 %{record} 需要此記錄，所以無法移除記錄
+          has_many: 由於 %{record} 需要此記錄，所以無法移除記錄
+  labels:
+    pundit:
+      not_authorized_error: 沒有使用權限
+  date:
+    abbr_day_names:
+    - 周日
+    - 周一
+    - 周二
+    - 周三
+    - 周四
+    - 周五
+    - 周六
+    abbr_month_names:
+    -
+    - 1月
+    - 2月
+    - 3月
+    - 4月
+    - 5月
+    - 6月
+    - 7月
+    - 8月
+    - 9月
+    - 10月
+    - 11月
+    - 12月
+    day_names:
+    - 星期日
+    - 星期一
+    - 星期二
+    - 星期三
+    - 星期四
+    - 星期五
+    - 星期六
+    formats:
+      default: "%Y-%m-%d"
+      long: "%Y年%b%d日"
+      short: "%b%d日"
+    month_names:
+    -
+    - 一月
+    - 二月
+    - 三月
+    - 四月
+    - 五月
+    - 六月
+    - 七月
+    - 八月
+    - 九月
+    - 十月
+    - 十一月
+    - 十二月
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: 大約一小時
+        other: 大約 %{count} 小時
+      about_x_months:
+        one: 大約一個月
+        other: 大約 %{count} 個月
+      about_x_years:
+        one: 大約一年
+        other: 大約 %{count} 年
+      almost_x_years:
+        one: 接近一年
+        other: 接近 %{count} 年
+      half_a_minute: 半分鐘
+      less_than_x_minutes:
+        one: 不到一分鐘
+        other: 不到 %{count} 分鐘
+      less_than_x_seconds:
+        one: 不到一秒
+        other: 不到 %{count} 秒
+      over_x_years:
+        one: 一年多
+        other: "%{count} 年多"
+      x_days:
+        one: 一天
+        other: "%{count} 天"
+      x_minutes:
+        one: 一分鐘
+        other: "%{count} 分鐘"
+      x_months:
+        one: 一個月
+        other: "%{count} 個月"
+      x_seconds:
+        one: 一秒
+        other: "%{count} 秒"
+    prompts:
+      day: 日
+      hour: 時
+      minute: 分
+      month: 月
+      second: 秒
+      year: 年
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: 必須是可被接受的
+      blank: 不能為空白
+      present: 必須是空白
+      confirmation: 兩次輸入須一致
+      empty: 不能留空
+      equal_to: 必須等於 %{count}
+      even: 必須是偶數
+      exclusion: 是被保留的關鍵字
+      greater_than: 必須大於 %{count}
+      greater_than_or_equal_to: 必須大於或等於 %{count}
+      inclusion: 沒有包含在列表中
+      invalid: 是無效的
+      less_than: 必須小於 %{count}
+      less_than_or_equal_to: 必須小於或等於 %{count}
+      model_invalid: "校驗失敗: %{errors}"
+      not_a_number: 不是數字
+      not_an_integer: 必須是整數
+      odd: 必須是奇數
+      required: 必須存在
+      taken: 已經被使用
+      too_long:
+        one: 過長（最長是一個字）
+        other: 過長（最長是 %{count} 個字）
+      too_short:
+        one: 過短（最短是一個字）
+        other: 過短（最短是 %{count} 個字）
+      wrong_length:
+        one: 字數錯誤 (必須是一個字)
+        other: 字數錯誤 (必須是 %{count} 個字)
+      other_than: 不可以是 %{count} 個字
+    template:
+      body: 以下欄位發生問題：
+      header:
+        one: 有 1 個錯誤發生使得「%{model}」無法被儲存。
+        other: 有 %{count} 個錯誤發生使得「%{model}」無法被儲存。
+  helpers:
+    page_title:
+      index: "%{model}列表"
+      new: 新增%{model}
+      edit: 編輯%{model}
+      show: 檢視%{model}
+    select:
+      prompt: 請選擇
+      true_option: 是
+      false_option: 否
+    submit:
+      create: 新增%{model}
+      submit: 儲存%{model}
+      update: 更新%{model}
+    form:
+      search_filter_block: 篩選條件
+      keyword_search_label: 關鍵字
+      keyword_search: 請輸入關鍵字查詢
+      placeholder: 請輸入%{column}
+      start_at: 請輸入開始時間
+      end_at: 請輸入結束時間
+      start_number: 請輸入開始數值
+      end_number: 請輸入結束數值
+      update_success: 更新%{model}成功
+      update_error: 更新%{model}時發生錯誤
+      create_success: 新增%{model}成功
+      create_error: 新增%{model}時發生錯誤
+      destroy_success: 刪除%{model}成功
+      destroy_error: 刪除%{model}時發生錯誤
+    datatables:
+      actions: 操作
+      length_menu_all: 全部
+      tab_all: 全部
+      select_all: 全部選擇
+      select_none: 取消選擇
+    ajax:
+      default_error: 送出資料發生錯誤，請稍後再試或洽詢系統管理員。
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u %n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: NT$
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          ten_thousand: 萬
+          billion: 十億
+          million: 百萬
+          quadrillion: 千兆
+          thousand: 千
+          trillion: 兆
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: false
+        strip_insignificant_zeros: false
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: 位元組
+            other: 位元組
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", 和 "
+      two_words_connector: " 和 "
+      words_connector: ", "
+  time:
+    am: 上午
+    formats:
+      default: "%Y年%b%d日 %A %H:%M:%S %Z"
+      long: "%Y年%b%d日 %H:%M"
+      short: "%b%d日 %H:%M"
+    pm: 下午
+  button:
+    add: 新增
+    new: 新增%{model}
+    edit: 編輯
+    show: 檢視
+    destroy: 刪除
+    back: 返回
+    save: 儲存
+    import: 匯入
+    filter: 查詢
+    reset: 清空
+    download_print: 下載/列印%{model}明細
+    prompt_feedback: 邀請顧客進行評價回填
+    destroy_confirm: "確認要刪除 %{message} 的 %{model} 嗎？"
+    update_status: 變更狀態
+    select_image: 選擇圖片
+    remove_image: 移除圖片
+    send_message: 送出訊息
+    maintenance_category_management: 修繕類別管理
+    reservation_management: 管理訂單狀態
+    cancel: 取消
+    batch_destroy: 批次刪除
+    complete: 完成
+    create_period_table: 產生分期表格
+    delete_table: 刪除表格內容
+  views:
+    web_content:
+      index: 首頁
+      advertising: 行銷廣告
+      business: 商業模式
+      news: 最新消息
+      member: 團隊成員
+      cession: 讓與債權
+      faq: 常見問題
+      other_description: 其他說明
+      rate_description: 資費說明
+      slide: Slide
+      article: 文案
+    headings:
+      current_time: 目前時間
+  datatables:
+    info_empty: 找不到符合的資料
+    zero_records: 找不到符合的資料。
+    length_menu: "每頁顯示 _MENU_ 筆資料"
+    processing: 搜尋中，請稍後，如久無反應請重新整理頁面。
+    previous: 上一頁
+    next: 下一頁
+    last: 最末頁
+    first: 第一頁
+    info: "顯示 _START_ 到 _END_ 筆，共 _TOTAL_ 筆資料"
+    info_filtered: "(從全部 _MAX_ 筆資料中查詢的結果)"
+    empty_table: 表格中沒有可用的資料
+    sort_ascending: 升冪排序
+    sort_descending: 降冪排序
+    click_to_select: "可以點擊選取下列資料"
+    selected_rows: "您選擇了 %d 筆資料"
+    only_one_row_selected: "您選擇了 1 筆資料"
+  form_inputs:
+    hints:
+      upload_size_limit: 每筆大小不得超過 5MB
+  templates:
+    general:
+      headers:
+        function_list: 功能列表
+        unit_info: 房屋資訊
+        id: 編號
+        areas: 房屋面積及價款
+        land: 房屋土地持分
+    maintenance:
+      feedback:
+        not_received: 未收到回饋
+      filters:
+        property: 建案
+        unit_number: 戶號/棟號
+        floor_number: 樓層
+      hints:
+        maintenance_categories: 說明：提供顧客在app填寫時，選取更精確的修繕內容。
+        land_unit_ratio: 建案成本比率：土地 40%；房屋 60%
+    customer:
+      header: 顧客詳細資料
+      basic: 基本資料
+      account: App會員帳密
+      name: 顧客姓名
+      contact_address: 通訊地址
+      residential_address: 戶籍地址
+      app_header: App帳號
+      email: 信箱
+      social_network: 社群連結
+      cell: 手機
+      status: 帳號狀態
+    reservation:
+      owner: 簽約戶
+      parent_property: 所屬建案
+      info: 訂單資訊
+      customer_info: 顧客資訊
+      cost_info: 價款資訊
+      period_info: 期別資訊
+      cost_tab:
+        total_price: 合計總價
+        total_parking_price: 車位總價
+        total_housing_price: 房屋總價
+        item: 項目
+        area: 面積 (平)
+        low_price: 低價
+        housing_breakdown: 成本比例拆分 (房屋)
+        parking_breakdown: 成本比例拆分 (土地)
+        over_under: 溢價/低底
+        unit_price: 單價 (萬元/坪)
+      areas_tab: 所有權面積
+      contract_attachment: 合約檔案上傳
+
+  app_upload: "App 上傳"
+  direct_contact: 直接洽談
+
