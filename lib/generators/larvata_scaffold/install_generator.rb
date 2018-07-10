@@ -22,6 +22,8 @@ module LarvataScaffold
         copy_file "controllers/common/modals_controller.rb", "app/controllers/common/modals_controller.rb"
         copy_file "controllers/attachments_controller.rb", "app/controllers/attachments_controller.rb"
 
+        copy_file "services/datatables_service.rb", "services/datatables_service.rb"
+
         copy_file "config/locales/zh-TW.yml", "config/locales/zh-TW.yml"
       end
 
