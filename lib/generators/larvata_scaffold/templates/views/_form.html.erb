@@ -40,9 +40,13 @@
         }.join("\n    ") 
     %>
 
-    <%= "<%= link_to t('button.back'), back_#{'admin_' if admin?}#{controller_file_path}_path, class: 'btn btn-default' %%>" %>
-    <%= "<%= link_to t('button.edit'), edit_#{'admin_' if admin?}#{controller_file_path.singularize}_path(@#{singular_name}), class: 'btn btn-primary' if readonly %%>" %>
-    <%= "<%= f.submit t('button.save'), class: 'btn btn-primary' unless readonly %%>" %>
+    <%= "<div class='row'>" %>
+    <%= "    <div class='col-sm-12'>" %>
+    <%= "        <%= link_to t('button.back'), back_#{'admin_' if admin?}#{controller_file_path}_path, class: 'btn btn-default' %%>" %>
+    <%= "        <%= link_to t('button.edit'), edit_#{'admin_' if admin?}#{controller_file_path.singularize}_path(@#{singular_name}), class: 'btn btn-primary m-r-10' if readonly %%>" %>
+    <%= "        <%= f.submit t('button.save'), class: 'btn btn-primary m-r-10' unless readonly %%>" %>
+    <%= "    </div" %>
+    <%= "</div>" %>
 <%= "<% end %%>" %>
 
 <%= "<%= render 'common/attachments', model: @#{singular_name}, upload: true, destroy: true %%>" if attachable? %>

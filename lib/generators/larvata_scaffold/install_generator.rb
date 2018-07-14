@@ -12,9 +12,12 @@ module LarvataScaffold
       # 產生需要的檔案
       def copy_require_files
         copy_file "assets/javascripts/datatables.utils.js", "app/assets/javascripts/datatables.utils.js"
-
         copy_file "assets/javascripts/common/attachments.js", "app/assets/javascripts/common/attachments.js"
         copy_file "assets/javascripts/common/modals.js", "app/assets/javascripts/common/modals.js"
+        copy_file "assets/javascripts/froala.js", "app/assets/javascripts/froala.js"
+        copy_file "assets/javascripts/froala_plugins.js", "app/assets/javascripts/froala_plugins.js"
+
+        copy_file "assets/stylesheets/froala_plugins.css.scss", "app/assets/stylesheets/froala_plugins.css.scss"
 
         copy_file "views/common/modals/open.js.erb", "app/views/common/modals/open.js.erb"
         copy_file "views/common/_attachments.html.erb", "app/views/common/_attachments.html.erb"
@@ -22,7 +25,7 @@ module LarvataScaffold
         copy_file "controllers/common/modals_controller.rb", "app/controllers/common/modals_controller.rb"
         copy_file "controllers/attachments_controller.rb", "app/controllers/attachments_controller.rb"
 
-        copy_file "services/datatables_service.rb", "services/datatables_service.rb"
+        copy_file "services/datatables_service.rb", "app/services/datatables_service.rb"
 
         copy_file "config/locales/zh-TW.yml", "config/locales/zh-TW.yml"
       end
@@ -79,6 +82,18 @@ module LarvataScaffold
           end
         end
 
+        if File.readlines(admin_js_file).grep(/froala_editor/).size == 0
+          insert_into_file admin_js_file, before: "$(function() {" do
+            _eof_content = <<~EOF
+  //= require froala_editor.min
+  //= require froala_plugins
+  //= require froala
+            EOF
+
+            _eof_content
+          end
+        end
+      
       end
 
 
@@ -98,6 +113,28 @@ module LarvataScaffold
           end
         end
 
+        if File.readlines(admin_css_file).grep(/froala_editor/).size == 0
+          append_to_file admin_css_file do
+            _eof_content = <<~EOF
+
+  @import "froala_editor.min";
+  @import "froala_style.min";
+  @import "froala_plugins";
+            EOF
+
+            _eof_content
+          end
+        end
+
+      end
+
+      # 確認是否存在 attachments model 和表格，如果不存在則建立之
+      def create_attachments_model_and_table
+        # 執行 rails g model attachment 指令
+        if ActiveRecord::Base.connection.table_exists? 'attachments'
+          generate "migration CreateAttachments attachable_id:integer attachable_type:string attachable_additional_type:string attachment_file_name:string attachment_file_size:integer attachment_content_type:string attachment_updated_at:datetime"
+          copy_file "models/attachment.rb", "app/models/attachment.rb"
+        end
       end
     end
   end

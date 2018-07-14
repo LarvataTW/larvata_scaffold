@@ -4,8 +4,8 @@ zh-TW:
       messages:
         record_invalid: "校驗失敗: %{errors}"
         restrict_dependent_destroy:
-          has_one: 由於 %{record} 需要此記錄，所以無法移除記錄
-          has_many: 由於 %{record} 需要此記錄，所以無法移除記錄
+          has_one: 由於 %{record} 需要此記錄，所以無法移除記錄。
+          has_many: 由於 %{record} 需要此記錄，所以無法移除記錄。
   labels:
     pundit:
       not_authorized_error: 沒有使用權限
@@ -166,12 +166,16 @@ zh-TW:
       end_at: 請輸入結束時間
       start_number: 請輸入開始數值
       end_number: 請輸入結束數值
-      update_success: 更新%{model}成功
-      update_error: 更新%{model}時發生錯誤
-      create_success: 新增%{model}成功
-      create_error: 新增%{model}時發生錯誤
-      destroy_success: 刪除%{model}成功
-      destroy_error: 刪除%{model}時發生錯誤
+      update_success: 更新 %{model} 成功
+      update_error: 更新 %{model} 時發生錯誤
+      create_success: 新增 %{model} 成功
+      create_error: 新增 %{model} 時發生錯誤
+      destroy_success: 刪除 %{model} 成功
+      destroy_error: 刪除 %{model} 時發生錯誤
+      disable_success: 停用 %{model} 成功
+      disable_error: 停用 %{model} 時發生錯誤
+      resume_success: 恢復 %{model} 成功
+      resume_error: 恢復 %{model} 時發生錯誤
     datatables:
       actions: 操作
       length_menu_all: 全部
@@ -256,7 +260,7 @@ zh-TW:
     prompt_feedback: 邀請顧客進行評價回填
     destroy_confirm: "確認要刪除 %{message} 的 %{model} 嗎？"
     update_status: 變更狀態
-    select_image: 選擇圖片
+    add_image: 增加圖片
     remove_image: 移除圖片
     send_message: 送出訊息
     maintenance_category_management: 修繕類別管理

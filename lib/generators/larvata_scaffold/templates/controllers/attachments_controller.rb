@@ -10,11 +10,12 @@ class AttachmentsController < ApplicationController
   def create
     # 如果是一般表單的附件上傳，不會傳送 attachable_additional_type 參數
     @source = params[:attachable_type]&.constantize&.find_by_id(params[:attachable_id])
-    @attachment = @source&.attachments&.new(
-      attachment: params[:attachment] || params[:file],
-      attachable_type: params[:attachable_type],
-      attachable_id: params[:attachable_id],
-      attachable_additional_type: params[:attachable_additional_type])
+    @attachment = @source&.attachments&.new || Attachment.new do |attachable|
+      attachable.attachment = params[:attachment] || params[:file]
+      attachable.attachable_type = params[:attachable_type]
+      attachable.attachable_id = params[:attachable_id]
+      attachable.attachable_additional_type = params[:attachable_additional_type]
+    end
 
     if @attachment.save
       render :json => {status: 'OK', files:[@attachment.to_jq_upload], link: @attachment.attachment.url(:original)}.to_json

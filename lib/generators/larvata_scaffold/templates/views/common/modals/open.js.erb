@@ -17,7 +17,22 @@
             closeButton: true,
             animate: true,
             size: 'large',
-            className: "bootbox-modal-width",
+            className: "draggable-modal resizable-modal bootbox-modal-width",
+        });
+
+        // 賦予視窗拖拉機制
+        $('.draggable-modal .modal-content')
+        .draggable({
+            cursor: "move",
+            cancel: ".bootbox-body"
+        });
+
+        // 賦予視窗調整尺寸機制
+        $('.resizable-modal .modal-content')
+        .resizable({
+            minWidth: 350,
+            minHeight: 350,
+            alsoResize: '.resizable-modal .bootbox-body'
         });
 
         dialog.init(function(){
