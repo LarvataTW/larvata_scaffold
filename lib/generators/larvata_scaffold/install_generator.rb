@@ -17,7 +17,7 @@ module LarvataScaffold
         copy_file "assets/javascripts/froala.js", "app/assets/javascripts/froala.js"
         copy_file "assets/javascripts/froala_plugins.js", "app/assets/javascripts/froala_plugins.js"
 
-        copy_file "assets/stylesheets/froala_plugins.css.scss", "app/assets/stylesheets/froala_plugins.css.scss"
+        copy_file "assets/stylesheets/froala_plugins.scss", "app/assets/stylesheets/froala_plugins.scss"
 
         copy_file "views/common/modals/open.js.erb", "app/views/common/modals/open.js.erb"
         copy_file "views/common/_attachments.html.erb", "app/views/common/_attachments.html.erb"

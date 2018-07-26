@@ -138,7 +138,7 @@ module LarvataScaffold
       end
 
       def master_controller
-        options['master_controller'] || master&.pluralize
+        custom_controller || master&.pluralize
       end
 
       def detail

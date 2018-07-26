@@ -40,7 +40,7 @@ module LarvataScaffold module Generators
       end
 
       def view_files
-        actions = %w(index _index_datatables new edit show _form _table _search_filter)
+        actions = %w(index _index_datatables new edit show _show_content _form _table _search_filter)
         actions
       end
 
@@ -56,7 +56,7 @@ module LarvataScaffold module Generators
         directory_path = File.join(views_path, controller_file_path, 'tabs')
         empty_directory directory_path
 
-        template "views/tabs/_master_tab.html.erb", File.join(directory_path, "_#{controller_file_name.singularize}_tab.html.erb")
+        template "views/tabs/_master_tab.html.erb", File.join(directory_path, "_#{master_controller}_tab.html.erb")
       end
 
       def copy_js_files

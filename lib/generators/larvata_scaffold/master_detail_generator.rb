@@ -175,11 +175,11 @@ module LarvataScaffold
         master_js_file = File.join(js_path, "#{master_controller}.js")
 
         # 
-        if File.readlines(master_js_file).grep(/typeof master_show_tab !== 'undefined' && master_show_tab != ""/).size == 0
+        if File.readlines(master_js_file).grep(/master_show_tab != ""/).size == 0
           insert_into_file master_js_file, after: "$(function() {\n" do
             _eof_content = <<-EOF
     // 依據傳入的 master_show_tab 參數來切換 show 頁面的 detail 頁籤內容
-    if( typeof #{master}_id !== 'undefined' && #{master}_id != "" && typeof master_show_tab !== 'undefined' && master_show_tab != "" ) {
+    if( #{master}_id != "" && master_show_tab != "" ) {
         \$.ajax({
             url: \"/#{'admin/' if admin?}#{master_controller}/\"+ #{master}_id +\"/render_tab_content\",
             method: 'get',
@@ -445,8 +445,37 @@ new_#{'admin_' if admin?}#{detail_controller.singularize}_path(
         end
       end
 
+      def modify_detail_index_file
+        detail_index_file = File.join(views_path, detail_controller, "index.html.erb")
+
+        # 加入 master id 的 hidden tag 到 <% content_for :post_scripts do %> 之前
+        if File.readlines(detail_index_file).grep(/hidden_field_tag '#{master}_id'/).size == 0
+          insert_into_file detail_index_file, before: "<% content_for :post_scripts do %>\n" do
+            _eof_content = <<-EOF
+<%= hidden_field_tag '#{master}_id', params[:#{master}_id] %>
+
+            EOF
+
+            _eof_content 
+          end
+        end
+
+
+      end
+
       def modify_detail_datatable_js_file
         detail_datatables_js_file = File.join(js_path, "#{detail_controller}_datatables.js")
+
+        # 加入 master id 的 var 設定到 this.datatables.initialize = function() { 之後
+        if File.readlines(detail_datatables_js_file).grep(/var #{master}_id = $('##{master}_id').val()/).size == 0
+          insert_into_file detail_datatables_js_file, after: "this.datatables.initialize = function() {\n" do
+            _eof_content = <<-EOF
+        var #{master}_id = $('##{master}_id').val() || '';
+            EOF
+
+            _eof_content 
+          end
+        end
 
         # 讓 datatable url 加上 master pk query string
         if File.readlines(detail_datatables_js_file).grep(/data: {/).size == 0
@@ -462,16 +491,7 @@ new_#{'admin_' if admin?}#{detail_controller.singularize}_path(
 
         insert_into_file detail_datatables_js_file, after: "data: {\n" do
           _eof_content = <<-EOF
-                    #{master}_id: typeof #{master}_id === 'undefined' ? '' : #{master}_id,
-          EOF
-
-          _eof_content 
-        end
-
-        # 增加 master_show_tab_value 到 datatables column 的 render function 內
-        insert_into_file detail_datatables_js_file, after: "var id = data.id;\n" do
-          _eof_content = <<-EOF
-                        var master_show_tab_value = typeof master_show_tab !== 'undefined' ? master_show_tab : '';
+                    #{master}_id: #{master}_id,
           EOF
 
           _eof_content 
@@ -479,14 +499,14 @@ new_#{'admin_' if admin?}#{detail_controller.singularize}_path(
 
         # 調整 datatables grid 上的編輯按鈕 url
         _eof_content = <<-EOF
-      /admin/#{detail_controller}/' + id + '/edit?master_show_tab='+ master_show_tab_value +'\"
+      /admin/#{detail_controller}/' + id + '/edit?master_show_tab='+ master_show_tab +'\"
         EOF
 
         gsub_file detail_datatables_js_file, /\/admin\/#{detail_controller}\/' \+ id \+ '\/edit"/, _eof_content.strip
 
         # 調整 datatables grid 上的刪除按鈕 url
         _eof_content = <<-EOF
-      /admin/#{detail_controller}/' + id + '?master_show_tab='+ master_show_tab_value +'\"
+      /admin/#{detail_controller}/' + id + '?master_show_tab='+ master_show_tab +'\"
         EOF
 
         gsub_file detail_datatables_js_file, /\/admin\/#{detail_controller}\/' \+ id \+ '"/, _eof_content.strip
@@ -520,11 +540,11 @@ new_#{'admin_' if admin?}#{detail_controller.singularize}_path(
       def modify_master_model_js_file
         master_model_js_file = File.join(js_path, "#{master_controller}.js")
 
-        if File.readlines(master_model_js_file).grep(/typeof master_show_tab !== 'undefined' && master_show_tab != ""/).size == 0
+        if File.readlines(master_model_js_file).grep(/master_show_tab != ""/).size == 0
           insert_into_file master_model_js_file, after: "$(function() {\n" do
             _eof_content = <<-EOF
     // 依據傳入的 master_show_tab 參數來切換 show 頁面的 detail 頁籤內容
-    if( typeof #{master}_id !== 'undefined' && #{master}_id != "" && typeof master_show_tab !== 'undefined' && master_show_tab != "" ) {
+    if( #{master}_id != "" && master_show_tab != "" ) {
         $.ajax({
             url: "/#{'admin/' if admin? }#{master_controller}/"+ #{master}_id +"/render_tab_content",
             method: 'get',
@@ -554,10 +574,21 @@ new_#{'admin_' if admin?}#{detail_controller.singularize}_path(
 
       # 調整 detail model js file
       def modify_detail_model_js_file
-        detail_datatables_js_file = File.join(js_path, "#{detail_controller}.js")
+        detail_model_js_file = File.join(js_path, "#{detail_controller}.js")
 
-        if File.readlines(detail_datatables_js_file).grep(/typeof master_show_tab !== 'undefined' && master_show_tab != ""/).size == 0
-          insert_into_file detail_datatables_js_file, after: "$(function() {\n" do
+        # 加入 master id 的 var 設定到 this.initialize = function() { 之後
+        if File.readlines(detail_model_js_file).grep(/var #{master}_id = $('##{master}_id').val()/).size == 0
+          insert_into_file detail_model_js_file, after: "this.initialize = function() {\n" do
+            _eof_content = <<-EOF
+        var #{master}_id = $('##{master}_id').val() || '';
+            EOF
+
+            _eof_content 
+          end
+        end
+
+        if File.readlines(detail_model_js_file).grep(/typeof master_show_tab !== 'undefined' && master_show_tab != ""/).size == 0
+          insert_into_file detail_model_js_file, after: "$(function() {\n" do
             _eof_content = <<-EOF
     // 依據傳入的 master_show_tab 參數來切換 show 頁面的 detail 頁籤內容
     if( typeof #{detail}_id !== 'undefined' && #{detail}_id != "" && typeof master_show_tab !== 'undefined' && master_show_tab != "" ) {

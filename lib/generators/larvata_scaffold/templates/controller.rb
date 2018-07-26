@@ -188,7 +188,7 @@ end
   # 設定連結所屬明細頁籤
   def tabs
     tabs_array = []
-    tabs_array << {name: '<%= master %>'}
+    tabs_array << {name: '<%= master_controller %>'}
     tabs_array
   end
 
