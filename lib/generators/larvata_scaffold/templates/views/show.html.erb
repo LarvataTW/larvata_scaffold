@@ -16,28 +16,7 @@
         <%= end_panel_header_tags %>
 
         <%= begin_panel_body_tags %>
-            <%= begin_tabs_block_tags %>
-                <%= begin_tabs_control_tags %>
-                    <ul class="nav nav-tabs text-left" role="tablist">
-                        <%= "<% @tabs.each_with_index do |tab, index| %%>" %>
-                            <%= "<li role='presentation' class='<%= 'active' if index == 0 %%>'>" %>
-                                <%= "<a href='<%= change_show_tab_#{'admin_' if admin?}#{controller_file_path.singularize}_path(tab: tab[:name]) %%>' aria-controls='<%= tab[:name] %%>_tab' role='tab' data-toggle='' data-remote='true' class='<%= tab[:name] %%>_tab'>" %>
-                                    <i class="ion-happy-outline"></i>
-                                    <%= "<%= t \"labels.#{singular_name}.\#{tab[:name]}_info\" %%>" %>
-                                </a>
-                            </li>
-                        <%= "<% end %%>" %>
-                    </ul>
-                <%= end_tabs_control_tags %>
-
-                <%= begin_tabs_content_tags %>
-                    <%= "<% @tabs.each_with_index do |tab, index| %%>" %>
-                        <%= "<div role='tabpanel' class='tab-pane fade in <%= 'active' if index == 0 %%>' id='<%= tab[:name] %%>_tabpanel'>" %>
-                            <%= "<%= render \"#{'admin/' if admin?}#{controller_file_path}/tabs/\#{tab[:name]}_tab\", #{singular_name}: @#{singular_name} if index == 0 %%>" %>
-                        </div>
-                    <%= "<% end %%>" %>
-                <%= end_tabs_content_tags %>
-            <%= end_tabs_block_tags %>
+            <%= "<%= render 'show_content' %%>" %>
         <%= end_panel_body_tags %>
     <%= end_panel_tags %>
 <%= end_page_content_tags %>

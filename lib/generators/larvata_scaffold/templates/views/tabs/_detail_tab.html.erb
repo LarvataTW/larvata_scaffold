@@ -1,9 +1,5 @@
 <!-- 串接 <%= detail_controller %> 功能頁面-->
 <%= "<%= render '#{'admin/' if admin?}#{detail_controller}/index_datatables', #{master}: #{master}, master_show_tab: master_show_tab %%>" %>
 
-<script>
-    <%= "var property_id = '<%= #{master}.id %%>';" %>
-    <%= "var master_show_tab = '<%= master_show_tab %%>';" %>
-</script>
 <%= "<%= javascript_include_tag '#{'admin/' if admin?}#{detail_controller}' %%>" %>
 <%= "<%= javascript_include_tag '#{'admin/' if admin?}#{detail_controller}_datatables' %%>" %>

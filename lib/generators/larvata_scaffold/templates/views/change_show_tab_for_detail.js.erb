@@ -1,3 +1,4 @@
+<%= "$('#master_show_tab').val('<%= @current_tab[:name] %%>');" %>
 <%= "tab_html = '<%= j render \"#{admin? ? 'admin/' : ''}#{detail_controller}/tabs/\#{@current_tab[:name]}_tab\", #{detail}: @#{detail}, master_show_tab: @current_tab[:name] %%>';" %>
 if(tab_html !== '') {
     $('.tab-pane.active').removeClass('active');

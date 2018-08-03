@@ -1,32 +1,36 @@
-<hr class="style3">
+<div class="row">
+    <div class="col-sm-12">
+        <hr class="style3">
 
-<h4><%= t('helpers.page_title.index', model: Attachment.model_name.human) %></h4>
+        <h4><%= t('helpers.page_title.index', model: Attachment.model_name.human) %></h4>
 
-<%= simple_form_for Attachment.new, html: { :multipart => true, :id => "fileupload" } do |f| %>
-    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-    <div class="fileupload-buttonbar">
-        <div class="span7">
-            <!-- The fileinput-button span is used to style the file input field as button -->
-            <span class="btn btn-success fileinput-button <%= 'hide' if defined? upload and not upload %>">
-                <i class="icon-plus icon-white"></i>
-                <span>Add files...</span>
-                <%= file_field_tag 'attachment', multiple: false, name: "attachment" %>
-            </span>
-        </div>
-        <div class="span5">
-            <!-- The global progress bar -->
-            <div class="progress progress-success progress-striped active fade">
-                <div class="bar" style="width:0%;"></div>
+        <%= simple_form_for Attachment.new, html: { :multipart => true, :id => "fileupload" } do |f| %>
+            <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+            <div class="fileupload-buttonbar">
+                <div class="span7">
+                    <!-- The fileinput-button span is used to style the file input field as button -->
+                    <span class="btn btn-success fileinput-button <%= 'hide' if defined? upload and not upload %>">
+                        <i class="icon-plus icon-white"></i>
+                        <span>Add files...</span>
+                        <%= file_field_tag 'attachment', multiple: false, name: "attachment" %>
+                    </span>
+                </div>
+                <div class="span5">
+                    <!-- The global progress bar -->
+                    <div class="progress progress-success progress-striped active fade">
+                        <div class="bar" style="width:0%;"></div>
+                    </div>
+                </div>
             </div>
-        </div>
+            <!-- The loading indicator is shown during image processing -->
+            <div class="fileupload-loading"></div>
+            <br>
+            <!-- The table listing the files available for upload/download -->
+            <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
+            </table>
+        <% end %>
     </div>
-    <!-- The loading indicator is shown during image processing -->
-    <div class="fileupload-loading"></div>
-    <br>
-    <!-- The table listing the files available for upload/download -->
-    <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
-    </table>
-<% end %>
+</div>
 
 <script>
 var fileUploadErrors = {
