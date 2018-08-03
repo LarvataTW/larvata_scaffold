@@ -28,7 +28,7 @@ class Common::ModalsController < ApplicationController
               instance_variable_set("@#{@model_name}", model_class.new) if @id.blank?
 
               # 設定頁面內不同資料來源的頁籤
-              instance_variable_set("@tabs", controller_class.new.tabs) unless @tab.blank?
+              instance_variable_set("@tabs", controller_class.new.tabs) if controller_class.new.methods.grep(/^tabs$/).any?
             else # 如果開啟的頁面是 index 列表頁 
               unless @associate_model_name.blank? # 設定關連資料的 master 物件
                 associate_class = @associate_model_name.classify.constantize 

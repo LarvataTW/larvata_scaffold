@@ -43,5 +43,8 @@
                 eval( 'common_attachments.initialize("<%= @model_name %>", "<%= @id %>");' );
             }
         });
+
+        // 讓 back 連結隱藏
+        $('.modal a[href$="/back"]').addClass('hide');
     }
 <% end %>
