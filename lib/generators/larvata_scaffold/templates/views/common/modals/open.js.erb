@@ -44,6 +44,9 @@
             }
         });
 
+        // 讓非 ajax 連結會以新視窗方式開啟
+        //$('.modal a:not([remote="true"])').attr('target', '_blank');
+        
         // 讓 back 連結隱藏
         $('.modal a[href$="/back"]').addClass('hide');
     }
