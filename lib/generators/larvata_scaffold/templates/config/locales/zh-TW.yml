@@ -304,58 +304,5 @@ zh-TW:
     only_one_row_selected: "您選擇了 1 筆資料"
   form_inputs:
     hints:
-      upload_size_limit: 每筆大小不得超過 5MB
-  templates:
-    general:
-      headers:
-        function_list: 功能列表
-        unit_info: 房屋資訊
-        id: 編號
-        areas: 房屋面積及價款
-        land: 房屋土地持分
-    maintenance:
-      feedback:
-        not_received: 未收到回饋
-      filters:
-        property: 建案
-        unit_number: 戶號/棟號
-        floor_number: 樓層
-      hints:
-        maintenance_categories: 說明：提供顧客在app填寫時，選取更精確的修繕內容。
-        land_unit_ratio: 建案成本比率：土地 40%；房屋 60%
-    customer:
-      header: 顧客詳細資料
-      basic: 基本資料
-      account: App會員帳密
-      name: 顧客姓名
-      contact_address: 通訊地址
-      residential_address: 戶籍地址
-      app_header: App帳號
-      email: 信箱
-      social_network: 社群連結
-      cell: 手機
-      status: 帳號狀態
-    reservation:
-      owner: 簽約戶
-      parent_property: 所屬建案
-      info: 訂單資訊
-      customer_info: 顧客資訊
-      cost_info: 價款資訊
-      period_info: 期別資訊
-      cost_tab:
-        total_price: 合計總價
-        total_parking_price: 車位總價
-        total_housing_price: 房屋總價
-        item: 項目
-        area: 面積 (平)
-        low_price: 低價
-        housing_breakdown: 成本比例拆分 (房屋)
-        parking_breakdown: 成本比例拆分 (土地)
-        over_under: 溢價/低底
-        unit_price: 單價 (萬元/坪)
-      areas_tab: 所有權面積
-      contract_attachment: 合約檔案上傳
-
-  app_upload: "App 上傳"
-  direct_contact: 直接洽談
+      upload_size_limit: 每筆大小不得超過 5MB 
 

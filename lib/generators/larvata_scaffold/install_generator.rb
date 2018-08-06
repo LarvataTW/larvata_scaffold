@@ -40,9 +40,10 @@ module LarvataScaffold
       get :open
     end
   end
+
         EOF
 
-        route _eof_content.strip
+        route _eof_content
       end
 
       # 補上缺少的 JS 設定
@@ -131,7 +132,7 @@ module LarvataScaffold
       # 確認是否存在 attachments model 和表格，如果不存在則建立之
       def create_attachments_model_and_table
         # 執行 rails g model attachment 指令
-        if ActiveRecord::Base.connection.table_exists? 'attachments'
+        unless ActiveRecord::Base.connection.table_exists? 'attachments'
           generate "migration CreateAttachments attachable_id:integer attachable_type:string attachable_additional_type:string attachment_file_name:string attachment_file_size:integer attachment_content_type:string attachment_updated_at:datetime"
           copy_file "models/attachment.rb", "app/models/attachment.rb"
         end
