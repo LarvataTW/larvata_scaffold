@@ -28,6 +28,9 @@ module LarvataScaffold
         copy_file "services/datatables_service.rb", "app/services/datatables_service.rb"
 
         copy_file "config/locales/zh-TW.yml", "config/locales/zh-TW.yml"
+
+        copy_file "app/policies/admin_policy.rb", "app/policies/admin_policy.rb"
+        copy_file "app/policies/application_policy.rb", "app/policies/application_policy.rb"
       end
 
       # 產生需要的 routes 設定
