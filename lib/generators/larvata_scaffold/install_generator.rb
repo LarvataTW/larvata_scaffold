@@ -29,8 +29,8 @@ module LarvataScaffold
 
         copy_file "config/locales/zh-TW.yml", "config/locales/zh-TW.yml"
 
-        copy_file "app/policies/admin_policy.rb", "app/policies/admin_policy.rb"
-        copy_file "app/policies/application_policy.rb", "app/policies/application_policy.rb"
+        copy_file "policies/admin_policy.rb", "app/policies/admin_policy.rb"
+        copy_file "policies/application_policy.rb", "app/policies/application_policy.rb"
       end
 
       # 產生需要的 routes 設定
