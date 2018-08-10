@@ -27,5 +27,10 @@ class Attachment < ActiveRecord::Base
   def pdf?
     attachment_content_type == "application/pdf"
   end
+
+  # 用在新建表單的附件上傳機制：在成功建立表單資料後，更新所上傳附件之 attachable_id
+  def self.update_attachable_ids(attachment_ids, attachable_id)
+    Attachment.where(id: attachment_ids.split(',')).update_all(attachable_id: attachable_id) unless attachment_ids.nil?
+  end
 end
 
