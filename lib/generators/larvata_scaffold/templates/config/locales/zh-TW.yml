@@ -305,4 +305,8 @@ zh-TW:
   form_inputs:
     hints:
       upload_size_limit: 每筆大小不得超過 5MB 
-
+  fileupload:
+    select_file: 選擇檔案...
+    cancel: 取消
+    start: 上傳
+    destroy: 刪除

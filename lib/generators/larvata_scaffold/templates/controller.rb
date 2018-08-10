@@ -65,6 +65,9 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
     @<%= singular_name %> = <%= class_name %>.new(<%= singular_name %>_params)
     respond_to do |format|
       if @<%= singular_name %>.save
+        # 更新已上傳、但未設定 attachable_id 的檔案資料
+        Attachment.update_attachable_ids(params[:attachments], @<%= singular_name %>.id)
+
         format.html {
           flash[:notice] = I18n.t('helpers.form.create_success', model: <%= class_name %>.model_name.human)
           back
