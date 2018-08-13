@@ -31,6 +31,8 @@ module LarvataScaffold
 
         copy_file "policies/admin_policy.rb", "app/policies/admin_policy.rb"
         copy_file "policies/application_policy.rb", "app/policies/application_policy.rb"
+
+        copy_file "lib/tasks/custom_seed.rake", "lib/tasks/custom_seed.rake"
       end
 
       # 產生需要的 routes 設定
