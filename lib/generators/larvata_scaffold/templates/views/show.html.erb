@@ -1,6 +1,5 @@
 <%= begin_subheader_tags %>
-    <%= begin_page_title_tags %>
-            <%= "<%= t('helpers.page_title.show', model: #{class_name}.model_name.human) %%>" %>
+    <%= begin_page_title_tags('show') %>
     <%= end_page_title_tags %>
 <%= end_subheader_tags %>
 
@@ -8,8 +7,7 @@
     <%= begin_panel_tags %>
 
         <%= begin_panel_header_tags %>
-            <%= begin_panel_header_caption_tags %>
-                <%= "<%= #{class_name}.model_name.human %%>" %>
+            <%= begin_panel_header_caption_tags('show') %>
             <%= end_panel_header_caption_tags %>
             <%= begin_panel_header_tools_tags %>
             <%= end_panel_header_tools_tags %>
