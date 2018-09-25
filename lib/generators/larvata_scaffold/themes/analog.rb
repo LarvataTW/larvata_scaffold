@@ -37,7 +37,7 @@ module LarvataScaffold
         # m-content
         def begin_page_content_tags
           _eof_content = <<-EOF
-<div>
+<div class="col-md-12">
           EOF
           _eof_content.rstrip
         end
@@ -234,9 +234,8 @@ module LarvataScaffold
         def begin_filter_condition_panel_header_tags(controller_file_path)
           _eof_content = <<-EOF
 <div class="panel-heading" role="tab">
-            <h4 class="panel-title">
-                <a class="collapsed" role="button" href="##{controller_file_path}_search_panel" data-toggle="collapse" 
-                    data-parent="#accordion" aria-expanded="false" aria-controls="#{controller_file_path}_search_panel">
+            <a class="collapsed" role="button" href="##{controller_file_path}_search_panel" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="#{controller_file_path}_search_panel">
+                <h4 class="panel-title">
           EOF
           _eof_content.rstrip
         end
@@ -244,8 +243,8 @@ module LarvataScaffold
         # 查詢區塊標頭標籤（結束）
         def end_filter_condition_panel_header_tags
           _eof_content = <<-EOF
-        </a>
-            </h4>
+        </h4>
+            </a>
         </div>
           EOF
           _eof_content.rstrip

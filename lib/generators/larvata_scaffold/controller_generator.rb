@@ -80,14 +80,14 @@ module LarvataScaffold module Generators
         routes_string += "resources :#{controller_file_name} do\n      "
 
         routes_string += "member do\n        "
-        routes_string += "get :change_show_tab\n          "
-        routes_string += "get :render_tab_content\n          "
-        routes_string += "end\n    "
+        routes_string += "get :change_show_tab\n        "
+        routes_string += "get :render_tab_content\n      "
+        routes_string += "end\n      "
 
         routes_string += "collection do\n        "
         routes_string += "post :datatables\n        "
         routes_string += "patch :update_row_sorting\n        " if contains_sorting_column?
-        routes_string += "patch :update_row\n      "
+        routes_string += "patch :update_row\n        "
         routes_string += "get :back\n      "
 
         # 建立 belongs_to associations select2 options route
