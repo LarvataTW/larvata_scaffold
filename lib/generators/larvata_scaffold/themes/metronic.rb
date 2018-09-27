@@ -24,10 +24,11 @@ module LarvataScaffold
         end
 
         # 功能標題標籤（開始）
-        def begin_page_title_tags
+        def begin_page_title_tags(page_title)
           _eof_content = <<-EOF
     <div class="mr-auto">
-            <h3 class="m-subheader__title m-subheader__title--separator">
+            <h4 class="m-subheader__title m-subheader__title--separator">
+                <%= t('helpers.page_title.#{page_title}', model: #{class_name}.model_name.human) %>
           EOF
           _eof_content.rstrip
         end
@@ -35,7 +36,7 @@ module LarvataScaffold
         # 功能標題標籤（結束）
         def end_page_title_tags
           _eof_content = <<-EOF
-        </h3>
+        </h4>
         </div>
           EOF
           _eof_content.rstrip
@@ -309,9 +310,10 @@ module LarvataScaffold
         end
 
         # panel or portlet 標頭 caption 標籤（開始）
-        def begin_panel_header_caption_tags
+        def begin_panel_header_caption_tags(page_title)
           _eof_content = <<-EOF
-<div class="m-portlet__head-caption"><h3 class="m-portlet__head-text">
+<div class="m-portlet__head-caption"><h4 class="m-portlet__head-text">
+                <%= t("#{class_name}.model_name.human") %>
           EOF
           _eof_content.rstrip
         end
@@ -319,7 +321,7 @@ module LarvataScaffold
         # panel or portlet 標頭 caption 標籤（結束）
         def end_panel_header_caption_tags
           _eof_content = <<-EOF
-</h3></div>
+</h4></div>
           EOF
           _eof_content.rstrip
         end

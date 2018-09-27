@@ -34,18 +34,19 @@
 
             component += "<%= f.full_error :#{attr.name}, class: 'full_error' %%>\n        " 
             component += "</div>\n        "
-            component += "<div class='clear'></div>\n   " 
+            component += "<div class='clear'></div>\n    " 
             component += "</div>"
             component 
         }.join("\n\n    ") 
     %>
 
-    <%= "<div class='row'>" %>
+    <%= "<div class='form-group'>" %>
     <%= "    <div class='col-sm-12'>" %>
     <%= "        <%= f.submit t('button.save'), class: 'btn btn-primary pull-right' unless readonly %%>" %>
     <%= "        <%= link_to t('button.back'), back_#{'admin_' if admin?}#{controller_file_path}_path, class: 'btn btn-default pull-right m-r-10' %%>" %>
     <%= "        <%= link_to t('button.back'), back_#{'admin_' if admin?}#{controller_file_path}_path, class: 'btn btn-default pull-right m-r-10' %%>" %>
     <%= "    </div>" %>
+    <%= "    <div class='clear'></div>" %>
     <%= "</div>" %>
 <%= "<% end %%>" %>
 

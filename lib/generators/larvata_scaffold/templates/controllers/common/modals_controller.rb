@@ -23,9 +23,22 @@ class Common::ModalsController < ApplicationController
               # 設定是否唯讀
               @readonly = ['show'].include? @action_name
 
-              # 設定關連資料的 master 物件
-              instance_variable_set("@#{@model_name}", model_class.find_by(id: @id)) unless @id.blank?
-              instance_variable_set("@#{@model_name}", model_class.new) if @id.blank?
+              # 設定關連資料的 master 物件和原本 action method 內的 instance variables
+              unless @id.blank?
+                model_instance = model_class.find_by(id: @id)
+                instance_variable_set("@#{@model_name}", model_instance) 
+
+                controller_instance = controller_class.new
+                controller_instance.instance_variable_set("@#{@model_name}", model_instance)
+                controller_instance.send(@action_name)
+                controller_instance.instance_variables.grep(/\@[a-z]/).map{|var| var.to_s}.each do |var|
+                  instance_variable_set("#{var}", controller_instance.instance_variable_get("#{var}"))
+                end
+              else
+                instance_variable_set("@#{@model_name}", model_class.new) if @id.blank?
+              end
+
+
 
               # 設定頁面內不同資料來源的頁籤
               instance_variable_set("@tabs", controller_class.new.tabs) if controller_class.new.methods.grep(/^tabs$/).any?

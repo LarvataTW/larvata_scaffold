@@ -34,6 +34,7 @@ module LarvataScaffold
 
       def modify_master_controller_file
         master_controller_file = File.join(controller_path, "#{master_controller}_controller.rb")
+        detail_controller_file = File.join(controller_path, "#{detail_controller}_controller.rb")
 
         # 增加 :change_show_tab 到 before_action 內
         if File.readlines(master_controller_file).grep(/:change_show_tab/).size == 0
@@ -147,15 +148,26 @@ module LarvataScaffold
         end
 
         # 增加 detail index row count variables 程式到 row_count_vars_of_tab 方法內
+
+        # 取得該 detail 作為 tab 的欄位名稱，如果有值，則產生 group_row_counts 和 all_row_count 程式碼
+        detail_tab_regexp = /#{detail_controller}_(\w{1,})_group_row_counts =/
+        detail_tab_line = File.readlines(detail_controller_file).grep(detail_tab_regexp).first
+        detail_tab = detail_tab_line&.scan(detail_tab_regexp)&.last&.first
+        if detail_tab.present?
+          _eof_detail_tab_content = <<-EOF
+@#{detail_controller}_#{detail_tab}_group_row_counts = @#{master}.#{detail.pluralize}.group(:#{detail_tab}).count
+      @#{detail_controller}_all_row_count = @#{detail_controller}_#{detail_tab}_group_row_counts.inject(0) { |row_count, #{detail_tab}_group| row_count + #{detail_tab}_group[1] }
+          EOF
+        end
+
         if File.readlines(master_controller_file).grep(/@#{detail_controller}_status_group_row_counts/).size == 0
           insert_into_file master_controller_file, after: "when '#{master}'\n" do
             _eof_content = <<-EOF
-      when '#{detail_controller}'
-        @#{detail_controller}_status_group_row_counts = @#{master}.#{detail.pluralize}.group(:status).count
-        @#{detail_controller}_all_row_count = @#{detail_controller}_status_group_row_counts.inject(0) { |row_count, status_group| row_count + status_group[1] }
+    when '#{detail_controller}'
+      #{_eof_detail_tab_content}
             EOF
 
-            _eof_content 
+            _eof_content
           end
         end
 

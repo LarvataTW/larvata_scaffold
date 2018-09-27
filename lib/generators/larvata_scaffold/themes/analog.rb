@@ -8,7 +8,6 @@ module LarvataScaffold
         # 子標頭標籤（開始）
         def begin_subheader_tags
           _eof_content = <<-EOF
-<div class="an-body-topbar wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
           EOF
           _eof_content.rstrip
         end
@@ -16,16 +15,13 @@ module LarvataScaffold
         # 子標頭標籤（結束）
         def end_subheader_tags
           _eof_content = <<-EOF
-</div>
           EOF
           _eof_content.rstrip
         end
 
         # 功能標題標籤（開始）
-        def begin_page_title_tags
+        def begin_page_title_tags(page_title)
           _eof_content = <<-EOF
-<div class="an-page-title">
-        <h2>
           EOF
           _eof_content.rstrip
         end
@@ -33,8 +29,6 @@ module LarvataScaffold
         # 功能標題標籤（結束）
         def end_page_title_tags
           _eof_content = <<-EOF
-    </h2>
-    </div>
           EOF
           _eof_content.rstrip
         end
@@ -43,7 +37,7 @@ module LarvataScaffold
         # m-content
         def begin_page_content_tags
           _eof_content = <<-EOF
-<div>
+<div class="col-md-12">
           EOF
           _eof_content.rstrip
         end
@@ -171,7 +165,9 @@ module LarvataScaffold
         # tab 區塊標籤（開始）
         def begin_tabs_block_tags
           _eof_content = <<-EOF
-<div class="an-bootstrap-custom-tab">
+<div class="row">
+    <div class="col-md-12">
+        <div class="an-bootstrap-custom-tab">
           EOF
           _eof_content.rstrip
         end
@@ -179,6 +175,8 @@ module LarvataScaffold
         # tab 區塊標籤（結束）
         def end_tabs_block_tags
           _eof_content = <<-EOF
+        </div>
+    </div>
 </div>
           EOF
           _eof_content.rstrip
@@ -236,9 +234,8 @@ module LarvataScaffold
         def begin_filter_condition_panel_header_tags(controller_file_path)
           _eof_content = <<-EOF
 <div class="panel-heading" role="tab">
-            <h4 class="panel-title">
-                <a class="collapsed" role="button" href="##{controller_file_path}_search_panel" data-toggle="collapse" 
-                    data-parent="#accordion" aria-expanded="false" aria-controls="#{controller_file_path}_search_panel">
+            <a class="collapsed" role="button" href="##{controller_file_path}_search_panel" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="#{controller_file_path}_search_panel">
+                <h4 class="panel-title">
           EOF
           _eof_content.rstrip
         end
@@ -246,8 +243,8 @@ module LarvataScaffold
         # 查詢區塊標頭標籤（結束）
         def end_filter_condition_panel_header_tags
           _eof_content = <<-EOF
-        </a>
-            </h4>
+        </h4>
+            </a>
         </div>
           EOF
           _eof_content.rstrip
@@ -274,7 +271,7 @@ module LarvataScaffold
         # panel or portlet 標籤（開始）
         def begin_panel_tags 
           _eof_content = <<-EOF
-<div class="panel">
+<div class="panel panel-success">
           EOF
           _eof_content.rstrip
         end
@@ -304,9 +301,10 @@ module LarvataScaffold
         end
 
         # panel or portlet 標頭 caption 標籤（開始）
-        def begin_panel_header_caption_tags
+        def begin_panel_header_caption_tags(page_title)
           _eof_content = <<-EOF
-<div class="m-portlet__head-caption"><h3 class="m-portlet__head-text">
+<div class="m-portlet__head-caption"><h4 class="m-portlet__head-text">
+                <%= t('helpers.page_title.#{page_title}', model: #{class_name}.model_name.human) %>
           EOF
           _eof_content.rstrip
         end
@@ -314,7 +312,7 @@ module LarvataScaffold
         # panel or portlet 標頭 caption 標籤（結束）
         def end_panel_header_caption_tags
           _eof_content = <<-EOF
-</h3></div>
+</h4></div>
           EOF
           _eof_content.rstrip
         end
