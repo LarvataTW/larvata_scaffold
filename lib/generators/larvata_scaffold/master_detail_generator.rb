@@ -200,7 +200,8 @@ module LarvataScaffold
         }).success(function(tab_html){
             if(tab_html !== '') {
                 $('.tab-pane.active').removeClass('active');
-                $('.tab.active').removeClass('active');
+                $('li[id$="_tab"].active').removeClass('active');
+
                 $('#'+master_show_tab+'_tab').addClass('active');
                 $('#'+master_show_tab+'_tabpanel').addClass('active').html($(tab_html));
             }
@@ -530,9 +531,9 @@ new_#{'admin_' if admin?}#{detail_controller.singularize}_path(
       def modify_detail_form_back_btn
         detail_form_file = File.join(views_path, detail_controller, "_form.html.erb")
 
-        if File.readlines(detail_form_file).grep(/admin_#{detail_controller}_path/).size != 0
+        if File.readlines(detail_form_file).grep(/back_#{'admin_' if admin?}#{detail_controller}_path/).size != 0
           _eof_content = <<-EOF
-      back_#{'admin_' if admin?}#{detail_controller}
+      back_#{'admin_' if admin?}#{detail_controller}_path
           EOF
 
           gsub_file detail_form_file, /#{'admin_' if admin?}#{detail_controller}_path/, _eof_content.strip
@@ -565,10 +566,10 @@ new_#{'admin_' if admin?}#{detail_controller.singularize}_path(
         }).success(function(tab_html){
             if(tab_html !== '') {
                 $('.tab-pane.active').removeClass('active');
-                $('.tab.active').removeClass('active');
+                $('li[id$="_tab"].active').removeClass('active');
 
                 if($('#'+master_show_tab+'_tab').length === 0) {
-                    master_show_tab = '<%= singular_name %>';
+                    master_show_tab = '<%= plural_name %>';
                 }
 
                 $('#'+master_show_tab+'_tab').addClass('active');
@@ -612,10 +613,10 @@ new_#{'admin_' if admin?}#{detail_controller.singularize}_path(
         }).success(function(tab_html){
             if(tab_html !== '') {
                 $('.tab-pane.active').removeClass('active');
-                $('.tab.active').removeClass('active');
+                $('li[id$="_tab"].active').removeClass('active');
 
                 if($('#'+master_show_tab+'_tab').length === 0) {
-                    master_show_tab = '<%= singular_name %>';
+                    master_show_tab = '<%= plural_name %>';
                 }
 
                 $('#'+master_show_tab+'_tab').addClass('active');

@@ -29,7 +29,7 @@
                     <%= "<% {'all'=>t('helpers.datatables.tab_all')}.merge(#{class_name}.#{tab.pluralize}_i18n).each_with_index do |tab, index| %%>" %>
                         <%= "<li id='<%= tab[0] %%>_tab' role='presentation' class='tab <%= 'active' if index == 0 %%>'>" %>
                             <%= "<a href='##{singular_name}_<%= tab[0] %%>_tabpanel' aria-controls='#{singular_name}_#{tab}_tab' role='tab' data-toggle='tab' data-tab_key='<%= tab[0] %%>' class='#{singular_name}_#{tab}_tab'>" %>
-                                <i class="ion-happy-outline"></i>
+                                <i class="fa fa-ravelry"></i>
                                 <%= "<%= \"\#{tab[1]}(\#{index == 0 ? @#{controller_file_name}_all_row_count : @#{controller_file_name}_#{tab}_group_row_counts[tab[0]] || 0})\" %%>" %>
                             </a>
                         </li>

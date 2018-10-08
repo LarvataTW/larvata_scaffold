@@ -2,7 +2,8 @@
 <%= "tab_html = '<%= j render \"#{admin? ? 'admin/' : ''}#{controller_file_name}/tabs/\#{@current_tab[:name]}_tab\", #{master}: @#{master}, master_show_tab: @current_tab[:name] %%>';" %>
 if(tab_html !== '') {
     $('.tab-pane.active').removeClass('active');
-    $('.tab.active').removeClass('active');
+    $('li[id$="_tab"].active').removeClass('active');
+
     <%= "$('#<%= @current_tab[:name] %%>_tab').addClass('active');" %>
     <%= "$('#<%= @current_tab[:name] %%>_tabpanel').addClass('active').html($(tab_html));" %>
 }

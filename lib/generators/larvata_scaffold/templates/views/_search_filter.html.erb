@@ -12,7 +12,7 @@
                     </div>
                     <div class="col-sm-10">
                         <input type='text' id='keyword_search' placeholder="<%%= t('helpers.form.keyword_search') %>"
-                                                               class='<%= "#{form_control_class} #{input_class_of_search_form}" %>'>
+                                                               class='<%= "#{search_form_control_class} #{input_class_of_search_form}" %>'>
                     </div>
                     <div class="clear"></div>
                 </div>
@@ -35,7 +35,7 @@
         _filter = <<-HEREDOC
                         <%= simple_form_for([:admin, #{class_name}.new], url: '/#{'admin' if admin?}/#{controller_file_path}/') do | f | %%>
                             <%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{assoc_class_name}.none, value_method: :id, label_method: :id,
-                                class: '#{form_control_class} filter-#{attr.name} filter-select-condition', include_blank: true, selected: nil %%>
+                                class: '#{search_form_control_class} filter-#{attr.name} filter-select-condition', include_blank: true, selected: nil %%>
                         <% end %%>
         HEREDOC
         filter = filter + _filter
@@ -43,7 +43,7 @@
         _filter = <<-HEREDOC
                         <%= simple_form_for([:admin, #{class_name}.new], url: '/#{'admin' if admin?}/#{controller_file_path}/') do | f | %%>
                             <%= f.input_field :#{attr.name}, name: '#{attr.name}', collection: #{class_name}.#{attr.name.pluralize}_i18n,
-                                class: '#{form_control_class} select2 filter-#{attr.name} filter-select-condition', include_blank: true, selected: nil %%>
+                                class: '#{search_form_control_class} select2 filter-#{attr.name} filter-select-condition', include_blank: true, selected: nil %%>
                         <% end %%>
         HEREDOC
         filter = filter + _filter
@@ -51,14 +51,14 @@
         _filter = <<-HEREDOC
                         <%= simple_form_for(:admin) do | f | %%>
                             <%= f.input_field :#{attr.name}, name: '#{attr.name}', collection:[[t('helpers.select.true_option'),true], [t('helpers.select.false_option'),false]],
-                                class: '#{form_control_class} select2 filter-#{attr.name} filter-select-condition', include_blank: true %%>
+                                class: '#{search_form_control_class} select2 filter-#{attr.name} filter-select-condition', include_blank: true %%>
                         <% end %%>
         HEREDOC
         filter = filter + _filter
       else
         _filter = <<-HEREDOC
                         <input type='text' name='#{attr.name}' placeholder='<%= t('helpers.form.placeholder', column: #{class_name}.human_attribute_name('#{attr.name}')) %%>'
-                            class='#{form_control_class} #{input_class_of_search_form} filter-#{attr.name} filter-condition'>
+                            class='#{search_form_control_class} #{input_class_of_search_form} filter-#{attr.name} filter-condition'>
         HEREDOC
         filter = filter + _filter
       end
@@ -87,13 +87,13 @@
       if attr.type == "datetime"
         _filter = <<-HEREDOC
                                 <input type='text' name='#{attr.name}_start' placeholder='<%= t('helpers.form.start_at') %%>'
-                                       class='#{form_control_class} #{input_class_of_search_form} datetimepicker filter-#{attr.name} filter-range-condition'>
+                                       class='#{search_form_control_class} #{input_class_of_search_form} datetimepicker filter-#{attr.name} filter-range-condition'>
         HEREDOC
         filter = filter + _filter
       else
         _filter = <<-HEREDOC
                                 <input type='number' name='#{attr.name}_start' placeholder='<%= t('helpers.form.start_number') %%>'
-                                       class='#{form_control_class} #{input_class_of_search_form} filter-#{attr.name} filter-range-condition'>
+                                       class='#{search_form_control_class} #{input_class_of_search_form} filter-#{attr.name} filter-range-condition'>
         HEREDOC
         filter = filter + _filter
       end
@@ -106,13 +106,13 @@
       if attr.type == "datetime"
         _filter = <<-HEREDOC
                                 <input type='text' name='#{attr.name}_end' placeholder='<%= t('helpers.form.end_at') %%>'
-                                       class='#{form_control_class} #{input_class_of_search_form} datetimepicker filter-#{attr.name} filter-range-condition'>
+                                       class='#{search_form_control_class} #{input_class_of_search_form} datetimepicker filter-#{attr.name} filter-range-condition'>
         HEREDOC
         filter = filter + _filter
       else
         _filter = <<-HEREDOC
                                 <input type='number' name='#{attr.name}_end' placeholder='<%= t('helpers.form.end_number') %%>'
-                                       class='#{form_control_class} #{input_class_of_search_form} filter-#{attr.name} filter-range-condition'>
+                                       class='#{search_form_control_class} #{input_class_of_search_form} filter-#{attr.name} filter-range-condition'>
         HEREDOC
         filter = filter + _filter
       end

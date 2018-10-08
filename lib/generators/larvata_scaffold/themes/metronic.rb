@@ -362,6 +362,11 @@ module LarvataScaffold
           "form-control"
         end
 
+        # 查詢表單輸入元件的 form-control class
+        def search_form_control_class
+          "form-control"
+        end
+
         # 查詢表單的輸入元件 class
         def input_class_of_search_form
           "m-input"
