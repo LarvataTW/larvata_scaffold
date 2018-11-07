@@ -2,10 +2,10 @@
             <%= begin_tabs_control_tags %>
                 <ul class="nav nav-tabs text-left" role="tablist">
                     <%= "<% @tabs.each_with_index do |tab, index| %%>" %>
-                        <%= "<li role='presentation' class='<%= 'active' if index == 0 %%>'>" %>
+                        <%= "<li id='<%= tab[:name] %%>_tab' role='presentation' class='<%= 'active' if index == 0 %%>'>" %>
                             <%= "<a href='<%= change_show_tab_#{'admin_' if admin?}#{controller_file_path.singularize}_path(tab: tab[:name]) %%>' aria-controls='<%= tab[:name] %%>_tab' role='tab' data-toggle='' data-remote='true' class='<%= tab[:name] %%>_tab'>" %>
                                 <i class="ion-happy-outline"></i>
-                                <%= "<%= #{class_name}.model_name.human %%>" %>
+                                <%= "<%= t \"labels.#{singular_name}.\#{tab[:name]}_info\" %%>" %>
                             </a>
                         </li>
                     <%= "<% end %%>" %>

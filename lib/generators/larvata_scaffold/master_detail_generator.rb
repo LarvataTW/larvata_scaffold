@@ -69,46 +69,6 @@ module LarvataScaffold
           end
         end
         
-        # 確認 tabs 是否存在，不存在則建立
-        if File.readlines(master_controller_file).grep(/def tabs/).size == 0
-          insert_into_file master_controller_file, before: "  private\n" do
-            _eof_content = <<-EOF
-  # 設定連結所屬明細頁籤
-  def tabs
-    tabs_array = []
-    tabs_array << {name: '#{master_controller.singularize}'}
-    tabs_array
-  end
-
-            EOF
-
-            _eof_content 
-          end
-        end
-        
-        # 確認 change_show_tab 是否存在，不存在則建立
-        if File.readlines(master_controller_file).grep(/def change_show_tab/).size == 0
-          insert_into_file master_controller_file, before: "  private\n" do
-            _eof_content = <<-EOF
-  # 變換頁籤顯示內容
-  def change_show_tab
-    @current_tab = tabs.select{ |tab| tab[:name] == params[:tab] }.first
-
-    @current_tab = tabs.first if @current_tab.nil?
-
-    row_count_vars_of_tab(@current_tab[:name])
-
-    respond_to do |format|
-      format.js { }
-    end
-  end
-
-            EOF
-
-            _eof_content 
-          end
-        end
-
         # 確認 render_tab_content 是否存在，不存在則建立
         if File.readlines(master_controller_file).grep(/def render_tab_content/).size == 0
           insert_into_file master_controller_file, before: "  private\n" do
@@ -535,7 +495,7 @@ new_#{'admin_' if admin?}#{detail_controller.singularize}_path(
       back_#{'admin_' if admin?}#{detail_controller}
           EOF
 
-          gsub_file detail_form_file, /#{'admin_' if admin?}#{detail_controller}_path/, _eof_content.strip
+          gsub_file detail_form_file, /back_#{'admin_' if admin?}#{detail_controller}_path/, _eof_content.strip
         end
       end
 
