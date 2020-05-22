@@ -5,14 +5,6 @@
 
 <%= begin_page_content_tags %>
     <%= begin_panel_tags %>
-
-        <%= begin_panel_header_tags %>
-            <%= begin_panel_header_caption_tags('new') %>
-            <%= end_panel_header_caption_tags %>
-            <%= begin_panel_header_tools_tags %>
-            <%= end_panel_header_tools_tags %>
-        <%= end_panel_header_tags %>
-
         <%= begin_panel_body_tags %>
             <%= "<%= render '#{'admin/' if admin?}#{controller_file_name}/form' %%>" %>
         <%= end_panel_body_tags %>

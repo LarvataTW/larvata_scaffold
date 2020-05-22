@@ -1,7 +1,6 @@
-class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < ApplicationController
-<% if admin? -%>
-  layout "admin"
-<% end -%>
+class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < <%= admin? ? 'Admin' : 'Application' %>Controller
+
+  add_breadcrumb "#{I18n.t('helpers.page_title.index', model: <%= class_name %>.model_name.human)}", :<%= "#{'admin_' if admin?}#{controller_file_path}_path" %>
 
   before_action :set_<%= singular_name %>, only: [:show, :edit, :update, :destroy, :change_show_tab, :render_tab_content]
   before_action :set_navigation, only: [:new, :edit, :show, :destroy]
@@ -58,6 +57,7 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   end
 
   def new
+    add_breadcrumb "#{t('helpers.page_title.new', model: <%= class_name %>.model_name.human)}"
     @<%= singular_name %> ||= <%= class_name %>.new
   end
 
@@ -85,7 +85,8 @@ class <%= 'Admin::' if admin? %><%= controller_class_name %>Controller < Applica
   end
 
   def edit
-
+    add_breadcrumb @<%= singular_name %>.id, <%= "#{'admin_' if admin?}#{controller_file_path.singularize}_path" %>(@<%= singular_name %>)
+    add_breadcrumb "#{t('helpers.page_title.edit', model: <%= class_name %>.model_name.human)}"
   end
 
   def show
